@@ -25,6 +25,10 @@ if (!admin.apps.length) {
         process.exit(1);
     }
 
+    console.log('[Worker] Initializing Firebase with:');
+    console.log(`- Project ID: "${FIREBASE_PROJECT_ID}" (Length: ${FIREBASE_PROJECT_ID.length})`);
+    console.log(`- Client Email: "${FIREBASE_CLIENT_EMAIL}"`);
+
     // Invincible Private Key Parsing
     let privateKey = FIREBASE_PRIVATE_KEY.trim();
 
@@ -123,10 +127,10 @@ async function processNotifications() {
                 await client.query("UPDATE notifications SET status = 'sent' WHERE id = $1", [id]);
 
             } catch (err) {
-                console.error(`[Worker] Failed to process notification ${id}:`, err.message);
+                console.error(`[Worker] Failed to process notification ${id}:`, err);
 
                 // Store a more descriptive error status
-                const errorDetail = err.message ? `: ${err.message.substring(0, 50)}` : '';
+                const errorDetail = err.message ? `: ${err.message.substring(0, 100)}` : '';
                 const statusUpdate = `failed${errorDetail}`;
 
                 await client.query(
