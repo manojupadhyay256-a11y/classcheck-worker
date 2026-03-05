@@ -28,10 +28,6 @@ if (!admin.apps.length) {
     const projectId = FIREBASE_PROJECT_ID.trim();
     const clientEmail = FIREBASE_CLIENT_EMAIL.trim();
 
-    console.log('[Worker] Initializing Firebase with:');
-    console.log(`- Project ID: "${projectId}" (Length: ${projectId.length})`);
-    console.log(`- Client Email: "${clientEmail}"`);
-
     // Invincible Private Key Parsing
     let privateKey = FIREBASE_PRIVATE_KEY.trim();
 
