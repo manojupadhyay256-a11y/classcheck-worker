@@ -25,9 +25,12 @@ if (!admin.apps.length) {
         process.exit(1);
     }
 
+    const projectId = FIREBASE_PROJECT_ID.trim();
+    const clientEmail = FIREBASE_CLIENT_EMAIL.trim();
+
     console.log('[Worker] Initializing Firebase with:');
-    console.log(`- Project ID: "${FIREBASE_PROJECT_ID}" (Length: ${FIREBASE_PROJECT_ID.length})`);
-    console.log(`- Client Email: "${FIREBASE_CLIENT_EMAIL}"`);
+    console.log(`- Project ID: "${projectId}" (Length: ${projectId.length})`);
+    console.log(`- Client Email: "${clientEmail}"`);
 
     // Invincible Private Key Parsing
     let privateKey = FIREBASE_PRIVATE_KEY.trim();
@@ -52,8 +55,8 @@ if (!admin.apps.length) {
 
     admin.initializeApp({
         credential: admin.credential.cert({
-            projectId: FIREBASE_PROJECT_ID,
-            clientEmail: FIREBASE_CLIENT_EMAIL,
+            projectId: projectId,
+            clientEmail: clientEmail,
             privateKey: privateKey,
         }),
     });
