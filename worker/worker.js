@@ -15,11 +15,21 @@ const pool = new Pool({
 
 // Initialize Firebase Admin
 if (!admin.apps.length) {
+    const { FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY } = process.env;
+
+    if (!FIREBASE_PROJECT_ID || !FIREBASE_CLIENT_EMAIL || !FIREBASE_PRIVATE_KEY) {
+        console.error('[Worker] Fatal Error: Missing Firebase environment variables!');
+        console.error(`- FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID ? 'Present' : 'MISSING'}`);
+        console.error(`- FIREBASE_CLIENT_EMAIL: ${FIREBASE_CLIENT_EMAIL ? 'Present' : 'MISSING'}`);
+        console.error(`- FIREBASE_PRIVATE_KEY: ${FIREBASE_PRIVATE_KEY ? 'Present' : 'MISSING'}`);
+        process.exit(1);
+    }
+
     admin.initializeApp({
         credential: admin.credential.cert({
-            projectId: process.env.FIREBASE_PROJECT_ID,
-            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-            privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+            projectId: FIREBASE_PROJECT_ID,
+            clientEmail: FIREBASE_CLIENT_EMAIL,
+            privateKey: FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
         }),
     });
 }
