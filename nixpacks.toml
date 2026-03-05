@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs-22_x"]
+
+[phases.install]
+cmds = ["npm install --omit=dev --ignore-scripts"]
+
+[phases.build]
+cmds = ["echo 'Skipping frontend build'"]
+
+[start]
+cmd = "node worker/worker.js"
