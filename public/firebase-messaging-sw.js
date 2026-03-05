@@ -18,7 +18,7 @@ firebase.initializeApp(firebaseConfig);
 
 // Retrieve an instance of Firebase Messaging so that it can handle background messages.
 const messaging = firebase.messaging();
-const VAPID_KEY = "BHHS5QaElyhwlpuWJLSk2vynRAW11VlhZWbOnzA2qOfVdc5AKtkLx8tHR2dYUqSB58YcaqIUmGQbBllaH5niSXs";
+const VAPID_KEY = "BHHS5QaElyhwlpuWJLSk2vynRAW11VlhzWb0nzA2qOfVdc5AKtkLx8tHR2dYUqsB58YcaqlUmGQbBlIaH5niSXs";
 
 // If you want to customize the notification behavior, you can do so here
 messaging.onBackgroundMessage((payload) => {

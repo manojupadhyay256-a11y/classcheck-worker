@@ -124,8 +124,15 @@ async function processNotifications() {
 
             } catch (err) {
                 console.error(`[Worker] Failed to process notification ${id}:`, err.message);
-                // Mark as failed so we don't loop indefinitely
-                await client.query("UPDATE notifications SET status = 'failed' WHERE id = $1", [id]);
+
+                // Store a more descriptive error status
+                const errorDetail = err.message ? `: ${err.message.substring(0, 50)}` : '';
+                const statusUpdate = `failed${errorDetail}`;
+
+                await client.query(
+                    "UPDATE notifications SET status = $1 WHERE id = $2",
+                    [statusUpdate, id]
+                );
             }
         }
     } catch (err) {

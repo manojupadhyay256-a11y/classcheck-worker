@@ -5,7 +5,6 @@ import MobileHeader from './MobileHeader';
 import { useAuthStore } from '../../stores/authStore';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNotificationStore } from '../../stores/notificationStore';
-import { Toaster } from 'sonner';
 import { useEffect } from 'react';
 import { FcmListener } from '../common/FcmListener';
 
@@ -32,7 +31,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <div className="flex h-screen bg-[#F8FAFC]">
-            <Toaster position="top-right" richColors closeButton />
             <FcmListener />
             {/* Desktop Sidebar */}
             <div className="hidden md:flex shrink-0">

@@ -17,7 +17,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-export const VAPID_KEY = 'BHHS5QaElyhwlpuWJLSk2vynRAW11VlhZWbOnzA2qOfVdc5AKtkLx8tHR2dYUqSB58YcaqIUmGQbBllaH5niSXs';
+export const VAPID_KEY = 'BHHS5QaElyhwlpuWJLSk2vynRAW11VlhzWb0nzA2qOfVdc5AKtkLx8tHR2dYUqsB58YcaqlUmGQbBlIaH5niSXs';
 
 // --- Lazy Messaging Initialization ---
 // Do NOT call getMessaging() eagerly at module-load.
