@@ -25,15 +25,32 @@ if (!admin.apps.length) {
         process.exit(1);
     }
 
+    // Invincible Private Key Parsing
+    let privateKey = FIREBASE_PRIVATE_KEY.trim();
+
+    // 1. If it looks like a JSON string (starts with "), parse it to get raw value
+    if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+        try {
+            privateKey = JSON.parse(privateKey);
+        } catch (e) {
+            privateKey = privateKey.slice(1, -1); // Fallback: just strip quotes
+        }
+    }
+
+    // 2. Handle the common \n vs actual newline issue
+    // We replace the literal string "\n" with the actual newline character
+    privateKey = privateKey.replace(/\\n/g, '\n');
+
+    // 3. Ensure it starts and ends correctly
+    if (!privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
+        console.error('[Worker] Error: FIREBASE_PRIVATE_KEY does not start with BEGIN PRIVATE KEY header.');
+    }
+
     admin.initializeApp({
         credential: admin.credential.cert({
             projectId: FIREBASE_PROJECT_ID,
             clientEmail: FIREBASE_CLIENT_EMAIL,
-            // Robust parsing: trim, remove potential surrounding quotes, and handle \n
-            privateKey: FIREBASE_PRIVATE_KEY
-                .trim()
-                .replace(/^["']|["']$/g, '')
-                .replace(/\\n/g, '\n'),
+            privateKey: privateKey,
         }),
     });
 }
