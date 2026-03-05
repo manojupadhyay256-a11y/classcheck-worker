@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0D9488;
+  --color-primary-hover: #0F766E;
+  --color-secondary: #8B5CF6;
+  /* Purple for hero and accents */
+  --color-accent: #F59E0B;
+  --color-success: #10B981;
+  --color-danger: #F43F5E;
+  --color-saas-dark: #0F172A;
+  --color-saas-accent: #6366F1;
+  --color-saas-accent-hover: #4F46E5;
+  --color-saas-border: #E2E8F0;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --font-outfit: "Outfit", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-[#F8F9FB] text-gray-900 font-outfit antialiased;
+  }
+}
+
+@layer utilities {
+  .soft-shadow {
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.02);
+  }
+
+  .hero-gradient {
+    background: linear-gradient(135deg, #1E1B4B 0%, #4338CA 50%, #7C3AED 100%);
+  }
+
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+
+  .saas-shadow {
+    box-shadow:
+      0 1px 3px 0 rgba(0, 0, 0, 0.04),
+      0 4px 6px -1px rgba(0, 0, 0, 0.03),
+      0 10px 20px -3px rgba(0, 0, 0, 0.03);
+  }
+
+  .saas-shadow-hover {
+    box-shadow:
+      0 1px 3px 0 rgba(0, 0, 0, 0.06),
+      0 8px 16px -2px rgba(0, 0, 0, 0.06),
+      0 20px 40px -4px rgba(0, 0, 0, 0.04);
+  }
+
+  .search-inset {
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
+  }
+}
