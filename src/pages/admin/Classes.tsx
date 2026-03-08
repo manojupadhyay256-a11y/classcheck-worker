@@ -167,12 +167,12 @@ const Classes = () => {
     return (
         <div className="min-h-screen bg-[#F8FAFC] pb-24 font-inter">
             {/* SaaS Header */}
-            <div className="bg-saas-dark text-white">
+            <div className="bg-slate-900 text-white">
                 <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 sm:py-12">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-10">
                         <div className="flex items-center gap-4 sm:gap-5">
-                            <div className="p-3.5 sm:p-4 bg-saas-accent/10 rounded-2xl border border-saas-accent/20 shrink-0">
-                                <School className="w-7 h-7 sm:w-8 sm:h-8 text-saas-accent" strokeWidth={2.5} />
+                            <div className="p-3.5 sm:p-4 bg-amber-500/10 rounded-2xl border border-amber-500/20 shrink-0">
+                                <School className="w-7 h-7 sm:w-8 sm:h-8 text-amber-500" strokeWidth={2.5} />
                             </div>
                             <div className="min-w-0">
                                 <h1 className="text-2xl sm:text-3xl font-black tracking-tight mb-1 truncate">Class Management</h1>
@@ -188,12 +188,12 @@ const Classes = () => {
                                     placeholder="Search by class or teacher..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-11 pr-4 py-3 sm:py-3.5 bg-white/5 border border-white/10 rounded-xl text-[13px] sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-saas-accent/40 transition-all search-inset"
+                                    className="w-full pl-11 pr-4 py-3 sm:py-3.5 bg-white/5 border border-white/10 rounded-xl text-[13px] sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all search-inset"
                                 />
                             </div>
                             <Button
                                 onClick={() => handleOpenModal()}
-                                className="bg-saas-accent hover:bg-saas-accent-hover text-white shadow-xl shadow-saas-accent/20 px-6 py-3 sm:py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0"
+                                className="bg-amber-600 hover:bg-amber-700 text-white shadow-xl shadow-amber-900/20 px-6 py-3 sm:py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0"
                             >
                                 <Plus className="w-5 h-5" strokeWidth={3} />
                                 <span className="font-bold">Add Class</span>
@@ -212,11 +212,11 @@ const Classes = () => {
                         </div>
                         <div>
                             <p className="text-[11px] sm:text-sm font-semibold text-slate-500 uppercase tracking-tight">Active Classes</p>
-                            <h2 className="text-xl sm:text-2xl font-bold text-saas-dark leading-tight">{classes.length}</h2>
+                            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 leading-tight">{classes.length}</h2>
                         </div>
                     </div>
                     {refreshing && (
-                        <div className="flex items-center gap-2 text-saas-accent text-[10px] sm:text-xs font-semibold animate-pulse">
+                        <div className="flex items-center gap-2 text-amber-600 text-[10px] sm:text-xs font-semibold animate-pulse">
                             <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin" />
                             Refining...
                         </div>
@@ -228,7 +228,7 @@ const Classes = () => {
             <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-8 mt-6 sm:mt-10">
                 {loading ? (
                     <div className="bg-white rounded-2xl saas-shadow border border-saas-border flex flex-col items-center justify-center py-20 sm:py-32 gap-4">
-                        <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 text-saas-accent animate-spin" strokeWidth={3} />
+                        <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 text-amber-600 animate-spin" strokeWidth={3} />
                         <p className="text-slate-400 font-semibold tracking-wide uppercase text-[10px] sm:text-[11px]">Loading Academic Units...</p>
                     </div>
                 ) : filteredClasses.length > 0 ? (
@@ -263,17 +263,17 @@ const Classes = () => {
                                                     </td>
                                                     <td className="px-8 py-6">
                                                         <div className="flex items-center gap-4">
-                                                            <div className="w-12 h-12 rounded-xl bg-teal-50 border border-teal-100/50 flex items-center justify-center text-teal-600 font-bold text-sm uppercase">
+                                                            <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100/50 flex items-center justify-center text-amber-600 font-bold text-sm uppercase">
                                                                 {cl.name.split(' ')[0]?.slice(0, 3)}
                                                             </div>
-                                                            <span className="font-semibold text-saas-dark text-[15px] uppercase tracking-tight">{cl.name}</span>
+                                                            <span className="font-semibold text-slate-900 text-[15px] uppercase tracking-tight">{cl.name}</span>
                                                         </div>
                                                     </td>
                                                     <td className="px-8 py-6">
                                                         {cl.class_teacher_name ? (
                                                             <div className="flex items-center gap-3">
-                                                                <div className="w-8 h-8 rounded-lg bg-saas-accent/5 flex items-center justify-center border border-saas-accent/10">
-                                                                    <UsersIcon className="w-4 h-4 text-saas-accent" />
+                                                                <div className="w-8 h-8 rounded-lg bg-amber-500/5 flex items-center justify-center border border-amber-500/10">
+                                                                    <UsersIcon className="w-4 h-4 text-amber-500" />
                                                                 </div>
                                                                 <span className="text-[14px] font-medium text-slate-700">{cl.class_teacher_name}</span>
                                                             </div>
@@ -282,12 +282,12 @@ const Classes = () => {
                                                         )}
                                                     </td>
                                                     <td className="px-8 py-6 text-center">
-                                                        <span className="inline-flex items-center px-2.5 py-1 bg-purple-50 text-purple-600 text-[10px] font-bold uppercase rounded-lg border border-purple-100 tracking-wide">
+                                                        <span className="inline-flex items-center px-2.5 py-1 bg-slate-50 text-slate-500 text-[10px] font-bold uppercase rounded-lg border border-slate-100 tracking-wide">
                                                             {cl.subject_count} Subjects
                                                         </span>
                                                     </td>
                                                     <td className="px-8 py-6 text-center">
-                                                        <span className="inline-flex items-center px-2.5 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase rounded-lg border border-emerald-100 tracking-wide">
+                                                        <span className="inline-flex items-center px-2.5 py-1 bg-amber-50 text-amber-600 text-[10px] font-bold uppercase rounded-lg border border-amber-100 tracking-wide">
                                                             {cl.student_count} Students
                                                         </span>
                                                     </td>
@@ -295,7 +295,7 @@ const Classes = () => {
                                                         <div className="flex items-center justify-end gap-2">
                                                             <button
                                                                 onClick={() => handleOpenModal(cl)}
-                                                                className="p-2.5 text-slate-400 hover:text-saas-accent hover:bg-saas-accent/5 rounded-xl transition-all duration-200 cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center border border-transparent hover:border-saas-accent/10"
+                                                                className="p-2.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-all duration-200 cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center border border-transparent hover:border-amber-100"
                                                             >
                                                                 <Edit2 className="w-4 h-4" />
                                                             </button>
@@ -307,7 +307,7 @@ const Classes = () => {
                                                             </button>
                                                             <button
                                                                 onClick={() => handleViewDetails(cl.id)}
-                                                                className="p-2.5 bg-slate-50 text-slate-600 hover:bg-saas-accent hover:text-white rounded-xl transition-all duration-200 border border-slate-200/50 hover:border-saas-accent shadow-sm ml-1 cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center"
+                                                                className="p-2.5 bg-slate-50 text-slate-600 hover:bg-amber-600 hover:text-white rounded-xl transition-all duration-200 border border-slate-200/50 hover:border-amber-600 shadow-sm ml-1 cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center"
                                                             >
                                                                 <ArrowRight className="w-4 h-4" />
                                                             </button>
@@ -335,11 +335,11 @@ const Classes = () => {
                                     >
                                         <div className="flex items-start justify-between mb-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600 font-bold text-[13px]">
+                                                <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 font-bold text-[13px]">
                                                     {cl.name.split(' ')[0]?.slice(0, 3)}
                                                 </div>
                                                 <div className="flex flex-col min-w-0">
-                                                    <span className="font-bold text-saas-dark text-[15px] leading-tight uppercase tracking-tight truncate">{cl.name}</span>
+                                                    <span className="font-bold text-slate-900 text-[15px] leading-tight uppercase tracking-tight truncate">{cl.name}</span>
                                                     <span className="text-[11px] text-slate-400 font-medium truncate">
                                                         {cl.class_teacher_name || 'No CT assigned'}
                                                     </span>
@@ -348,7 +348,7 @@ const Classes = () => {
                                             <div className="flex gap-1 shrink-0 ml-2">
                                                 <button
                                                     onClick={() => handleOpenModal(cl)}
-                                                    className="p-2 text-slate-400 hover:text-saas-accent hover:bg-saas-accent/5 rounded-lg active:scale-95 transition-all"
+                                                    className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg active:scale-95 transition-all"
                                                 >
                                                     <Edit2 className="w-4 h-4" />
                                                 </button>
@@ -362,15 +362,15 @@ const Classes = () => {
                                         </div>
 
                                         <div className="flex items-center gap-2 pt-4 border-t border-slate-50">
-                                            <span className="inline-flex items-center px-2 py-0.5 bg-purple-50 text-purple-600 text-[10px] font-bold uppercase rounded-md border border-purple-100 font-mono">
+                                            <span className="inline-flex items-center px-2 py-0.5 bg-slate-50 text-slate-500 text-[10px] font-bold uppercase rounded-md border border-slate-100 font-mono">
                                                 {cl.subject_count} Subj
                                             </span>
-                                            <span className="inline-flex items-center px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase rounded-md border border-emerald-100 font-mono">
+                                            <span className="inline-flex items-center px-2 py-0.5 bg-amber-50 text-amber-600 text-[10px] font-bold uppercase rounded-md border border-amber-100 font-mono">
                                                 {cl.student_count} Stud
                                             </span>
                                             <button
                                                 onClick={() => handleViewDetails(cl.id)}
-                                                className="ml-auto flex items-center gap-1.5 text-indigo-600 text-[11px] font-bold uppercase tracking-wider hover:bg-indigo-50 px-2 py-1 rounded-lg transition-colors"
+                                                className="ml-auto flex items-center gap-1.5 text-amber-600 text-[11px] font-bold uppercase tracking-wider hover:bg-amber-50 px-2 py-1 rounded-lg transition-colors"
                                             >
                                                 Details
                                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -386,9 +386,9 @@ const Classes = () => {
                         <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6 border border-slate-100">
                             <School className="w-8 h-8 text-slate-300" />
                         </div>
-                        <h3 className="text-lg font-bold text-saas-dark">No Academic Units</h3>
+                        <h3 className="text-lg font-bold text-slate-900">No Academic Units</h3>
                         <p className="text-slate-400 mt-2 max-w-xs text-[13px] font-medium leading-relaxed">Refine your search or create a new class registry.</p>
-                        <Button onClick={() => handleOpenModal()} className="mt-8 bg-saas-accent shadow-none px-6 py-3 rounded-xl font-bold">
+                        <Button onClick={() => handleOpenModal()} className="mt-8 bg-amber-600 shadow-none px-6 py-3 rounded-xl font-bold">
                             <Plus className="w-5 h-5 mr-2" />
                             Add Class
                         </Button>
@@ -405,7 +405,7 @@ const Classes = () => {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => !isSaving && setIsModalOpen(false)}
-                            className="absolute inset-0 bg-saas-dark/60 backdrop-blur-sm"
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
                         />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -416,15 +416,15 @@ const Classes = () => {
                             <div className="p-8">
                                 <div className="flex items-center justify-between mb-8">
                                     <div>
-                                        <h2 className="text-2xl font-bold text-saas-dark">
+                                        <h2 className="text-2xl font-bold text-slate-900">
                                             {editingClass ? 'Refine Academic Unit' : 'New Academic Unit'}
                                         </h2>
                                         <p className="text-slate-400 text-sm mt-1">
                                             {editingClass ? 'Update class identification and homeroom lead.' : 'Initialize a new class for the current academic session.'}
                                         </p>
                                     </div>
-                                    <div className="p-3 bg-saas-accent/10 rounded-2xl">
-                                        <School className="w-6 h-6 text-saas-accent" />
+                                    <div className="p-3 bg-amber-500/10 rounded-2xl">
+                                        <School className="w-6 h-6 text-amber-500" />
                                     </div>
                                 </div>
 
@@ -438,7 +438,7 @@ const Classes = () => {
                                             value={formData.name}
                                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                             placeholder="e.g. 10-A, 11-B"
-                                            className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-saas-accent/20 focus:border-saas-accent transition-all placeholder:text-slate-400"
+                                            className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all placeholder:text-slate-400"
                                             disabled={isSaving}
                                             autoFocus
                                         />
@@ -451,7 +451,7 @@ const Classes = () => {
                                         <select
                                             value={formData.class_teacher_id}
                                             onChange={(e) => setFormData({ ...formData, class_teacher_id: e.target.value })}
-                                            className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-saas-accent/20 focus:border-saas-accent transition-all appearance-none cursor-pointer"
+                                            className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all appearance-none cursor-pointer"
                                             disabled={isSaving}
                                         >
                                             <option value="">Select a Teacher (Optional)</option>
@@ -483,7 +483,7 @@ const Classes = () => {
                                         </button>
                                         <button
                                             type="submit"
-                                            className="flex-1 px-6 py-4 bg-saas-accent text-white font-bold rounded-2xl hover:bg-saas-accent-hover shadow-lg shadow-saas-accent/20 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
+                                            className="flex-1 px-6 py-4 bg-amber-600 text-white font-bold rounded-2xl hover:bg-amber-700 shadow-lg shadow-amber-900/20 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
                                             disabled={isSaving}
                                         >
                                             {isSaving ? (

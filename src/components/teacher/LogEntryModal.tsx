@@ -192,7 +192,7 @@ export const LogEntryModal: React.FC<LogEntryModalProps> = ({ isOpen, onClose, o
                                             required
                                             value={formData.date}
                                             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#008B74] focus:border-transparent outline-none font-bold text-slate-700"
+                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none font-bold text-slate-700"
                                         />
                                     </div>
                                 </div>
@@ -208,7 +208,7 @@ export const LogEntryModal: React.FC<LogEntryModalProps> = ({ isOpen, onClose, o
                                             placeholder="e.g. 1st, 2nd"
                                             value={formData.period}
                                             onChange={(e) => setFormData({ ...formData, period: e.target.value })}
-                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#008B74] focus:border-transparent outline-none font-bold text-slate-700"
+                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none font-bold text-slate-700"
                                         />
                                     </div>
                                 </div>
@@ -224,7 +224,7 @@ export const LogEntryModal: React.FC<LogEntryModalProps> = ({ isOpen, onClose, o
                                             required
                                             value={formData.class_subject_id}
                                             onChange={(e) => setFormData({ ...formData, class_subject_id: e.target.value, chapter_id: '' })}
-                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#008B74] focus:border-transparent outline-none font-bold text-slate-700 appearance-none"
+                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none font-bold text-slate-700 appearance-none"
                                         >
                                             <option value="">Select Class / Subject</option>
                                             {subjects.map(s => (
@@ -245,7 +245,7 @@ export const LogEntryModal: React.FC<LogEntryModalProps> = ({ isOpen, onClose, o
                                             value={formData.chapter_id}
                                             onChange={(e) => setFormData({ ...formData, chapter_id: e.target.value })}
                                             disabled={!formData.class_subject_id}
-                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#008B74] focus:border-transparent outline-none font-bold text-slate-700 appearance-none disabled:opacity-50"
+                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none font-bold text-slate-700 appearance-none disabled:opacity-50"
                                         >
                                             <option value="">Select Chapter</option>
                                             {chapters.map(c => (
@@ -269,7 +269,7 @@ export const LogEntryModal: React.FC<LogEntryModalProps> = ({ isOpen, onClose, o
                                         placeholder="Details of topics taught..."
                                         value={formData.topics_covered}
                                         onChange={(e) => setFormData({ ...formData, topics_covered: e.target.value })}
-                                        className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#008B74] focus:border-transparent outline-none font-bold text-slate-700 resize-none"
+                                        className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none font-bold text-slate-700 resize-none"
                                     />
                                 </div>
                             </div>
@@ -284,7 +284,7 @@ export const LogEntryModal: React.FC<LogEntryModalProps> = ({ isOpen, onClose, o
                                         placeholder="Any additional notes..."
                                         value={formData.remarks}
                                         onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
-                                        className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#008B74] focus:border-transparent outline-none font-bold text-slate-700"
+                                        className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none font-bold text-slate-700"
                                     />
                                 </div>
                             </div>
@@ -301,7 +301,7 @@ export const LogEntryModal: React.FC<LogEntryModalProps> = ({ isOpen, onClose, o
                                 <Button
                                     type="submit"
                                     disabled={loading}
-                                    className="flex-1 py-4 bg-[#008B74] hover:bg-[#007663]"
+                                    className="flex-1 py-4 bg-amber-600 hover:bg-amber-700"
                                 >
                                     {loading ? (
                                         <Loader2 className="w-5 h-5 animate-spin mx-auto" />

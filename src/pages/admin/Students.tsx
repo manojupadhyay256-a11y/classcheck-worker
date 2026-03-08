@@ -5,7 +5,7 @@ import Button from '../../components/common/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sql } from '../../lib/db';
 import { clsx } from 'clsx';
-import { parseStudentImport, executeStudentImport } from '../../lib/bulkImport';
+import { parseStudentImport, executeStudentImport, deleteSelectedStudents } from '../../lib/bulkImport';
 
 interface Student {
     id: string;
@@ -52,6 +52,7 @@ const Students = () => {
         category: 'General',
         class_id: ''
     });
+    const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const fetchData = async () => {
@@ -220,6 +221,9 @@ const Students = () => {
         const deletePromise = (async () => {
             await sql`DELETE FROM public.students WHERE id = ${id}`;
             await fetchData();
+            const newSelected = new Set(selectedIds);
+            newSelected.delete(id);
+            setSelectedIds(newSelected);
         })();
 
         toast.promise(deletePromise, {
@@ -233,6 +237,49 @@ const Students = () => {
         } catch (err) {
             console.error('Delete error:', err);
         }
+    };
+
+    const handleBulkDelete = async () => {
+        const count = selectedIds.size;
+        if (count === 0) return;
+        if (!window.confirm(`Are you sure you want to delete ${count} selected students?`)) return;
+
+        const bulkDeletePromise = (async () => {
+            const ids = Array.from(selectedIds);
+            await deleteSelectedStudents(ids);
+            await fetchData();
+            setSelectedIds(new Set());
+        })();
+
+        toast.promise(bulkDeletePromise, {
+            loading: `Deleting ${count} students...`,
+            success: 'Selected students deleted successfully!',
+            error: 'Failed to delete students.'
+        });
+
+        try {
+            await bulkDeletePromise;
+        } catch (err) {
+            console.error('Bulk delete error:', err);
+        }
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedIds.size === filteredStudents.length) {
+            setSelectedIds(new Set());
+        } else {
+            setSelectedIds(new Set(filteredStudents.map(s => s.id)));
+        }
+    };
+
+    const toggleSelectOne = (id: string) => {
+        const newSelected = new Set(selectedIds);
+        if (newSelected.has(id)) {
+            newSelected.delete(id);
+        } else {
+            newSelected.add(id);
+        }
+        setSelectedIds(newSelected);
     };
 
     const filteredStudents = students.filter(s => {
@@ -253,12 +300,12 @@ const Students = () => {
             />
 
             {/* SaaS Header */}
-            <div className="bg-saas-dark text-white">
+            <div className="bg-slate-900 text-white">
                 <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 sm:py-12">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-10">
                         <div className="flex items-center gap-4 sm:gap-5">
-                            <div className="p-3.5 sm:p-4 bg-saas-accent/10 rounded-2xl border border-saas-accent/20 shrink-0">
-                                <UsersIcon className="w-7 h-7 sm:w-8 sm:h-8 text-saas-accent" strokeWidth={2.5} />
+                            <div className="p-3.5 sm:p-4 bg-amber-500/10 rounded-2xl border border-amber-500/20 shrink-0">
+                                <UsersIcon className="w-7 h-7 sm:w-8 sm:h-8 text-amber-500" strokeWidth={2.5} />
                             </div>
                             <div className="min-w-0">
                                 <h1 className="text-2xl sm:text-3xl font-black tracking-tight mb-1 truncate">Student Registry</h1>
@@ -278,7 +325,7 @@ const Students = () => {
                             </Button>
                             <Button
                                 onClick={() => handleOpenModal()}
-                                className="bg-saas-accent hover:bg-saas-accent-hover text-white shadow-xl shadow-saas-accent/20 px-6 py-3 sm:py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0"
+                                className="bg-amber-600 hover:bg-amber-700 text-white shadow-xl shadow-amber-900/20 px-6 py-3 sm:py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0"
                             >
                                 <Plus className="w-5 h-5" strokeWidth={3} />
                                 <span className="font-bold">Add Student</span>
@@ -298,7 +345,7 @@ const Students = () => {
                             placeholder="Search by name or admission no..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm text-saas-dark placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-saas-accent/20 focus:border-saas-accent transition-all"
+                            className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 transition-all"
                         />
                     </div>
 
@@ -308,7 +355,7 @@ const Students = () => {
                             <select
                                 value={selectedClass}
                                 onChange={(e) => setSelectedClass(e.target.value)}
-                                className="w-full pl-11 pr-10 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-saas-accent/20 appearance-none cursor-pointer"
+                                className="w-full pl-11 pr-10 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 appearance-none cursor-pointer"
                             >
                                 <option value="All">All Classes</option>
                                 {classes.map(c => (
@@ -321,7 +368,7 @@ const Students = () => {
                                 </svg>
                             </div>
                         </div>
-                        <button className="p-3 bg-slate-50 text-slate-400 hover:text-saas-accent hover:bg-saas-accent/5 rounded-xl border border-slate-100 transition-all active:scale-95 shrink-0">
+                        <button className="p-3 bg-slate-50 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-xl border border-slate-100 transition-all active:scale-95 shrink-0">
                             <Download className="w-5 h-5" />
                         </button>
                     </div>
@@ -332,17 +379,17 @@ const Students = () => {
             <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-8 mt-6 sm:mt-10">
                 {isLoading ? (
                     <div className="bg-white rounded-2xl saas-shadow border border-saas-border flex flex-col items-center justify-center py-24 sm:py-32 gap-4">
-                        <Loader2 className="w-10 h-10 text-saas-accent animate-spin" strokeWidth={3} />
-                        <p className="text-slate-400 font-semibold tracking-wide uppercase text-[10px] sm:text-[11px] animate-pulse">Loading student records...</p>
+                        <Loader2 className="w-10 h-10 text-amber-600 animate-spin" strokeWidth={3} />
+                        <p className="text-sm font-semibold text-slate-400 tracking-wide">Loading student records…</p>
                     </div>
                 ) : filteredStudents.length === 0 ? (
                     <div className="bg-white rounded-2xl saas-shadow border border-saas-border flex flex-col items-center justify-center py-24 text-center p-6">
                         <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6 border border-slate-100">
                             <Search className="w-8 h-8 text-slate-300" />
                         </div>
-                        <h3 className="text-lg font-bold text-saas-dark">No Students Found</h3>
+                        <h3 className="text-lg font-bold text-slate-900">No Students Found</h3>
                         <p className="text-slate-400 mt-2 max-w-xs text-[13px] font-medium leading-relaxed">Refine your search or class filter to locate students.</p>
-                        <Button onClick={() => handleOpenModal()} className="mt-8 bg-saas-accent shadow-none px-6 py-3 rounded-xl font-bold">
+                        <Button onClick={() => handleOpenModal()} className="mt-8 bg-amber-600 hover:bg-amber-700 shadow-none px-6 py-3 rounded-xl font-bold">
                             <Plus className="w-5 h-5 mr-2" />
                             Add Student
                         </Button>
@@ -355,7 +402,14 @@ const Students = () => {
                                 <table className="w-full text-left">
                                     <thead>
                                         <tr className="bg-slate-50/50 border-b border-saas-border">
-                                            <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-16">#</th>
+                                            <th className="px-8 py-5 w-12">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={filteredStudents.length > 0 && selectedIds.size === filteredStudents.length}
+                                                    onChange={toggleSelectAll}
+                                                    className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500/20 cursor-pointer"
+                                                />
+                                            </th>
                                             <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Student Details</th>
                                             <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Class</th>
                                             <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">DOB</th>
@@ -372,24 +426,32 @@ const Students = () => {
                                                     animate={{ opacity: 1, y: 0 }}
                                                     exit={{ opacity: 0, scale: 0.95 }}
                                                     transition={{ delay: index * 0.02 }}
-                                                    className="group hover:bg-slate-50/50 transition-colors duration-200"
+                                                    className={clsx(
+                                                        "group transition-colors duration-200",
+                                                        selectedIds.has(student.id) ? "bg-amber-50" : "hover:bg-slate-50/50"
+                                                    )}
                                                 >
                                                     <td className="px-8 py-6">
-                                                        <span className="font-mono text-xs font-bold text-slate-300">#AD-{student.admission_no}</span>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedIds.has(student.id)}
+                                                            onChange={() => toggleSelectOne(student.id)}
+                                                            className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500/20 cursor-pointer"
+                                                        />
                                                     </td>
                                                     <td className="px-8 py-6">
                                                         <div className="flex items-center gap-4">
-                                                            <div className="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-black text-sm uppercase">
+                                                            <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 font-black text-sm uppercase">
                                                                 {student.student_name.charAt(0)}
                                                             </div>
                                                             <div className="flex flex-col">
-                                                                <span className="font-bold text-saas-dark text-[15px] tracking-tight">{student.student_name}</span>
+                                                                <span className="font-bold text-slate-900 text-[15px] tracking-tight">{student.student_name}</span>
                                                                 <span className="text-[11px] text-slate-400 font-medium uppercase tracking-wider">{student.category}</span>
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td className="px-8 py-6">
-                                                        <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-saas-accent/5 text-saas-accent text-[11px] font-bold ring-1 ring-inset ring-saas-accent/10">
+                                                        <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-amber-50 text-amber-600 text-[11px] font-bold ring-1 ring-inset ring-amber-500/10">
                                                             {student.class_name}
                                                         </span>
                                                     </td>
@@ -408,7 +470,7 @@ const Students = () => {
                                                         <div className="flex items-center justify-end gap-2">
                                                             <button
                                                                 onClick={() => handleOpenModal(student)}
-                                                                className="p-2.5 text-slate-400 hover:text-saas-accent hover:bg-saas-accent/5 rounded-xl transition-all duration-200 cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center border border-transparent hover:border-saas-accent/10"
+                                                                className="p-2.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-all duration-200 cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center border border-transparent hover:border-amber-500/10"
                                                             >
                                                                 <Edit2 className="w-4 h-4" />
                                                             </button>
@@ -426,6 +488,43 @@ const Students = () => {
                                     </tbody>
                                 </table>
                             </div>
+
+                            {/* Bulk Action Bar */}
+                            <AnimatePresence>
+                                {selectedIds.size > 0 && (
+                                    <motion.div
+                                        initial={{ y: 100, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        exit={{ y: 100, opacity: 0 }}
+                                        className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/10 shadow-2xl flex items-center gap-8 min-w-[320px] md:min-w-[480px] justify-between"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-500 font-black">
+                                                {selectedIds.size}
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-white font-bold text-sm tracking-tight">Students Selected</span>
+                                                <span className="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Bulk Actions Available</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <button
+                                                onClick={() => setSelectedIds(new Set())}
+                                                className="px-4 py-2 text-slate-400 hover:text-white text-[13px] font-bold transition-colors"
+                                            >
+                                                Deselect
+                                            </button>
+                                            <button
+                                                onClick={handleBulkDelete}
+                                                className="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2.5 rounded-xl font-bold text-[13px] flex items-center gap-2 transition-all active:scale-95 shadow-lg shadow-rose-500/20"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                                Delete Selected
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
 
                         {/* Mobile Card View */}
@@ -441,23 +540,31 @@ const Students = () => {
                                         className="bg-white rounded-2xl p-5 saas-shadow border border-saas-border"
                                     >
                                         <div className="flex items-start justify-between mb-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-black text-[13px]">
-                                                    {student.student_name.charAt(0)}
-                                                </div>
-                                                <div className="flex flex-col min-w-0">
-                                                    <span className="font-bold text-saas-dark text-[15px] leading-tight tracking-tight truncate uppercase">
-                                                        {student.student_name}
-                                                    </span>
-                                                    <span className="text-[11px] text-slate-400 font-medium">
-                                                        ADM: #AD-{student.admission_no}
-                                                    </span>
+                                            <div className="flex items-center gap-4">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedIds.has(student.id)}
+                                                    onChange={() => toggleSelectOne(student.id)}
+                                                    className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500/20 cursor-pointer mt-3"
+                                                />
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 font-black text-[13px]">
+                                                        {student.student_name.charAt(0)}
+                                                    </div>
+                                                    <div className="flex flex-col min-w-0">
+                                                        <span className="font-bold text-slate-900 text-[15px] leading-tight tracking-tight truncate uppercase">
+                                                            {student.student_name}
+                                                        </span>
+                                                        <span className="text-[11px] text-slate-400 font-medium">
+                                                            ADM: #AD-{student.admission_no}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="flex gap-1 shrink-0 ml-2">
                                                 <button
                                                     onClick={() => handleOpenModal(student)}
-                                                    className="p-2 text-slate-400 hover:text-saas-accent hover:bg-saas-accent/5 rounded-lg active:scale-95 transition-all outline-none"
+                                                    className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg active:scale-95 transition-all outline-none"
                                                 >
                                                     <Edit2 className="w-4 h-4" />
                                                 </button>
@@ -473,7 +580,7 @@ const Students = () => {
                                         <div className="grid grid-cols-2 gap-4 py-4 border-t border-slate-50">
                                             <div className="flex flex-col">
                                                 <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-1">Class</span>
-                                                <span className="text-[13px] font-bold text-saas-accent">{student.class_name}</span>
+                                                <span className="text-[13px] font-bold text-amber-600">{student.class_name}</span>
                                             </div>
                                             <div className="flex flex-col">
                                                 <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-1">Parent Info</span>
@@ -506,22 +613,22 @@ const Students = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-100 bg-saas-dark/60 backdrop-blur-sm flex items-center justify-center p-4"
+                        className="fixed inset-0 z-100 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
                     >
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             className="bg-white rounded-3xl p-8 max-w-md w-full saas-shadow border border-saas-border text-center"
                         >
-                            <div className="w-20 h-20 rounded-2xl bg-saas-accent/10 flex items-center justify-center text-saas-accent mx-auto mb-6">
+                            <div className="w-20 h-20 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 mx-auto mb-6">
                                 <Loader2 className="w-10 h-10 animate-spin" />
                             </div>
-                            <h3 className="text-xl font-bold text-saas-dark mb-2">Importing Students</h3>
+                            <h3 className="text-xl font-bold text-slate-900 mb-2">Importing Students</h3>
                             <p className="text-slate-500 mb-8">{importStatus}</p>
 
                             <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden mb-4">
                                 <motion.div
-                                    className="h-full bg-saas-accent"
+                                    className="h-full bg-amber-600"
                                     initial={{ width: 0 }}
                                     animate={{ width: `${importProgress}%` }}
                                     transition={{ type: "spring", bounce: 0, duration: 0.5 }}
@@ -543,7 +650,7 @@ const Students = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-110 bg-saas-dark/60 backdrop-blur-sm flex items-center justify-center p-4"
+                        className="fixed inset-0 z-110 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
                     >
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -553,12 +660,12 @@ const Students = () => {
                             <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mx-auto mb-6">
                                 <Check className="w-8 h-8" />
                             </div>
-                            <h3 className="text-lg font-bold text-saas-dark mb-2">Import Complete!</h3>
+                            <h3 className="text-lg font-bold text-slate-900 mb-2">Import Complete!</h3>
                             <p className="text-slate-500 mb-8 text-sm">
                                 Successfully imported <strong>{importStats?.added}</strong> students.
                             </p>
                             <Button
-                                className="w-full bg-saas-accent hover:bg-saas-accent-hover text-white rounded-xl py-4 font-bold"
+                                className="w-full bg-amber-600 hover:bg-amber-700 text-white rounded-xl py-4 font-bold"
                                 onClick={() => setShowSuccessPopup(false)}
                             >
                                 Continue
@@ -597,7 +704,7 @@ const Students = () => {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => !isSaving && setIsModalOpen(false)}
-                            className="absolute inset-0 bg-saas-dark/60 backdrop-blur-sm"
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
                         />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -608,15 +715,15 @@ const Students = () => {
                             <div className="p-5 sm:p-8 max-h-[90vh] overflow-y-auto">
                                 <div className="flex items-center justify-between mb-8">
                                     <div>
-                                        <h2 className="text-xl sm:text-2xl font-bold text-saas-dark">
+                                        <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
                                             {editingStudent ? 'Refine Student Profile' : 'Student Enrollment'}
                                         </h2>
                                         <p className="text-slate-400 text-[13px] sm:text-sm mt-1">
                                             {editingStudent ? 'Update registration and academic info.' : 'Complete the registration for the new pupil.'}
                                         </p>
                                     </div>
-                                    <div className="p-3 bg-saas-accent/10 rounded-2xl hidden sm:block">
-                                        <UsersIcon className={clsx("w-6 h-6 text-saas-accent")} />
+                                    <div className="p-3 bg-amber-500/10 rounded-2xl hidden sm:block">
+                                        <UsersIcon className={clsx("w-6 h-6 text-amber-500")} />
                                     </div>
                                 </div>
 
@@ -629,7 +736,7 @@ const Students = () => {
                                                 required
                                                 value={formData.admission_no}
                                                 onChange={(e) => setFormData({ ...formData, admission_no: e.target.value })}
-                                                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-saas-accent/20 focus:border-saas-accent transition-all"
+                                                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 transition-all"
                                                 placeholder="e.g. 10245"
                                             />
                                         </div>
@@ -640,7 +747,7 @@ const Students = () => {
                                                     required
                                                     value={formData.class_id}
                                                     onChange={(e) => setFormData({ ...formData, class_id: e.target.value })}
-                                                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-saas-accent/20 focus:border-saas-accent transition-all appearance-none cursor-pointer"
+                                                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 transition-all appearance-none cursor-pointer"
                                                 >
                                                     <option value="">Select Class</option>
                                                     {classes.map(c => (
@@ -658,7 +765,7 @@ const Students = () => {
                                             required
                                             value={formData.student_name}
                                             onChange={(e) => setFormData({ ...formData, student_name: e.target.value })}
-                                            className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-saas-accent/20 focus:border-saas-accent transition-all"
+                                            className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 transition-all"
                                             placeholder="Enter full name"
                                         />
                                     </div>
@@ -670,7 +777,7 @@ const Students = () => {
                                                 type="text"
                                                 value={formData.father_name}
                                                 onChange={(e) => setFormData({ ...formData, father_name: e.target.value })}
-                                                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-saas-accent/20 focus:border-saas-accent transition-all"
+                                                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 transition-all"
                                                 placeholder="Father's name"
                                             />
                                         </div>
@@ -680,7 +787,7 @@ const Students = () => {
                                                 type="text"
                                                 value={formData.mother_name}
                                                 onChange={(e) => setFormData({ ...formData, mother_name: e.target.value })}
-                                                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-saas-accent/20 focus:border-saas-accent transition-all"
+                                                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 transition-all"
                                                 placeholder="Mother's name"
                                             />
                                         </div>
@@ -693,7 +800,7 @@ const Students = () => {
                                                 type="text"
                                                 value={formData.phone_number}
                                                 onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
-                                                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-saas-accent/20 focus:border-saas-accent transition-all"
+                                                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 transition-all"
                                                 placeholder="Mobile number"
                                             />
                                         </div>
@@ -703,7 +810,7 @@ const Students = () => {
                                                 type="date"
                                                 value={formData.dob}
                                                 onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
-                                                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-saas-accent/20 focus:border-saas-accent transition-all"
+                                                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 transition-all"
                                             />
                                         </div>
                                     </div>
@@ -713,7 +820,7 @@ const Students = () => {
                                         <textarea
                                             value={formData.address}
                                             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                                            className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-saas-accent/20 focus:border-saas-accent transition-all resize-none h-24"
+                                            className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 transition-all resize-none h-24"
                                             placeholder="Resident address"
                                         />
                                     </div>
@@ -729,7 +836,7 @@ const Students = () => {
                                         </button>
                                         <button
                                             type="submit"
-                                            className="flex-1 px-6 py-4 bg-saas-accent text-white font-bold rounded-2xl hover:bg-saas-accent-hover shadow-lg shadow-saas-accent/20 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2 text-[15px]"
+                                            className="flex-1 px-6 py-4 bg-amber-600 text-white font-bold rounded-2xl hover:bg-amber-700 shadow-lg shadow-amber-900/20 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2 text-[15px]"
                                             disabled={isSaving}
                                         >
                                             {isSaving ? (
@@ -748,7 +855,7 @@ const Students = () => {
                     </div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 };
 

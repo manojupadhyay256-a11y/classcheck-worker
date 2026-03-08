@@ -100,7 +100,7 @@ const TeacherLogBook = () => {
     if (loading && logs.length === 0) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAFC]">
-                <Loader2 className="w-10 h-10 mb-4 animate-spin text-[#008B74]" />
+                <Loader2 className="w-10 h-10 mb-4 animate-spin text-amber-600" />
                 <p className="text-sm font-semibold text-slate-400 tracking-wide uppercase">Loading Log Book...</p>
             </div>
         );
@@ -127,7 +127,7 @@ const TeacherLogBook = () => {
 
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="flex items-center justify-center gap-3 px-8 py-4 bg-[#008B74] text-white font-black uppercase tracking-widest rounded-2xl border border-[#00A388] hover:bg-[#00A388] transition-all duration-300 active:scale-95 text-xs shadow-xl shadow-[#008B74]/20 group"
+                        className="flex items-center justify-center gap-3 px-8 py-4 bg-amber-600 text-white font-black uppercase tracking-widest rounded-2xl border border-amber-500 hover:bg-amber-700 transition-all duration-300 active:scale-95 text-xs shadow-xl shadow-amber-900/10 group"
                     >
                         <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
                         Create Entry
@@ -144,7 +144,7 @@ const TeacherLogBook = () => {
                         placeholder="Search by class, subject, or topic..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-14 pr-6 py-4 bg-white border border-slate-200 rounded-3xl focus:ring-2 focus:ring-[#008B74] focus:border-transparent outline-none font-bold text-slate-600 shadow-sm"
+                        className="w-full pl-14 pr-6 py-4 bg-white border border-slate-200 rounded-3xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none font-bold text-slate-600 shadow-sm"
                     />
                 </div>
             </div>
@@ -166,13 +166,13 @@ const TeacherLogBook = () => {
                                 <div className="flex flex-col items-center justify-center min-w-[80px] p-4 bg-slate-50 rounded-2xl border border-slate-100">
                                     <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{format(new Date(log.date), 'MMM')}</span>
                                     <span className="text-2xl font-black text-slate-800">{format(new Date(log.date), 'dd')}</span>
-                                    <span className="text-[10px] font-black uppercase text-[#008B74] tracking-widest mt-1">{log.period}</span>
+                                    <span className="text-[10px] font-black uppercase text-amber-600 tracking-widest mt-1">{log.period}</span>
                                 </div>
 
                                 {/* Content */}
                                 <div className="flex-1 min-w-0">
                                     <div className="flex flex-wrap items-center gap-3 mb-2">
-                                        <span className="px-3 py-1 bg-[#EEF2FF] text-saas-accent-hover text-[10px] font-black rounded-lg uppercase tracking-widest border border-[#E0E7FF]">
+                                        <span className="px-3 py-1 bg-amber-50 text-amber-600 text-[10px] font-black rounded-lg uppercase tracking-widest border border-amber-100">
                                             Class {log.class_name}
                                         </span>
                                         <span className="px-3 py-1 bg-slate-50 text-slate-500 text-[10px] font-black rounded-lg uppercase tracking-widest border border-slate-100">
@@ -200,7 +200,7 @@ const TeacherLogBook = () => {
                                     >
                                         <Trash2 className="w-5 h-5" />
                                     </button>
-                                    <div className="hidden md:flex p-3 text-slate-300 group-hover:text-[#008B74] transition-colors duration-300">
+                                    <div className="hidden md:flex p-3 text-slate-300 group-hover:text-amber-600 transition-colors duration-300">
                                         <ChevronRight className="w-6 h-6" />
                                     </div>
                                 </div>

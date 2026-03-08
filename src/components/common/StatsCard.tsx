@@ -18,14 +18,14 @@ const StatsCard = ({ label, value, icon: Icon, trend, color = 'primary' }: Stats
     const colors = {
         primary: 'bg-primary/10 text-primary',
         secondary: 'bg-secondary/10 text-secondary',
-        accent: 'bg-indigo-100 text-indigo-600',
+        accent: 'bg-amber-100 text-amber-600',
         success: 'bg-emerald-100 text-emerald-600',
     };
 
     return (
         <motion.div
             whileHover={{ y: -4 }}
-            className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300"
+            className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300"
         >
             <div className="flex items-center justify-between mb-4">
                 <div className={clsx("p-3 rounded-xl", colors[color])}>
@@ -42,8 +42,8 @@ const StatsCard = ({ label, value, icon: Icon, trend, color = 'primary' }: Stats
                 )}
             </div>
             <div>
-                <p className="text-sm font-medium text-gray-500">{label}</p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-1">{value}</h3>
+                <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">{label}</p>
+                <h3 className="text-3xl font-extrabold text-gray-900 mt-1 tabular-nums">{value}</h3>
             </div>
         </motion.div>
     );

@@ -149,12 +149,12 @@ const TeacherLogins = () => {
     return (
         <div className="min-h-screen bg-[#F8FAFC] pb-24 font-inter">
             {/* SaaS Header */}
-            <div className="bg-saas-dark text-white">
+            <div className="bg-slate-900 text-white">
                 <div className="max-w-7xl mx-auto px-4 md:px-8 py-10">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                         <div className="flex items-center gap-5">
-                            <div className="p-4 bg-saas-accent/10 rounded-2xl border border-saas-accent/20">
-                                <Key className="w-8 h-8 text-saas-accent" strokeWidth={2.5} />
+                            <div className="p-4 bg-amber-500/10 rounded-2xl border border-amber-500/20">
+                                <Key className="w-8 h-8 text-amber-500" strokeWidth={2.5} />
                             </div>
                             <div>
                                 <h1 className="text-3xl font-bold tracking-tight mb-1">Teacher Logins</h1>
@@ -169,7 +169,7 @@ const TeacherLogins = () => {
                                 placeholder="Search teacher by name..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-11 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-saas-accent/40 transition-all search-inset"
+                                className="w-full pl-11 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-600/40 transition-all search-inset"
                             />
                         </div>
                     </div>
@@ -185,13 +185,13 @@ const TeacherLogins = () => {
                         </div>
                         <div>
                             <p className="text-sm font-semibold text-slate-500">Access Overview</p>
-                            <h2 className="text-2xl font-bold text-saas-dark leading-tight">
+                            <h2 className="text-2xl font-bold text-slate-900 leading-tight">
                                 {data.filter(t => t.profile_id).length} / {data.length} Logins
                             </h2>
                         </div>
                     </div>
                     {refreshing && (
-                        <div className="flex items-center gap-2 text-saas-accent text-xs font-semibold animate-pulse">
+                        <div className="flex items-center gap-2 text-amber-600 text-xs font-semibold animate-pulse">
                             <RefreshCw className="w-4 h-4 animate-spin" />
                             Refreshing...
                         </div>
@@ -203,7 +203,7 @@ const TeacherLogins = () => {
                 <div className="bg-white rounded-2xl saas-shadow border border-saas-border overflow-hidden">
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-32 gap-4">
-                            <Loader2 className="w-10 h-10 text-saas-accent animate-spin" strokeWidth={3} />
+                            <Loader2 className="w-10 h-10 text-amber-600 animate-spin" strokeWidth={3} />
                             <p className="text-slate-400 font-semibold tracking-wide uppercase text-[11px]">Loading accounts...</p>
                         </div>
                     ) : filteredData.length > 0 ? (
@@ -229,10 +229,10 @@ const TeacherLogins = () => {
                                             >
                                                 <td className="px-8 py-6">
                                                     <div className="flex items-center gap-3">
-                                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm ${item.profile_id ? 'bg-indigo-50 text-indigo-600 border border-indigo-100' : 'bg-slate-100 text-slate-400 border border-slate-200'}`}>
+                                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm ${item.profile_id ? 'bg-amber-50 text-amber-600 border border-amber-100' : 'bg-slate-100 text-slate-400 border border-slate-200'}`}>
                                                             {item.name.charAt(0)}
                                                         </div>
-                                                        <span className="font-semibold text-saas-dark text-[15px]">{item.name}</span>
+                                                        <span className="font-semibold text-slate-900 text-[15px]">{item.name}</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-8 py-6">
@@ -258,7 +258,7 @@ const TeacherLogins = () => {
                                                     {!item.profile_id ? (
                                                         <button
                                                             onClick={() => handleOpenCreateModal(item)}
-                                                            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm hover:shadow-md"
+                                                            className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm hover:shadow-md"
                                                         >
                                                             <UserPlus className="w-4 h-4" />
                                                             Create Access
@@ -280,7 +280,7 @@ const TeacherLogins = () => {
                             <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
                                 <Fingerprint className="w-10 h-10 text-slate-300" />
                             </div>
-                            <h3 className="text-xl font-bold text-saas-dark">No teachers found</h3>
+                            <h3 className="text-xl font-bold text-slate-900">No teachers found</h3>
                             <p className="text-slate-400 mt-2 text-sm">Check your teacher directory or try another search.</p>
                         </div>
                     )}
@@ -296,7 +296,7 @@ const TeacherLogins = () => {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => !isCreating && setIsCreateModalOpen(false)}
-                            className="absolute inset-0 bg-saas-dark/80 backdrop-blur-sm"
+                            className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"
                         />
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -304,15 +304,15 @@ const TeacherLogins = () => {
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
                             className="relative bg-white rounded-[32px] p-8 md:p-10 max-w-md w-full shadow-2xl overflow-hidden text-center"
                         >
-                            <div className="absolute top-0 left-0 w-full h-2 bg-indigo-600" />
+                            <div className="absolute top-0 left-0 w-full h-2 bg-amber-600" />
 
-                            <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                                <ShieldCheck className="w-8 h-8 text-indigo-600" />
+                            <div className="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                                <ShieldCheck className="w-8 h-8 text-amber-600" />
                             </div>
 
-                            <h3 className="text-2xl font-black text-saas-dark mb-2">Create Teacher Login</h3>
+                            <h3 className="text-2xl font-black text-slate-900 mb-2">Create Teacher Login</h3>
                             <p className="text-slate-400 text-sm font-medium mb-8">
-                                You are creating a login for <span className="text-indigo-600 font-bold">{selectedTeacher?.name}</span>.
+                                You are creating a login for <span className="text-amber-600 font-bold">{selectedTeacher?.name}</span>.
                             </p>
 
                             <div className="space-y-4 mb-8">
@@ -325,18 +325,18 @@ const TeacherLogins = () => {
                                 <div className="text-left space-y-1">
                                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Default Password</label>
                                     <div className="relative">
-                                        <Key className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-400" />
+                                        <Key className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-400" />
                                         <input
                                             type={showPassword ? "text" : "password"}
                                             value={customPassword}
                                             onChange={(e) => setCustomPassword(e.target.value)}
-                                            className="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-indigo-600 font-bold text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                                            className="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-amber-600 font-bold text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all"
                                             placeholder="Set password (min. 8 chars)..."
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 transition-colors"
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-amber-600 transition-colors"
                                         >
                                             {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                         </button>
@@ -364,7 +364,7 @@ const TeacherLogins = () => {
                                 <Button
                                     onClick={handleCreateLogin}
                                     isLoading={isCreating}
-                                    className="flex-1 rounded-2xl bg-indigo-600 hover:bg-indigo-700"
+                                    className="flex-1 rounded-2xl bg-amber-600 hover:bg-amber-700"
                                 >
                                     Proceed
                                 </Button>

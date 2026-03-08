@@ -91,7 +91,7 @@ const AttendanceReport = () => {
                         <ArrowLeft className="w-6 h-6 text-gray-600 group-hover:-translate-x-1 transition-transform" />
                     </button>
                     <div>
-                        <h1 className="text-3xl font-black text-[#1E1B4B] tracking-tight">Attendance Report</h1>
+                        <h1 className="text-3xl font-black text-slate-900 tracking-tight">Attendance Report</h1>
                         <p className="text-gray-500 font-medium">Daily class-wise attendance analytics</p>
                     </div>
                 </div>
@@ -103,7 +103,7 @@ const AttendanceReport = () => {
                             type="date"
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
-                            className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border border-gray-100 focus:ring-2 focus:ring-indigo-600 outline-none shadow-sm transition-all font-bold text-[#1E1B4B]"
+                            className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border border-gray-100 focus:ring-2 focus:ring-amber-600 outline-none shadow-sm transition-all font-bold text-slate-900"
                         />
                     </div>
                 </div>
@@ -113,12 +113,12 @@ const AttendanceReport = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white p-6 rounded-[32px] soft-shadow border border-gray-100">
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center">
-                            <TrendingUp className="w-6 h-6 text-indigo-600" />
+                        <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center">
+                            <TrendingUp className="w-6 h-6 text-amber-600" />
                         </div>
                         <span className="text-sm font-black text-gray-400 uppercase tracking-widest">Global Attendance</span>
                     </div>
-                    <p className="text-4xl font-black text-[#1E1B4B]">{averageAttendance}%</p>
+                    <p className="text-4xl font-black text-slate-900">{averageAttendance}%</p>
                     <p className="text-xs font-bold text-gray-400 mt-2 italic">Average across all {attendances.length} classes</p>
                 </div>
 
@@ -131,7 +131,7 @@ const AttendanceReport = () => {
                     </div>
                     <div className="w-full bg-gray-50 h-3 rounded-full overflow-hidden mt-6 flex">
                         <div
-                            className="h-full bg-indigo-600 transition-all duration-1000"
+                            className="h-full bg-amber-600 transition-all duration-1000"
                             style={{ width: `${averageAttendance}%` }}
                         />
                     </div>
@@ -146,7 +146,7 @@ const AttendanceReport = () => {
             {/* List Section */}
             <div className="bg-white rounded-[32px] soft-shadow border border-gray-100 overflow-hidden">
                 <div className="p-8 border-b border-gray-50 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                    <h2 className="text-xl font-black text-[#1E1B4B]">Class Statistics</h2>
+                    <h2 className="text-xl font-black text-slate-900">Class Statistics</h2>
                     <div className="relative w-full md:w-80">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
@@ -154,7 +154,7 @@ const AttendanceReport = () => {
                             placeholder="Search class or teacher..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-12 pr-4 py-3 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-600 outline-none transition-all font-bold text-[#1E1B4B]"
+                            className="w-full pl-12 pr-4 py-3 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-amber-600 outline-none transition-all font-bold text-slate-900"
                         />
                     </div>
                 </div>
@@ -188,10 +188,10 @@ const AttendanceReport = () => {
                                     >
                                         <td className="px-8 py-6">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center">
-                                                    <School className="w-5 h-5 text-indigo-600" />
+                                                <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center">
+                                                    <School className="w-5 h-5 text-amber-600" />
                                                 </div>
-                                                <span className="text-lg font-black text-[#1E1B4B]">{a.name}</span>
+                                                <span className="text-lg font-black text-slate-900">{a.name}</span>
                                             </div>
                                         </td>
                                         <td className="px-8 py-6">
@@ -199,7 +199,7 @@ const AttendanceReport = () => {
                                         </td>
                                         <td className="px-8 py-6 text-center">
                                             <div className="flex flex-col items-center">
-                                                <span className="text-lg font-black text-[#1E1B4B]">{a.present_today} / {a.total_students}</span>
+                                                <span className="text-lg font-black text-slate-900">{a.present_today} / {a.total_students}</span>
                                                 <span className="text-xs font-bold text-gray-400">Students</span>
                                             </div>
                                         </td>
@@ -225,7 +225,7 @@ const AttendanceReport = () => {
                                             </div>
                                         </td>
                                         <td className="px-8 py-6">
-                                            <button className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                                            <button className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-amber-600 group-hover:text-white transition-all">
                                                 <ChevronRight className="w-5 h-5" />
                                             </button>
                                         </td>

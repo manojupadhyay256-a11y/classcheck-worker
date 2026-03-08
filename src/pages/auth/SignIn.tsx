@@ -45,9 +45,9 @@ const roles = [
         id: 'student',
         label: 'Student',
         icon: GraduationCap,
-        color: 'bg-indigo-50',
-        iconColor: 'text-indigo-500',
-        borderColor: 'hover:border-indigo-200'
+        color: 'bg-amber-50',
+        iconColor: 'text-amber-500',
+        borderColor: 'hover:border-amber-200'
     },
 ];
 
@@ -191,9 +191,14 @@ const SignIn = () => {
                     <div className="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2"></div>
                 </div>
 
-                <div className="relative z-10 flex items-center gap-4">
-                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center p-2 shadow-xl shadow-black/20">
-                        <img src="/dpsicon.jpg" alt="Logo" className="w-full h-full object-contain" />
+                <div className="relative z-10 flex items-center gap-6">
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-2 shadow-xl shadow-black/20 overflow-hidden border border-white/10">
+                            <img src="/check.png" alt="Logo" className="w-full h-full object-contain" />
+                        </div>
+                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-2 shadow-xl shadow-black/20 overflow-hidden border border-white/10">
+                            <img src="/dpsicon.png" alt="DPS Logo" className="w-full h-full object-contain" />
+                        </div>
                     </div>
                     <div className="flex flex-col">
                         <span className="text-2xl font-bold text-white tracking-tight leading-none uppercase">DPSMRN</span>
@@ -221,11 +226,11 @@ const SignIn = () => {
                 {/* Mobile Header (Only visible on mobile) */}
                 <div className="lg:hidden absolute top-0 left-0 right-0 p-4 border-b border-gray-50 bg-white z-20">
                     <div className="flex items-center justify-between mb-3">
-                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center p-1.5 shadow-sm border border-gray-100">
-                            <img src="/icon.png" alt="ClassCheck" className="w-full h-full object-contain" />
+                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-2 shadow-sm border border-gray-100 overflow-hidden">
+                            <img src="/check.png" alt="ClassCheck" className="w-full h-full object-contain" />
                         </div>
-                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center p-1.5 shadow-sm border border-gray-100">
-                            <img src="/dpsicon.jpg" alt="Logo" className="w-full h-full object-contain" />
+                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-2 shadow-sm border border-gray-100 overflow-hidden">
+                            <img src="/dpsicon.png" alt="DPS Logo" className="w-full h-full object-contain" />
                         </div>
                     </div>
 

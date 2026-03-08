@@ -102,7 +102,7 @@ const Settings = () => {
     return (
         <div className="max-w-4xl mx-auto space-y-8 pb-12">
             <div>
-                <h1 className="text-3xl font-bold text-[#1E1B4B] mb-2">Settings</h1>
+                <h1 className="text-3xl font-bold text-slate-900 mb-2">Settings</h1>
                 <p className="text-gray-500">Manage your account and school configuration.</p>
             </div>
 
@@ -154,20 +154,20 @@ const Settings = () => {
                     >
                         {/* Personal Info - Read Only */}
                         <section className="bg-white p-8 rounded-[32px] border border-gray-100 soft-shadow">
-                            <h2 className="text-xl font-bold text-[#1E1B4B] mb-6 flex items-center gap-2">
+                            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                                 <User className="w-5 h-5 text-primary" />
                                 Personal Information
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-1.5">
                                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Full Name</label>
-                                    <div className="p-4 bg-gray-50 border border-gray-100 rounded-2xl font-semibold text-[#1E1B4B]">
+                                    <div className="p-4 bg-gray-50 border border-gray-100 rounded-2xl font-semibold text-slate-900">
                                         {profile?.full_name}
                                     </div>
                                 </div>
                                 <div className="space-y-1.5">
                                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Email Address</label>
-                                    <div className="p-4 bg-gray-50 border border-gray-100 rounded-2xl font-semibold text-[#1E1B4B]">
+                                    <div className="p-4 bg-gray-50 border border-gray-100 rounded-2xl font-semibold text-slate-900">
                                         {profile?.email}
                                     </div>
                                 </div>
@@ -176,7 +176,7 @@ const Settings = () => {
 
                         {/* Change Password */}
                         <section className="bg-white p-8 rounded-[32px] border border-gray-100 soft-shadow">
-                            <h2 className="text-xl font-bold text-[#1E1B4B] mb-6 flex items-center gap-2">
+                            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                                 <Lock className="w-5 h-5 text-primary" />
                                 Change Password
                             </h2>
@@ -219,7 +219,7 @@ const Settings = () => {
                                 <button
                                     type="submit"
                                     disabled={isSaving}
-                                    className="px-8 py-4 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-indigo-900/20 hover:shadow-indigo-900/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50"
+                                    className="px-8 py-4 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-amber-900/20 hover:shadow-amber-900/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50"
                                 >
                                     {isSaving ? 'Updating...' : 'Update Password'}
                                 </button>
@@ -234,7 +234,7 @@ const Settings = () => {
                         animate={{ opacity: 1, x: 0 }}
                     >
                         <section className="bg-white p-8 rounded-[32px] border border-gray-100 soft-shadow">
-                            <h2 className="text-xl font-bold text-[#1E1B4B] mb-6 flex items-center gap-2">
+                            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                                 <Building2 className="w-5 h-5 text-primary" />
                                 School Information
                             </h2>
@@ -248,7 +248,7 @@ const Settings = () => {
                                             required
                                             value={systemData.school_name}
                                             onChange={(e) => setSystemData({ ...systemData, school_name: e.target.value })}
-                                            className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all font-semibold text-[#1E1B4B]"
+                                            className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all font-semibold text-slate-900"
                                             placeholder="Enter school name"
                                         />
                                     </div>
@@ -264,7 +264,7 @@ const Settings = () => {
                                                 required
                                                 value={systemData.academic_year}
                                                 onChange={(e) => setSystemData({ ...systemData, academic_year: e.target.value })}
-                                                className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all font-semibold text-[#1E1B4B]"
+                                                className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all font-semibold text-slate-900"
                                                 placeholder="e.g. 2026-27"
                                             />
                                         </div>
@@ -292,7 +292,7 @@ const Settings = () => {
                                 <button
                                     type="submit"
                                     disabled={isSaving}
-                                    className="px-8 py-4 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-indigo-900/20 hover:shadow-indigo-900/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50"
+                                    className="px-8 py-4 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-amber-900/20 hover:shadow-amber-900/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50"
                                 >
                                     {isSaving ? 'Saving Changes...' : 'Save System Settings'}
                                 </button>

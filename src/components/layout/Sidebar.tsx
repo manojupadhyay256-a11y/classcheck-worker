@@ -44,14 +44,15 @@ const Sidebar = ({ onClose }: SidebarProps) => {
         { to: '/admin/syllabus', icon: BookOpen, label: 'Syllabus Status' },
         { to: '/admin/reports/attendance', icon: BarChart3, label: 'Attendance Report' },
         { to: '/admin/profile', icon: Users, label: 'Profile' },
-        { to: '/admin/notifications', icon: ListChecks, label: 'Notifications' },
+        { to: '/admin/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
+        { to: '/admin/help', icon: HelpCircle, label: 'Help' },
     ];
 
     const systemLinks = [
         { to: '/admin/bulk-import', icon: CalendarCheck, label: 'Bulk Import' },
         { to: '/admin/settings', icon: SettingsIcon, label: 'Settings' },
         { to: '/admin/teacher-logins', icon: Fingerprint, label: 'Teacher Logins' },
-        { icon: HelpCircle, label: 'Help & Guide', onClick: () => alert('Coming Soon') },
+        { to: '/admin/help', icon: HelpCircle, label: 'Help & Guide' },
     ];
 
     const teacherLinks = [
@@ -62,7 +63,8 @@ const Sidebar = ({ onClose }: SidebarProps) => {
         { to: '/teacher/log-book', icon: ListChecks, label: 'Log Book' },
         { to: '/teacher/reports', icon: BarChart3, label: 'Reports' },
         { to: '/teacher/profile', icon: Users, label: 'Profile' },
-        { to: '/teacher/notifications', icon: Bell, label: 'Notifications' },
+        { to: '/teacher/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
+        { to: '/teacher/help', icon: HelpCircle, label: 'Help' },
     ];
 
     const studentLinks = [
@@ -71,7 +73,8 @@ const Sidebar = ({ onClose }: SidebarProps) => {
         { to: '/student/attendance', icon: CalendarCheck, label: 'Attendance' },
         { to: '/student/subjects', icon: BookOpen, label: 'My Subjects' },
         { to: '/student/profile', icon: Users, label: 'Profile' },
-        { to: '/student/notifications', icon: Bell, label: 'Notifications' },
+        { to: '/student/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
+        { to: '/student/help', icon: HelpCircle, label: 'Help' },
     ];
 
     const handleLogout = () => {
@@ -86,17 +89,17 @@ const Sidebar = ({ onClose }: SidebarProps) => {
             {/* Header */}
             <div className="px-6 md:px-8 mb-6 md:mb-10 flex items-center justify-between">
                 <div className="flex items-center gap-3 md:gap-4 overflow-hidden">
-                    <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-100 border border-[#F1F5F9] p-2 shrink-0">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg shadow-amber-100 border border-[#F1F5F9] p-2 shrink-0">
                         <img src="/dpsicon.jpg" alt="Logo" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex flex-col min-w-0">
-                        <span className="text-lg md:text-xl font-black text-[#1E1B4B] tracking-tight leading-none uppercase truncate">
+                        <span className="text-lg md:text-xl font-black text-slate-900 tracking-tight leading-none uppercase truncate">
                             {settings?.school_name?.split(' ').map(w => w[0]).join('').slice(0, 6) || 'DPSMRN'}
                         </span>
-                        <span className="text-[9px] md:text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full mt-1 md:mt-1.5 self-start opacity-70 whitespace-nowrap">
+                        <span className="text-[9px] md:text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full mt-1 md:mt-1.5 self-start opacity-70 whitespace-nowrap">
                             {profile?.role === 'admin' ? 'ADMIN PORTAL' : profile?.role === 'teacher' ? 'TEACHER PORTAL' : 'STUDENT PORTAL'}
                         </span>
-                        <span className="text-[7px] md:text-[8px] font-black text-indigo-400 uppercase tracking-widest mt-1.5 opacity-50">
+                        <span className="text-[7px] md:text-[8px] font-black text-amber-400 uppercase tracking-widest mt-1.5 opacity-50">
                             Powered by ClassCheck
                         </span>
                     </div>
@@ -122,22 +125,22 @@ const Sidebar = ({ onClose }: SidebarProps) => {
                                 className={({ isActive }) => clsx(
                                     "flex items-center gap-3.5 px-4 py-3.5 rounded-2xl transition-all duration-300 group",
                                     isActive
-                                        ? "bg-indigo-600 text-white shadow-xl shadow-indigo-200"
-                                        : "text-[#64748B] hover:bg-indigo-50 hover:text-indigo-700"
+                                        ? "bg-amber-600 text-white shadow-xl shadow-amber-900/10"
+                                        : "text-[#64748B] hover:bg-amber-50 hover:text-amber-700"
                                 )}
                             >
                                 {({ isActive }) => (
                                     <>
                                         <link.icon className={clsx(
                                             "w-5 h-5 transition-transform duration-300 group-hover:scale-110",
-                                            isActive ? "text-white" : "text-[#94A3B8] group-hover:text-indigo-600"
+                                            isActive ? "text-white" : "text-[#94A3B8] group-hover:text-amber-600"
                                         )} />
                                         <span className="font-bold text-[15px] tracking-tight">{link.label}</span>
                                         {isActive && (
                                             <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                                         )}
                                         {!isActive && link.to.endsWith('/notifications') && unreadCount > 0 && (
-                                            <div className="ml-auto min-w-[20px] h-5 bg-rose-500 text-white text-[10px] font-black rounded-full flex items-center justify-center px-1 border-2 border-white group-hover:border-indigo-50 transition-colors">
+                                            <div className="ml-auto min-w-[20px] h-5 bg-rose-500 text-white text-[10px] font-black rounded-full flex items-center justify-center px-1 border-2 border-white group-hover:border-amber-50 transition-colors">
                                                 {unreadCount > 9 ? '9+' : unreadCount}
                                             </div>
                                         )}
@@ -153,41 +156,30 @@ const Sidebar = ({ onClose }: SidebarProps) => {
                         <p className="px-4 text-[10px] uppercase font-black tracking-widest text-[#94A3B8] mb-4">System Settings</p>
                         <div className="space-y-1">
                             {systemLinks.map((link) => (
-                                link.to ? (
-                                    <NavLink
-                                        key={link.to}
-                                        to={link.to}
-                                        onClick={onClose}
-                                        className={({ isActive }) => clsx(
-                                            "flex items-center gap-3.5 px-4 py-3.5 rounded-2xl transition-all duration-300 group",
-                                            isActive
-                                                ? "bg-indigo-600 text-white shadow-xl shadow-indigo-200"
-                                                : "text-[#64748B] hover:bg-indigo-50 hover:text-indigo-700"
-                                        )}
-                                    >
-                                        {({ isActive }) => (
-                                            <>
-                                                <link.icon className={clsx(
-                                                    "w-5 h-5 transition-transform duration-300 group-hover:scale-110",
-                                                    isActive ? "text-white" : "text-[#94A3B8] group-hover:text-indigo-600"
-                                                )} />
-                                                <span className="font-bold text-[15px] tracking-tight">{link.label}</span>
-                                                {isActive && (
-                                                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                                                )}
-                                            </>
-                                        )}
-                                    </NavLink>
-                                ) : (
-                                    <button
-                                        key={link.label}
-                                        onClick={link.onClick}
-                                        className="flex items-center gap-3.5 px-4 py-3.5 w-full text-left text-[#64748B] hover:bg-indigo-50 hover:text-indigo-700 rounded-2xl transition-all duration-300 group"
-                                    >
-                                        <link.icon className="w-5 h-5 transition-transform duration-300 group-hover:scale-110 text-[#94A3B8] group-hover:text-indigo-600" />
-                                        <span className="font-bold text-[15px] tracking-tight">{link.label}</span>
-                                    </button>
-                                )
+                                <NavLink
+                                    key={link.to}
+                                    to={link.to}
+                                    onClick={onClose}
+                                    className={({ isActive }) => clsx(
+                                        "flex items-center gap-3.5 px-4 py-3.5 rounded-2xl transition-all duration-300 group",
+                                        isActive
+                                            ? "bg-amber-600 text-white shadow-xl shadow-amber-900/10"
+                                            : "text-[#64748B] hover:bg-amber-50 hover:text-amber-700"
+                                    )}
+                                >
+                                    {({ isActive }) => (
+                                        <>
+                                            <link.icon className={clsx(
+                                                "w-5 h-5 transition-transform duration-300 group-hover:scale-110",
+                                                isActive ? "text-white" : "text-[#94A3B8] group-hover:text-indigo-600"
+                                            )} />
+                                            <span className="font-bold text-[15px] tracking-tight">{link.label}</span>
+                                            {isActive && (
+                                                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                                            )}
+                                        </>
+                                    )}
+                                </NavLink>
                             ))}
                         </div>
                     </div>
@@ -196,14 +188,14 @@ const Sidebar = ({ onClose }: SidebarProps) => {
 
             {/* Profile & Logout */}
             <div className="px-4 mt-auto space-y-3">
-                <div className="p-1 bg-indigo-50/50 rounded-[28px] border border-indigo-100/50">
+                <div className="p-1 bg-amber-50/50 rounded-[28px] border border-amber-100/50">
                     <div className="px-4 py-4 flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-200">
+                        <div className="w-10 h-10 rounded-2xl bg-amber-600 flex items-center justify-center shadow-lg shadow-amber-900/10">
                             <span className="text-white font-black text-lg">{profile?.full_name?.charAt(0) || 'U'}</span>
                         </div>
                         <div className="flex flex-col min-w-0">
-                            <span className="text-[15px] font-black text-[#1E1B4B] truncate tracking-tight">{profile?.full_name || 'User'}</span>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-indigo-600/60 leading-none mt-1">
+                            <span className="text-[15px] font-black text-slate-900 truncate tracking-tight">{profile?.full_name || 'User'}</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-amber-600/60 leading-none mt-1">
                                 {profile?.role || 'Guest'}
                             </span>
                         </div>

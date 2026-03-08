@@ -71,16 +71,16 @@ const StudentSubjects = () => {
     if (loading) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAFC]">
-                <Loader2 className="w-10 h-10 mb-4 animate-spin text-[#1E1B4B]" />
+                <Loader2 className="w-10 h-10 mb-4 animate-spin text-amber-600" />
                 <p className="text-sm font-semibold text-slate-400 tracking-wide uppercase">Organizing Your Studies...</p>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 pb-24 font-inter text-[#1E1B4B]">
+        <div className="min-h-screen bg-slate-50 pb-24 font-inter text-slate-900">
             {/* Header section */}
-            <div className="bg-[#1E1B4B] rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group">
+            <div className="bg-amber-600 rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-32 -translate-y-32 group-hover:scale-110 transition-transform duration-700" />
 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
@@ -92,17 +92,17 @@ const StudentSubjects = () => {
                             <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md uppercase">
                                 My Subjects
                             </h1>
-                            <p className="text-indigo-200 text-sm font-medium">Explore your academic journey and track syllabus progress</p>
+                            <p className="text-amber-100 text-sm font-medium">Explore your academic journey and track syllabus progress</p>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-indigo-500/20 rounded-xl flex items-center justify-center border border-indigo-400/30">
-                                <GraduationCap className="w-5 h-5 text-indigo-300" />
+                            <div className="w-10 h-10 bg-amber-400/20 rounded-xl flex items-center justify-center border border-amber-400/30">
+                                <GraduationCap className="w-5 h-5 text-amber-100" />
                             </div>
                             <div>
-                                <span className="text-[10px] font-black uppercase tracking-widest text-indigo-300 block">Total Subjects</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-amber-200 block">Total Subjects</span>
                                 <span className="text-xl font-black text-white">{subjects.length}</span>
                             </div>
                         </div>
@@ -138,7 +138,7 @@ const StudentSubjects = () => {
                                 </div>
                             </div>
 
-                            <h3 className="text-[22px] font-black text-[#1E1B4B] uppercase tracking-tight leading-tight mb-4 group-hover:text-primary transition-colors duration-300">
+                            <h3 className="text-[22px] font-black text-slate-900 uppercase tracking-tight leading-tight mb-4 group-hover:text-primary transition-colors duration-300">
                                 {subject.name}
                             </h3>
 

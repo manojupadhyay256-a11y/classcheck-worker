@@ -23,8 +23,7 @@ export const VAPID_KEY = 'BHHS5QaElyhwlpuWJLSk2vynRAW11VlhzWb0nzA2qOfVdc5AKtkLx8
 // Do NOT call getMessaging() eagerly at module-load.
 // On native Android/iOS (Capacitor WebView), the Firebase Web Messaging SDK
 // is not supported and will throw, crashing the app immediately.
-let _messagingInstance: Messaging | null = null;
-let _messagingInitAttempted = false;
+let _messagingPromise: Promise<Messaging | null> | null = null;
 
 /**
  * Returns the Firebase Messaging instance, or null if messaging is not
@@ -32,43 +31,46 @@ let _messagingInitAttempted = false;
  * Safe to call from any platform — will never throw.
  */
 export async function getMessagingInstance(): Promise<Messaging | null> {
-    // Only attempt initialization once
-    if (_messagingInitAttempted) return _messagingInstance;
-    _messagingInitAttempted = true;
+    if (_messagingPromise) return _messagingPromise;
 
-    try {
-        // Guard: Must be a browser environment with service worker support
-        if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
-            console.log('[Firebase] Messaging not available: no service worker support');
-            return null;
-        }
-
-        // Guard: Must be on HTTPS or localhost (SW requirement)
-        const isSecure = location.protocol === 'https:' || location.hostname === 'localhost';
-        if (!isSecure) {
-            console.log('[Firebase] Messaging not available: not a secure context');
-            return null;
-        }
-
-        // Attempt to register the Firebase messaging service worker first.
-        // If this fails (e.g., file missing, native platform), skip messaging entirely
-        // to avoid a loop where the SDK repeatedly tries to fetch a token.
+    _messagingPromise = (async () => {
         try {
-            await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-            console.log('[Firebase] Service worker registered successfully');
-        } catch (swErr) {
-            console.warn('[Firebase] Service worker registration failed, skipping messaging:', swErr);
+            // Guard: Must be a browser environment with service worker support
+            if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
+                console.log('[Firebase] Messaging not available: no service worker support');
+                return null;
+            }
+
+            // Guard: Must be on HTTPS or localhost (SW requirement)
+            const isSecure =
+                location.protocol === 'https:' ||
+                location.hostname === 'localhost' ||
+                location.hostname === '127.0.0.1';
+
+            if (!isSecure) {
+                console.log('[Firebase] Messaging not available: not a secure context');
+                return null;
+            }
+
+            // Attempt to register the Firebase messaging service worker first.
+            try {
+                await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+                console.log('[Firebase] Service worker registered successfully');
+            } catch (swErr) {
+                console.warn('[Firebase] Service worker registration failed:', swErr);
+                return null;
+            }
+
+            const messaging = getMessaging(app);
+            console.log('[Firebase] Messaging initialized successfully');
+            return messaging;
+        } catch (err) {
+            console.warn('[Firebase] Failed to initialize messaging (safe fallback):', err);
             return null;
         }
+    })();
 
-        _messagingInstance = getMessaging(app);
-        console.log('[Firebase] Messaging initialized successfully');
-        return _messagingInstance;
-    } catch (err) {
-        console.warn('[Firebase] Failed to initialize messaging (safe fallback):', err);
-        _messagingInstance = null;
-        return null;
-    }
+    return _messagingPromise;
 }
 
 export default app;

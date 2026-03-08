@@ -286,8 +286,8 @@ const TeacherStudents = () => {
                         >
                             <div className="p-6 sm:p-8">
                                 <div className="flex justify-between items-center mb-6">
-                                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center">
-                                        <Lock className="w-6 h-6 text-indigo-600" />
+                                    <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center">
+                                        <Lock className="w-6 h-6 text-amber-600" />
                                     </div>
                                     <button onClick={() => setIsPasswordModalOpen(false)} className="text-gray-400 hover:text-gray-600 p-2">
                                         <X className="w-6 h-6" />

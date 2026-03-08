@@ -5,7 +5,8 @@ import {
     Settings,
     CalendarCheck,
     BookOpen,
-    Bell
+    Bell,
+    HelpCircle
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { useNotificationStore } from '../../stores/notificationStore';
@@ -24,7 +25,7 @@ const BottomNav = () => {
                     { to: '/admin', icon: LayoutDashboard, label: 'Home' },
                     { to: '/admin/students', icon: Users, label: 'Students' },
                     { to: '/admin/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
-                    { to: '/admin/profile', icon: Users, label: 'Profile' },
+                    { to: '/admin/help', icon: HelpCircle, label: 'Help' },
                     { to: '/admin/settings', icon: Settings, label: 'Settings' },
                 ];
             case 'teacher':
@@ -33,7 +34,7 @@ const BottomNav = () => {
                     { to: '/teacher/attendance', icon: CalendarCheck, label: 'Attend' },
                     { to: '/teacher/my-subjects', icon: BookOpen, label: 'Subjects' },
                     { to: '/teacher/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
-                    { to: '/teacher/profile', icon: Users, label: 'Profile' },
+                    { to: '/teacher/help', icon: HelpCircle, label: 'Help' },
                 ];
             case 'student':
                 return [
@@ -41,7 +42,7 @@ const BottomNav = () => {
                     { to: '/student/attendance', icon: CalendarCheck, label: 'Attend' },
                     { to: '/student/subjects', icon: BookOpen, label: 'Subjects' },
                     { to: '/student/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
-                    { to: '/student/profile', icon: Users, label: 'Profile' },
+                    { to: '/student/help', icon: HelpCircle, label: 'Help' },
                 ];
             default:
                 return [];
@@ -54,10 +55,10 @@ const BottomNav = () => {
 
     return (
         <nav
-            className="bg-[#1E1B4B]/95 backdrop-blur-xl border-t border-white/10 flex justify-around items-center px-4 w-full shadow-[0_-8px_30px_rgb(0,0,0,0.12)]"
+            className="bg-slate-900/95 backdrop-blur-xl border-t border-white/10 flex justify-around items-center px-4 w-full shadow-[0_-8px_30px_rgb(0,0,0,0.12)]"
             style={{
-                paddingTop: '0.75rem',
-                paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))'
+                paddingTop: '0.5rem',
+                paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0px))'
             }}
         >
             {navItems.map((item) => (
@@ -66,7 +67,7 @@ const BottomNav = () => {
                     to={item.to}
                     end={['/admin', '/teacher', '/student'].includes(item.to)}
                     className={({ isActive }) => clsx(
-                        "flex flex-col items-center gap-1 transition-all duration-300 relative px-2 py-1",
+                        "flex flex-col items-center transition-all duration-300 relative px-2",
                         isActive ? "text-white" : "text-white/40 hover:text-white/70"
                     )}
                 >
@@ -74,17 +75,17 @@ const BottomNav = () => {
                         <>
                             <div className="relative">
                                 <item.icon className={clsx(
-                                    "w-6 h-6 transition-all duration-300",
+                                    "w-5 h-5 transition-all duration-300",
                                     isActive ? "scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" : "scale-100"
                                 )} />
                                 {item.badge && item.badge > 0 && (
-                                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-[#1E1B4B] animate-in zoom-in duration-300">
+                                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-slate-900 animate-in zoom-in duration-300">
                                         {item.badge > 9 ? '9+' : item.badge}
                                     </div>
                                 )}
                             </div>
                             <span className={clsx(
-                                "text-[10px] font-black uppercase tracking-widest transition-all duration-300 mt-1",
+                                "text-[9px] font-bold uppercase tracking-wider transition-all duration-300 mt-1",
                                 isActive ? "opacity-100 translate-y-0" : "opacity-60 translate-y-0.5"
                             )}>
                                 {item.label}

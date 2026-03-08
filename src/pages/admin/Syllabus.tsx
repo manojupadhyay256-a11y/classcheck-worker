@@ -122,7 +122,7 @@ const AdminSyllabus = () => {
     if (loading && subjectStatuses.length === 0) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAFC]">
-                <Loader2 className="w-10 h-10 mb-4 animate-spin text-[#008B74]" />
+                <Loader2 className="w-10 h-10 mb-4 animate-spin text-amber-600" />
                 <p className="text-sm font-semibold text-slate-400 tracking-wide uppercase">Analyzing Syllabus Progress...</p>
             </div>
         );
@@ -131,12 +131,12 @@ const AdminSyllabus = () => {
     return (
         <div className="min-h-screen bg-[#F8FAFC] pb-24 font-inter">
             {/* Header */}
-            <div className="rounded-3xl p-8 md:p-10 mb-10 relative overflow-hidden group shadow-2xl bg-[#1E293B]">
-                <div className="absolute top-0 right-0 w-72 h-72 bg-[#008B74]/10 rounded-full translate-x-36 -translate-y-36" />
+            <div className="rounded-3xl p-8 md:p-10 mb-10 relative overflow-hidden group shadow-2xl bg-slate-900">
+                <div className="absolute top-0 right-0 w-72 h-72 bg-amber-500/10 rounded-full translate-x-36 -translate-y-36" />
                 <div className="relative z-10">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
                         <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 bg-[#008B74] rounded-2xl flex items-center justify-center shadow-lg border border-[#008B74]/50">
+                            <div className="w-16 h-16 bg-amber-600 rounded-2xl flex items-center justify-center shadow-lg border border-amber-500/50">
                                 <GraduationCap className="w-8 h-8 text-white" />
                             </div>
                             <div>
@@ -144,7 +144,7 @@ const AdminSyllabus = () => {
                                     Syllabus Status
                                 </h1>
                                 <p className="text-slate-400 text-sm font-bold uppercase tracking-widest mt-2 flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-[#008B74]" />
+                                    <span className="w-2 h-2 rounded-full bg-amber-600" />
                                     Completion Tracking
                                 </p>
                             </div>
@@ -157,21 +157,21 @@ const AdminSyllabus = () => {
                 {/* Filters */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                     <div className="relative group">
-                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-[#008B74] transition-colors" />
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-amber-600 transition-colors" />
                         <input
                             type="text"
                             placeholder="Search Subject or Class..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-14 pr-6 py-4 bg-white border-2 border-slate-100 rounded-2xl text-slate-800 font-bold focus:outline-none focus:border-[#008B74]/40 transition-all shadow-sm"
+                            className="w-full pl-14 pr-6 py-4 bg-white border-2 border-slate-100 rounded-2xl text-slate-800 font-bold focus:outline-none focus:border-amber-500/40 transition-all shadow-sm"
                         />
                     </div>
                     <div className="relative group">
-                        <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-[#008B74] transition-colors" />
+                        <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-amber-600 transition-colors" />
                         <select
                             value={teacherFilter}
                             onChange={(e) => setTeacherFilter(e.target.value)}
-                            className="w-full pl-14 pr-6 py-4 bg-white border-2 border-slate-100 rounded-2xl text-slate-800 font-bold focus:outline-none focus:border-[#008B74]/40 transition-all shadow-sm appearance-none"
+                            className="w-full pl-14 pr-6 py-4 bg-white border-2 border-slate-100 rounded-2xl text-slate-800 font-bold focus:outline-none focus:border-amber-500/40 transition-all shadow-sm appearance-none"
                         >
                             <option value="">All Teachers</option>
                             {teachers.map(t => (
@@ -192,7 +192,7 @@ const AdminSyllabus = () => {
                                     layoutId={status.class_subject_id}
                                     onClick={() => fetchChapterDetails(status)}
                                     className={`p-6 rounded-3xl border-2 transition-all cursor-pointer ${selectedSubject?.class_subject_id === status.class_subject_id
-                                        ? 'border-[#008B74] bg-white shadow-xl shadow-[#008B74]/5'
+                                        ? 'border-amber-600 bg-white shadow-xl shadow-amber-900/5'
                                         : 'border-white bg-white hover:border-slate-200 hover:shadow-lg shadow-sm'}`}
                                 >
                                     <div className="flex justify-between items-start mb-4">
@@ -210,7 +210,7 @@ const AdminSyllabus = () => {
                                             </h3>
                                         </div>
                                         <div className="text-right">
-                                            <p className="text-2xl font-black text-[#008B74] tracking-tight">{Math.round(progress)}%</p>
+                                            <p className="text-2xl font-black text-amber-600 tracking-tight">{Math.round(progress)}%</p>
                                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                                                 {status.completed_chapters}/{status.total_chapters} Chapters
                                             </p>
@@ -220,8 +220,8 @@ const AdminSyllabus = () => {
                                     <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                                         <motion.div
                                             initial={{ width: 0 }}
-                                            animate={{ width: `${progress}%` }}
-                                            className="h-full bg-gradient-to-r from-[#008B74] to-[#00C4A0]"
+                                            animate={{ width: `${Math.round((status.completed_chapters / status.total_chapters) * 100)}%` }}
+                                            className="h-full bg-linear-to-r from-amber-500 to-amber-600"
                                         />
                                     </div>
                                 </motion.div>
@@ -241,8 +241,8 @@ const AdminSyllabus = () => {
                                     className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden"
                                 >
                                     <div className="p-8 bg-slate-900 text-white relative">
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#008B74]/20 rounded-full -translate-y-16 translate-x-16" />
-                                        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#008B74] mb-2">Detailed Progress</h4>
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/20 rounded-full -translate-y-16 translate-x-16" />
+                                        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-amber-500 mb-2">Detailed Progress</h4>
                                         <h3 className="text-2xl font-black tracking-tight mb-1">{selectedSubject.subject_name}</h3>
                                         <p className="text-slate-400 text-sm font-bold uppercase tracking-widest leading-none">
                                             {selectedSubject.class_name} — {selectedSubject.teacher_name}
@@ -252,13 +252,13 @@ const AdminSyllabus = () => {
                                     <div className="p-8">
                                         {loadingDetails ? (
                                             <div className="py-20 text-center">
-                                                <Loader2 className="w-8 h-8 animate-spin text-[#008B74] mx-auto mb-4" />
+                                                <Loader2 className="w-8 h-8 animate-spin text-amber-600 mx-auto mb-4" />
                                                 <p className="text-sm text-slate-400 font-bold uppercase tracking-widest">Fetching Details...</p>
                                             </div>
                                         ) : (
                                             <div className="space-y-6">
                                                 {['PWT1', 'Half Yearly', 'PWT2', 'Final'].map(term => {
-                                                    const termChapters = chapterStatuses.filter(c => c.term === term);
+                                                    const termChapters = chapterStatuses.filter(c => c.term?.split(',').includes(term));
                                                     if (termChapters.length === 0) return null;
 
                                                     return (
@@ -273,7 +273,7 @@ const AdminSyllabus = () => {
                                                                         <div className="flex items-center justify-between mb-2">
                                                                             <div className="flex items-center gap-3">
                                                                                 {chapter.status === 'Completed' ? (
-                                                                                    <CheckCircle2 className="w-5 h-5 text-[#008B74]" />
+                                                                                    <CheckCircle2 className="w-5 h-5 text-amber-600" />
                                                                                 ) : chapter.status === 'Started' ? (
                                                                                     <Loader2 className="w-5 h-5 text-amber-500 animate-spin" />
                                                                                 ) : (
@@ -285,7 +285,7 @@ const AdminSyllabus = () => {
                                                                             </div>
                                                                             <div className="flex items-center gap-2">
                                                                                 {chapter.status === 'Completed' && chapter.completed_at && (
-                                                                                    <span className="text-[10px] font-black text-[#008B74] bg-[#E2F2F0] px-2 py-0.5 rounded-md uppercase tracking-widest whitespace-nowrap">
+                                                                                    <span className="text-[10px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md uppercase tracking-widest whitespace-nowrap border border-amber-100">
                                                                                         Done {new Date(chapter.completed_at).toLocaleDateString()}
                                                                                     </span>
                                                                                 )}
@@ -301,11 +301,11 @@ const AdminSyllabus = () => {
                                                                         <div className="ml-8 flex flex-col gap-1">
                                                                             <div className="flex items-center justify-between">
                                                                                 <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">Correction Work</span>
-                                                                                <span className="text-[9px] font-black text-[#008B74] leading-none">{Math.round(chapter.correction_percentage)}%</span>
+                                                                                <span className="text-[9px] font-black text-amber-600 leading-none">{Math.round(chapter.correction_percentage)}%</span>
                                                                             </div>
                                                                             <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                                                                                 <div
-                                                                                    className="h-full bg-linear-to-r from-[#008B74] to-[#00C4A0] rounded-full"
+                                                                                    className="h-full bg-gradient-to-r from-amber-500 to-amber-600 rounded-full"
                                                                                     style={{ width: `${chapter.correction_percentage}%` }}
                                                                                 />
                                                                             </div>

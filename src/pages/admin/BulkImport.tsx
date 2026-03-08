@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../../components/common/Button';
-import { parseImportFile, executeImport, bulkDeleteData, type ParsedImport } from '../../lib/bulkImport';
+import { parseImportFile, executeImport, bulkDeleteData, clearStudentsOnly, type ParsedImport } from '../../lib/bulkImport';
 
 type Step = 'upload' | 'preview' | 'import' | 'done';
 
@@ -32,6 +32,7 @@ const BulkImport = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [confirmText, setConfirmText] = useState('');
     const [deleteLoading, setDeleteLoading] = useState(false);
+    const [deleteType, setDeleteType] = useState<'all' | 'students'>('all');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +80,10 @@ const BulkImport = () => {
         setDeleteLoading(true);
         setError(null);
         try {
-            const deleteResult = await bulkDeleteData();
+            const deleteResult = deleteType === 'all'
+                ? await bulkDeleteData()
+                : await clearStudentsOnly();
+
             setResult(deleteResult);
             setStep('done');
             setShowDeleteModal(false);
@@ -99,16 +103,16 @@ const BulkImport = () => {
     ];
 
     const kpis = [
-        { label: 'TEACHERS', value: parsedData?.teachers.length || 0, icon: Users, color: 'bg-blue-50', iconColor: 'text-blue-500' },
-        { label: 'CLASSES', value: parsedData?.classes.length || 0, icon: School, color: 'bg-emerald-50', iconColor: 'text-emerald-500' },
-        { label: 'SUBJECTS', value: parsedData?.subjects.length || 0, icon: BookOpen, color: 'bg-purple-50', iconColor: 'text-purple-500' },
-        { label: 'TOTAL ROWS', value: parsedData?.totalRows || 0, icon: FileText, color: 'bg-yellow-50', iconColor: 'text-yellow-500' },
+        { label: 'TEACHERS', value: parsedData?.teachers.length || 0, icon: Users, color: 'bg-amber-50', iconColor: 'text-amber-600' },
+        { label: 'CLASSES', value: parsedData?.classes.length || 0, icon: School, color: 'bg-amber-100/50', iconColor: 'text-amber-700' },
+        { label: 'SUBJECTS', value: parsedData?.subjects.length || 0, icon: BookOpen, color: 'bg-slate-50', iconColor: 'text-slate-600' },
+        { label: 'TOTAL ROWS', value: parsedData?.totalRows || 0, icon: FileText, color: 'bg-slate-100/50', iconColor: 'text-slate-500' },
     ];
 
     return (
         <div className="space-y-8 pb-12">
             {/* Header */}
-            <div className="hero-gradient rounded-[32px] p-8 md:p-12 relative overflow-hidden shadow-2xl shadow-indigo-900/20">
+            <div className="bg-slate-900 rounded-[32px] p-8 md:p-12 relative overflow-hidden shadow-2xl shadow-amber-900/10">
                 <div className="relative z-10">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="w-12 h-12 glass-card rounded-2xl flex items-center justify-center text-white">
@@ -116,7 +120,7 @@ const BulkImport = () => {
                         </div>
                         <h1 className="text-3xl md:text-4xl font-bold text-white leading-none">Bulk Import</h1>
                     </div>
-                    <p className="text-indigo-100 max-w-xl text-lg">
+                    <p className="text-slate-300 max-w-xl text-lg">
                         Import teachers, classes, subjects and assignments from Excel. Populate your database in seconds.
                     </p>
                 </div>
@@ -162,7 +166,7 @@ const BulkImport = () => {
                             <Upload className="w-10 h-10 text-primary animate-bounce" />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-bold text-[#1E1B4B]">Choose your file</h2>
+                            <h2 className="text-2xl font-bold text-slate-900">Choose your file</h2>
                             <p className="text-gray-400 mt-1">Accepts .xlsx, .xls or .csv formats</p>
                             <p className="text-gray-300 mt-2 text-xs">Expected columns: Class, Class Teacher, Subject, Subject Teacher</p>
                         </div>
@@ -205,7 +209,7 @@ const BulkImport = () => {
                                         <kpi.icon className={`w-7 h-7 ${kpi.iconColor}`} />
                                     </div>
                                     <div>
-                                        <p className="text-2xl font-black text-[#1E1B4B]">{kpi.value.toLocaleString()}</p>
+                                        <p className="text-2xl font-black text-slate-900">{kpi.value.toLocaleString()}</p>
                                         <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">{kpi.label}</p>
                                     </div>
                                 </div>
@@ -215,8 +219,8 @@ const BulkImport = () => {
                         {/* File Info */}
                         <div className="bg-white rounded-2xl p-4 flex items-center justify-between border border-gray-100 px-8">
                             <div className="flex items-center gap-3">
-                                <FileSpreadsheet className="w-5 h-5 text-emerald-500" />
-                                <span className="font-bold text-[#1E1B4B]">{file?.name}</span>
+                                <FileSpreadsheet className="w-5 h-5 text-amber-600" />
+                                <span className="font-bold text-slate-900">{file?.name}</span>
                             </div>
                             <span className="text-xs font-bold text-primary bg-primary/5 px-3 py-1 rounded-full uppercase tracking-wider">
                                 {parsedData?.totalRows} rows parsed
@@ -225,9 +229,9 @@ const BulkImport = () => {
 
                         {/* Preview Table — 4 columns */}
                         <div className="bg-white rounded-[32px] soft-shadow border border-gray-50 overflow-hidden">
-                            <div className="p-6 bg-saas-accent-hover flex items-center justify-between">
+                            <div className="p-6 bg-amber-600 flex items-center justify-between">
                                 <h3 className="text-lg font-bold text-white">Data Preview</h3>
-                                <div className="text-indigo-100 text-sm font-medium">Displaying first 5 rows</div>
+                                <div className="text-amber-50 text-sm font-medium">Displaying first 5 rows</div>
                             </div>
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left">
@@ -244,7 +248,7 @@ const BulkImport = () => {
                                         {parsedData?.assignments.slice(0, 7).map((row, i) => (
                                             <tr key={i} className="hover:bg-gray-50/80 transition-colors">
                                                 <td className="px-6 py-5 text-gray-400 font-bold">{i + 1}</td>
-                                                <td className="px-6 py-5 font-bold text-[#1E1B4B] uppercase">{row.className}</td>
+                                                <td className="px-6 py-5 font-bold text-slate-900 uppercase">{row.className}</td>
                                                 <td className="px-6 py-5 font-medium text-gray-600 uppercase">{row.classTeacher}</td>
                                                 <td className="px-6 py-5 font-medium text-gray-600 uppercase tracking-wider text-xs">{row.subject}</td>
                                                 <td className="px-6 py-5 font-medium text-gray-600 uppercase">{row.subjectTeacher}</td>
@@ -265,10 +269,10 @@ const BulkImport = () => {
                                 </div>
                                 <div className="max-h-64 overflow-y-auto space-y-2 pr-2 scrollbar-style">
                                     {parsedData?.teachers.map((t, i) => (
-                                        <div key={i} className="bg-gray-50 rounded-xl px-4 py-3 group hover:bg-indigo-50 transition-colors">
+                                        <div key={i} className="bg-gray-50 rounded-xl px-4 py-3 group hover:bg-amber-50 transition-colors">
                                             <div className="flex justify-between items-center">
-                                                <span className="font-bold text-sm text-[#1E1B4B] uppercase truncate">{t.name}</span>
-                                                <Check className="w-4 h-4 text-emerald-500 opacity-0 group-hover:opacity-100 shrink-0" />
+                                                <span className="font-bold text-sm text-slate-900 uppercase truncate">{t.name}</span>
+                                                <Check className="w-4 h-4 text-amber-600 opacity-0 group-hover:opacity-100 shrink-0" />
                                             </div>
                                             <p className="text-[10px] text-primary mt-1 tracking-wider">{t.email}</p>
                                         </div>
@@ -284,10 +288,10 @@ const BulkImport = () => {
                                 </div>
                                 <div className="max-h-48 overflow-y-auto space-y-2 pr-2 scrollbar-style">
                                     {parsedData?.classes.map((c, i) => (
-                                        <div key={i} className="bg-gray-50 rounded-xl px-4 py-3 group hover:bg-emerald-50 transition-colors">
+                                        <div key={i} className="bg-gray-50 rounded-xl px-4 py-3 group hover:bg-amber-50 transition-colors">
                                             <div className="flex justify-between items-center">
-                                                <span className="font-bold text-sm text-[#1E1B4B] uppercase">{c}</span>
-                                                <UserCheck className="w-4 h-4 text-emerald-500 opacity-0 group-hover:opacity-100" />
+                                                <span className="font-bold text-sm text-slate-900 uppercase">{c}</span>
+                                                <UserCheck className="w-4 h-4 text-amber-600 opacity-0 group-hover:opacity-100" />
                                             </div>
                                             {parsedData?.classTeacherMap[c] && (
                                                 <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">CT: {parsedData.classTeacherMap[c]}</p>
@@ -307,12 +311,12 @@ const BulkImport = () => {
                                     {parsedData?.subjects.map((s, i) => {
                                         const firstClass = parsedData?.assignments.find(a => a.subject === s)?.className;
                                         return (
-                                            <div key={i} className="bg-gray-50 rounded-xl px-4 py-3 flex justify-between items-center group hover:bg-purple-50 transition-colors">
+                                            <div key={i} className="bg-gray-50 rounded-xl px-4 py-3 flex justify-between items-center group hover:bg-amber-50 transition-colors">
                                                 <div className="flex items-center gap-2">
-                                                    <span className="font-bold text-sm text-[#1E1B4B] uppercase">{s}</span>
+                                                    <span className="font-bold text-sm text-slate-900 uppercase">{s}</span>
                                                     {firstClass && <span className="text-[9px] text-gray-400 uppercase tracking-wider">({firstClass})</span>}
                                                 </div>
-                                                <Check className="w-4 h-4 text-emerald-500 opacity-0 group-hover:opacity-100 shrink-0" />
+                                                <Check className="w-4 h-4 text-amber-600 opacity-0 group-hover:opacity-100 shrink-0" />
                                             </div>
                                         );
                                     })}
@@ -356,7 +360,7 @@ const BulkImport = () => {
                         key="done"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="bg-white rounded-[40px] p-16 text-center shadow-2xl shadow-indigo-900/10 border border-indigo-50 max-w-2xl mx-auto flex flex-col items-center"
+                        className="bg-white rounded-[40px] p-16 text-center shadow-2xl shadow-amber-900/10 border border-amber-50 max-w-2xl mx-auto flex flex-col items-center"
                     >
                         <div className="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mb-8 relative">
                             <Check className="w-12 h-12 text-emerald-500" />
@@ -367,7 +371,7 @@ const BulkImport = () => {
                                 className="absolute inset-0 bg-emerald-400/20 rounded-full"
                             />
                         </div>
-                        <h2 className="text-3xl font-extrabold text-[#1E1B4B] mb-4">
+                        <h2 className="text-3xl font-extrabold text-slate-900 mb-4">
                             {result?.teachersCount !== undefined ? "Import Successful!" : "Data Cleared Successfully!"}
                         </h2>
                         <p className="text-gray-500 text-lg mb-10 leading-relaxed text-center">
@@ -410,7 +414,7 @@ const BulkImport = () => {
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
                             className="relative bg-white rounded-[40px] p-10 max-w-lg w-full shadow-2xl overflow-hidden text-center"
                         >
-                            <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-primary via-purple-500 to-primary animate-pulse" />
+                            <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-amber-600 via-amber-400 to-amber-600 animate-pulse" />
 
                             <div className="flex flex-col items-center space-y-8">
                                 <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center relative">
@@ -419,7 +423,7 @@ const BulkImport = () => {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <h3 className="text-3xl font-black text-[#1E1B4B]">Importing Data</h3>
+                                    <h3 className="text-3xl font-black text-slate-900">Importing Data</h3>
                                     <p className="text-gray-500 font-medium h-6">{importStatus}</p>
                                 </div>
 
@@ -431,7 +435,7 @@ const BulkImport = () => {
 
                                     <div className="h-5 w-full bg-gray-100 rounded-full overflow-hidden border-4 border-white shadow-inner">
                                         <motion.div
-                                            className="h-full bg-linear-to-r from-primary to-purple-600 rounded-full shadow-lg"
+                                            className="h-full bg-linear-to-r from-amber-600 to-amber-400 rounded-full shadow-lg"
                                             initial={{ width: 0 }}
                                             animate={{ width: `${importProgress}%` }}
                                             transition={{ type: "spring", bounce: 0, duration: 0.5 }}
@@ -465,26 +469,53 @@ const BulkImport = () => {
                         >
                             <div className="absolute top-0 left-0 w-full h-2 bg-rose-500" />
                             <div className="flex flex-col items-center text-center space-y-6">
-                                <div className="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center">
-                                    <Trash2 className="w-10 h-10 text-rose-500" />
+                                <div className="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center">
+                                    <Trash2 className="w-8 h-8 text-rose-500" />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-2xl font-black text-[#1E1B4B]">Clear All Data?</h3>
-                                    <p className="text-gray-400 font-medium">
-                                        This will permanently delete all teachers, classes, subjects, and attendance records. <br />
-                                        <span className="text-gray-600 font-bold">Admin account will be preserved.</span>
+                                    <h3 className="text-2xl font-black text-slate-900">Clear Academic Data</h3>
+                                    <p className="text-gray-400 font-medium text-sm">
+                                        Select the type of clearing you want to perform for the new session.
                                     </p>
+                                </div>
+
+                                <div className="w-full grid grid-cols-1 gap-3">
+                                    <button
+                                        onClick={() => setDeleteType('all')}
+                                        className={`p-4 rounded-2xl border-2 transition-all text-left flex items-start gap-4 ${deleteType === 'all' ? 'border-rose-500 bg-rose-50/50' : 'border-gray-100 hover:border-gray-200'}`}
+                                    >
+                                        <div className={`w-5 h-5 rounded-full border-2 mt-1 shrink-0 flex items-center justify-center ${deleteType === 'all' ? 'border-rose-500' : 'border-gray-300'}`}>
+                                            {deleteType === 'all' && <div className="w-2.5 h-2.5 bg-rose-500 rounded-full" />}
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-saas-dark text-sm">Full Academic Reset</p>
+                                            <p className="text-[11px] text-slate-500 leading-tight mt-1">Deletes teachers, classes, subjects, students, and all attendance logs. (Scorched Earth)</p>
+                                        </div>
+                                    </button>
+
+                                    <button
+                                        onClick={() => setDeleteType('students')}
+                                        className={`p-4 rounded-2xl border-2 transition-all text-left flex items-start gap-4 ${deleteType === 'students' ? 'border-rose-500 bg-rose-50/50' : 'border-gray-100 hover:border-gray-200'}`}
+                                    >
+                                        <div className={`w-5 h-5 rounded-full border-2 mt-1 shrink-0 flex items-center justify-center ${deleteType === 'students' ? 'border-rose-500' : 'border-gray-300'}`}>
+                                            {deleteType === 'students' && <div className="w-2.5 h-2.5 bg-rose-500 rounded-full" />}
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-saas-dark text-sm">Students & Attendance Only</p>
+                                            <p className="text-[11px] text-slate-500 leading-tight mt-1">Wipes student profiles and attendance records. Keeps classes and staff directory intact.</p>
+                                        </div>
+                                    </button>
                                 </div>
 
                                 <div className="w-full space-y-4">
                                     <div className="bg-amber-50 border border-amber-100 p-4 rounded-2xl">
-                                        <p className="text-amber-800 text-xs font-bold uppercase tracking-wider mb-2">Type "DELETE ALL" to confirm</p>
+                                        <p className="text-amber-800 text-[10px] font-bold uppercase tracking-widest mb-2">Type "DELETE ALL" to confirm</p>
                                         <input
                                             type="text"
                                             value={confirmText}
                                             onChange={(e) => setConfirmText(e.target.value)}
                                             placeholder="DELETE ALL"
-                                            className="w-full px-4 py-3 rounded-xl border-2 border-amber-200 focus:border-rose-500 focus:ring-0 text-center font-black tracking-widest text-[#1E1B4B] uppercase"
+                                            className="w-full px-4 py-3 rounded-xl border-2 border-amber-200 focus:border-rose-500 focus:ring-0 text-center font-black tracking-widest text-slate-900 uppercase text-sm"
                                         />
                                     </div>
 
@@ -502,9 +533,9 @@ const BulkImport = () => {
                                         <Button
                                             className="flex-1 bg-rose-500 hover:bg-rose-600 rounded-2xl text-white shadow-lg shadow-rose-500/20"
                                             onClick={handleDeleteAll}
-                                            disabled={confirmText !== 'DELETE ALL' || deleteLoading}
+                                            disabled={confirmText.toUpperCase() !== 'DELETE ALL' || deleteLoading}
                                         >
-                                            {deleteLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Delete Everything"}
+                                            {deleteLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Confirm Delete"}
                                         </Button>
                                     </div>
                                 </div>

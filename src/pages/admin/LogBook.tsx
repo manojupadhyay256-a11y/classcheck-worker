@@ -92,7 +92,7 @@ const AdminLogBook = () => {
     if (loading && logs.length === 0) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAFC]">
-                <Loader2 className="w-10 h-10 mb-4 animate-spin text-[#008B74]" />
+                <Loader2 className="w-10 h-10 mb-4 animate-spin text-amber-600" />
                 <p className="text-sm font-semibold text-slate-400 tracking-wide uppercase">Gathers Logs...</p>
             </div>
         );
@@ -101,7 +101,7 @@ const AdminLogBook = () => {
     return (
         <div className="min-h-screen bg-slate-50 pb-24 font-inter">
             {/* Header section */}
-            <div className="bg-[#1E293B] rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group border border-slate-700/50">
+            <div className="bg-slate-900 rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group border border-slate-700/50">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-32 -translate-y-32 group-hover:scale-110 transition-transform duration-700" />
 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
@@ -128,7 +128,7 @@ const AdminLogBook = () => {
                         placeholder="Search logs..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-14 pr-6 py-4 bg-white border border-slate-200 rounded-3xl focus:ring-2 focus:ring-[#008B74] outline-none font-bold text-slate-600 shadow-sm transition-all"
+                        className="w-full pl-14 pr-6 py-4 bg-white border border-slate-200 rounded-3xl focus:ring-2 focus:ring-amber-600 outline-none font-bold text-slate-600 shadow-sm transition-all"
                     />
                 </div>
 
@@ -138,7 +138,7 @@ const AdminLogBook = () => {
                         type="date"
                         value={dateFilter}
                         onChange={(e) => setDateFilter(e.target.value)}
-                        className="w-full pl-14 pr-6 py-4 bg-white border border-slate-200 rounded-3xl focus:ring-2 focus:ring-[#008B74] outline-none font-bold text-slate-600 shadow-sm transition-all"
+                        className="w-full pl-14 pr-6 py-4 bg-white border border-slate-200 rounded-3xl focus:ring-2 focus:ring-amber-600 outline-none font-bold text-slate-600 shadow-sm transition-all"
                     />
                 </div>
 
@@ -147,7 +147,7 @@ const AdminLogBook = () => {
                     <select
                         value={teacherFilter}
                         onChange={(e) => setTeacherFilter(e.target.value)}
-                        className="w-full pl-14 pr-10 py-4 bg-white border border-slate-200 rounded-3xl focus:ring-2 focus:ring-[#008B74] outline-none font-bold text-slate-600 shadow-sm appearance-none transition-all"
+                        className="w-full pl-14 pr-10 py-4 bg-white border border-slate-200 rounded-3xl focus:ring-2 focus:ring-amber-600 outline-none font-bold text-slate-600 shadow-sm appearance-none transition-all"
                     >
                         <option value="">All Teachers</option>
                         {teachers.map(t => (
@@ -185,7 +185,7 @@ const AdminLogBook = () => {
                                     <td className="px-8 py-6">
                                         <div className="flex flex-col">
                                             <span className="text-sm font-black text-slate-800">{format(new Date(log.date), 'dd MMM yyyy')}</span>
-                                            <span className="text-[10px] font-bold text-[#008B74] uppercase tracking-wider mt-0.5">{log.period}</span>
+                                            <span className="text-[10px] font-bold text-amber-600 uppercase tracking-wider mt-0.5">{log.period}</span>
                                         </div>
                                     </td>
                                     <td className="px-8 py-6">

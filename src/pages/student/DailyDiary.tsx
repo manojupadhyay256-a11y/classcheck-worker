@@ -77,7 +77,7 @@ const StudentDailyDiary = () => {
     if (loading) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAFC]">
-                <Loader2 className="w-10 h-10 mb-4 animate-spin text-[#008B74]" />
+                <Loader2 className="w-10 h-10 mb-4 animate-spin text-amber-600" />
                 <p className="text-sm font-semibold text-slate-400 tracking-wide uppercase">Reading Your Diary...</p>
             </div>
         );
@@ -96,8 +96,8 @@ const StudentDailyDiary = () => {
     return (
         <div className="min-h-screen bg-slate-50 pb-24 font-inter">
             {/* Header section */}
-            <div className="bg-[#008B74] rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group border border-[#007663]">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-32 -translate-y-32 group-hover:scale-110 transition-transform duration-700" />
+            <div className="bg-slate-900 rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group border border-slate-700/50">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full translate-x-32 -translate-y-32 group-hover:scale-110 transition-transform duration-700" />
 
                 <div className="relative z-10 flex items-center justify-between gap-8">
                     <div className="flex items-center gap-6">
@@ -108,7 +108,7 @@ const StudentDailyDiary = () => {
                             <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md">
                                 Daily Diary
                             </h1>
-                            <p className="text-emerald-50 text-sm font-medium">Keep track of what was taught in your class today</p>
+                            <p className="text-slate-300 text-sm font-medium">Keep track of what was taught in your class today</p>
                         </div>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ const StudentDailyDiary = () => {
                         <div className="flex items-center gap-4 mb-6 px-4">
                             <div className="h-[2px] flex-1 bg-slate-200" />
                             <div className="flex items-center gap-2 px-6 py-2 bg-white rounded-full border border-slate-200 shadow-sm">
-                                <CalendarDays className="w-4 h-4 text-[#008B74]" />
+                                <CalendarDays className="w-4 h-4 text-amber-600" />
                                 <span className="text-sm font-black text-slate-800 uppercase tracking-widest">
                                     {format(new Date(date), 'EEEE, MMMM do')}
                                 </span>
@@ -138,15 +138,15 @@ const StudentDailyDiary = () => {
                                     className="bg-white rounded-[32px] border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 p-8 flex flex-col group"
                                 >
                                     <div className="flex items-center justify-between mb-6">
-                                        <span className="px-3 py-1 bg-slate-50 text-[#008B74] text-[10px] font-black rounded-xl uppercase tracking-widest border border-slate-100 shadow-sm">
+                                        <span className="px-3 py-1 bg-amber-50 text-amber-600 text-[10px] font-black rounded-xl uppercase tracking-widest border border-amber-100 shadow-sm">
                                             {entry.period} Period
                                         </span>
-                                        <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:bg-[#008B74] transition-colors duration-300">
+                                        <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:bg-amber-600 transition-colors duration-300">
                                             <BookOpen className="w-4 h-4 text-slate-300 group-hover:text-white" />
                                         </div>
                                     </div>
 
-                                    <h3 className="text-xl font-black text-slate-800 uppercase tracking-tight mb-2 group-hover:text-[#008B74] transition-colors duration-300">
+                                    <h3 className="text-xl font-black text-slate-800 uppercase tracking-tight mb-2 group-hover:text-amber-600 transition-colors duration-300">
                                         {entry.subject_name}
                                     </h3>
 
@@ -160,12 +160,12 @@ const StudentDailyDiary = () => {
                                     <div className="flex-1 space-y-4">
                                         {entry.chapter_name && (
                                             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                                <span className="text-[9px] font-black uppercase tracking-widest text-[#008B74] block mb-1">Chapter</span>
+                                                <span className="text-[9px] font-black uppercase tracking-widest text-amber-600 block mb-1">Chapter</span>
                                                 <span className="text-sm font-bold text-slate-700">{entry.chapter_name}</span>
                                             </div>
                                         )}
-                                        <div className="p-4 bg-emerald-50/30 rounded-2xl border border-emerald-100/50">
-                                            <span className="text-[9px] font-black uppercase tracking-widest text-[#008B74] block mb-1">Today's Topics</span>
+                                        <div className="p-4 bg-amber-50/30 rounded-2xl border border-amber-100/50">
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-amber-600 block mb-1">Today's Topics</span>
                                             <p className="text-sm font-medium text-slate-600 leading-relaxed italic">{entry.topics_covered}</p>
                                         </div>
                                     </div>

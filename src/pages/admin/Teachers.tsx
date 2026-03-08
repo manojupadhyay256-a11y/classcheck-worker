@@ -13,6 +13,8 @@ import {
 import Button from '../../components/common/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sql } from '../../lib/db';
+import { clsx } from 'clsx';
+import { deleteSelectedTeachers } from '../../lib/bulkImport';
 
 const Teachers = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -26,6 +28,7 @@ const Teachers = () => {
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [formData, setFormData] = useState({ name: '', email: '' });
+    const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
     const fetchTeachers = async (isRefresh = false) => {
         if (isRefresh) setRefreshing(true);
@@ -137,11 +140,57 @@ const Teachers = () => {
             // Delete from teachers table (class_subjects has ON DELETE CASCADE)
             await sql`DELETE FROM teachers WHERE id = ${id}`;
             await fetchTeachers(true);
+            const newSelected = new Set(selectedIds);
+            newSelected.delete(id);
+            setSelectedIds(newSelected);
             toast.success(`${name} has been removed from the directory.`);
         } catch (error) {
             console.error('Error deleting teacher:', error);
             toast.error('Failed to delete teacher. Please try again.');
         }
+    };
+
+    const handleBulkDelete = async () => {
+        const count = selectedIds.size;
+        if (count === 0) return;
+        if (!confirm(`Are you sure you want to delete ${count} selected teachers? This will also remove their subject assignments.`)) return;
+
+        const bulkDeletePromise = (async () => {
+            const ids = Array.from(selectedIds);
+            await deleteSelectedTeachers(ids);
+            await fetchTeachers(true);
+            setSelectedIds(new Set());
+        })();
+
+        toast.promise(bulkDeletePromise, {
+            loading: `Removing ${count} teachers...`,
+            success: 'Selected teachers removed successfully!',
+            error: 'Failed to remove selected teachers.'
+        });
+
+        try {
+            await bulkDeletePromise;
+        } catch (err) {
+            console.error('Bulk delete error:', err);
+        }
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedIds.size === filteredTeachers.length) {
+            setSelectedIds(new Set());
+        } else {
+            setSelectedIds(new Set(filteredTeachers.map(t => t.id)));
+        }
+    };
+
+    const toggleSelectOne = (id: string) => {
+        const newSelected = new Set(selectedIds);
+        if (newSelected.has(id)) {
+            newSelected.delete(id);
+        } else {
+            newSelected.add(id);
+        }
+        setSelectedIds(newSelected);
     };
 
     return (
@@ -219,7 +268,14 @@ const Teachers = () => {
                                 <table className="w-full text-left">
                                     <thead>
                                         <tr className="bg-slate-50/50 border-b border-saas-border">
-                                            <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-16">#</th>
+                                            <th className="px-8 py-5 w-12 text-center">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={filteredTeachers.length > 0 && selectedIds.size === filteredTeachers.length}
+                                                    onChange={toggleSelectAll}
+                                                    className="w-4 h-4 rounded border-slate-300 text-saas-accent focus:ring-saas-accent/20 cursor-pointer"
+                                                />
+                                            </th>
                                             <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Educator Info</th>
                                             <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Academic Focus</th>
                                             <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
@@ -234,10 +290,18 @@ const Teachers = () => {
                                                     animate={{ opacity: 1, y: 0 }}
                                                     exit={{ opacity: 0, scale: 0.95 }}
                                                     transition={{ delay: index * 0.03 }}
-                                                    className="group hover:bg-slate-50/50 transition-colors duration-200"
+                                                    className={clsx(
+                                                        "group transition-colors duration-200",
+                                                        selectedIds.has(teacher.id) ? "bg-saas-accent/5" : "hover:bg-slate-50/50"
+                                                    )}
                                                 >
-                                                    <td className="px-8 py-6">
-                                                        <span className="text-slate-300 font-mono text-sm">{index + 1}</span>
+                                                    <td className="px-8 py-6 text-center">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedIds.has(teacher.id)}
+                                                            onChange={() => toggleSelectOne(teacher.id)}
+                                                            className="w-4 h-4 rounded border-slate-300 text-saas-accent focus:ring-saas-accent/20 cursor-pointer"
+                                                        />
                                                     </td>
                                                     <td className="px-8 py-6">
                                                         <div className="flex items-center gap-4">
@@ -308,6 +372,43 @@ const Teachers = () => {
                             </div>
                         </div>
 
+                        {/* Bulk Action Bar */}
+                        <AnimatePresence>
+                            {selectedIds.size > 0 && (
+                                <motion.div
+                                    initial={{ y: 100, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: 100, opacity: 0 }}
+                                    className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 bg-saas-dark/95 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/10 shadow-2xl flex items-center gap-8 min-w-[320px] md:min-w-[480px] justify-between"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 bg-saas-accent/20 rounded-xl flex items-center justify-center text-saas-accent font-black">
+                                            {selectedIds.size}
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-white font-bold text-sm tracking-tight">Staff Selected</span>
+                                            <span className="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Bulk Actions Available</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            onClick={() => setSelectedIds(new Set())}
+                                            className="px-4 py-2 text-slate-400 hover:text-white text-[13px] font-bold transition-colors"
+                                        >
+                                            Deselect
+                                        </button>
+                                        <button
+                                            onClick={handleBulkDelete}
+                                            className="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2.5 rounded-xl font-bold text-[13px] flex items-center gap-2 transition-all active:scale-95 shadow-lg shadow-rose-500/20"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                            Remove Selected
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
                         {/* Mobile Card View */}
                         <div className="md:hidden space-y-4">
                             <AnimatePresence mode="popLayout">
@@ -321,13 +422,21 @@ const Teachers = () => {
                                         className="bg-white rounded-2xl p-5 saas-shadow border border-saas-border"
                                     >
                                         <div className="flex items-start justify-between mb-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-xl bg-saas-accent/10 flex items-center justify-center text-saas-accent font-bold">
-                                                    {teacher.name.charAt(0)}
-                                                </div>
-                                                <div className="flex flex-col min-w-0">
-                                                    <span className="font-bold text-saas-dark text-[15px] leading-tight truncate">{teacher.name}</span>
-                                                    <span className="text-[11px] text-slate-400 font-medium truncate">{teacher.email || 'No email set'}</span>
+                                            <div className="flex items-center gap-4">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedIds.has(teacher.id)}
+                                                    onChange={() => toggleSelectOne(teacher.id)}
+                                                    className="w-4 h-4 rounded border-slate-300 text-saas-accent focus:ring-saas-accent/20 cursor-pointer mt-3"
+                                                />
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 rounded-xl bg-saas-accent/10 flex items-center justify-center text-saas-accent font-bold">
+                                                        {teacher.name.charAt(0)}
+                                                    </div>
+                                                    <div className="flex flex-col min-w-0">
+                                                        <span className="font-bold text-saas-dark text-[15px] leading-tight truncate">{teacher.name}</span>
+                                                        <span className="text-[11px] text-slate-400 font-medium truncate">{teacher.email || 'No email set'}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="flex gap-1">

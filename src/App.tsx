@@ -33,6 +33,7 @@ import StudentSubjects from './pages/student/Subjects';
 import StudentSyllabus from './pages/student/Syllabus';
 import Profile from './pages/Profile';
 import Notifications from './pages/Notifications';
+import Help from './pages/Help';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
 import { useAuthStore } from './stores/authStore';
@@ -111,6 +112,11 @@ const App = () => {
 
           // 4. Register with FCM/APNS
           await PushNotifications.register();
+        } else {
+          // 2. Web/PWA Registration
+          // Ensure we also register on web whenever the app mounts
+          // This catches PWA installations for users already logged in
+          notificationService.registerPushToken(profile.id, profile.role as any);
         }
       } catch (err) {
         // Catch-all: never let notification setup crash the app
@@ -196,6 +202,7 @@ const App = () => {
                     <Route path="/syllabus" element={<AdminSyllabus />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/notifications" element={<Notifications />} />
+                    <Route path="/help" element={<Help />} />
                   </Routes>
                 </Layout>
               </ErrorBoundary>
@@ -216,6 +223,7 @@ const App = () => {
                     <Route path="/reports" element={<TeacherReports />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/notifications" element={<Notifications />} />
+                    <Route path="/help" element={<Help />} />
                   </Routes>
                 </Layout>
               </ErrorBoundary>
@@ -234,6 +242,7 @@ const App = () => {
                     <Route path="syllabus/:classSubjectId" element={<StudentSyllabus />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="notifications" element={<Notifications />} />
+                    <Route path="help" element={<Help />} />
                   </Routes>
                 </Layout>
               </ErrorBoundary>

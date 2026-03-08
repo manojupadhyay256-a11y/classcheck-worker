@@ -427,7 +427,7 @@ const Notifications = () => {
         switch (priority) {
             case 'urgent': return 'text-rose-600 bg-rose-50';
             case 'high': return 'text-amber-600 bg-amber-50';
-            default: return 'text-indigo-600 bg-indigo-50';
+            default: return 'text-amber-600 bg-amber-50';
         }
     };
 
@@ -445,7 +445,7 @@ const Notifications = () => {
                         {notifications.some(n => !n.is_read) && (
                             <button
                                 onClick={handleMarkAllAsRead}
-                                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white text-indigo-600 font-bold rounded-xl border border-indigo-100 shadow-sm hover:shadow-md transition-all active:scale-95"
+                                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white text-amber-600 font-bold rounded-xl border border-amber-100 shadow-sm hover:shadow-md transition-all active:scale-95"
                             >
                                 <Check className="w-4 h-4" />
                                 Mark all read
@@ -453,23 +453,23 @@ const Notifications = () => {
                         )}
                         <button
                             onClick={() => setIsComposeOpen(true)}
-                            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all active:scale-95"
+                            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white font-bold rounded-xl shadow-lg shadow-amber-200 hover:bg-amber-700 transition-all active:scale-95"
                         >
                             <Plus className="w-4 h-4" />
-                            {isStudent ? 'Message Admin' : 'Compose'}
+                            {isStudent ? 'Send Message' : 'Compose'}
                         </button>
                     </div>
                 </div>
 
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-20">
-                        <div className="w-12 h-12 border-4 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin mb-4" />
+                        <div className="w-12 h-12 border-4 border-amber-600/20 border-t-amber-600 rounded-full animate-spin mb-4" />
                         <p className="text-slate-400 font-bold">Loading updates...</p>
                     </div>
                 ) : notifications.length === 0 ? (
                     <div className="bg-white rounded-[32px] p-12 border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col items-center text-center">
-                        <div className="w-20 h-20 bg-indigo-50 rounded-[28px] flex items-center justify-center mb-6">
-                            <Bell className="w-10 h-10 text-indigo-400" />
+                        <div className="w-20 h-20 bg-amber-50 rounded-[28px] flex items-center justify-center mb-6">
+                            <Bell className="w-10 h-10 text-amber-400" />
                         </div>
                         <h2 className="text-2xl font-black text-[#1E1B4B]">All caught up!</h2>
                         <p className="text-slate-500 font-medium mt-2 max-w-sm">
@@ -493,7 +493,7 @@ const Notifications = () => {
                                             "group relative bg-white p-6 rounded-[28px] border transition-all duration-300 cursor-pointer",
                                             notification.is_read
                                                 ? "border-slate-100 opacity-75 grayscale-[0.5]"
-                                                : "border-indigo-100 shadow-lg shadow-indigo-100/50 hover:shadow-xl hover:shadow-indigo-200/50"
+                                                : "border-amber-100 shadow-lg shadow-amber-100/50 hover:shadow-xl hover:shadow-amber-200/50"
                                         )}
                                     >
                                         <div className="flex gap-6">
@@ -518,7 +518,7 @@ const Notifications = () => {
                                                         </p>
                                                     </div>
                                                     {!notification.is_read && (
-                                                        <div className="w-3 h-3 bg-indigo-600 rounded-full shadow-[0_0_12px_rgba(79,70,229,0.5)] animate-pulse" />
+                                                        <div className="w-3 h-3 bg-amber-600 rounded-full shadow-[0_0_12px_rgba(245,158,11,0.5)] animate-pulse" />
                                                     )}
                                                 </div>
                                                 <p className={clsx(
@@ -540,7 +540,7 @@ const Notifications = () => {
             {/* Compose Modal */}
             <AnimatePresence>
                 {isComposeOpen && (
-                    <div className="fixed inset-0 z-[60] flex items-center justify-center p-2 sm:p-4">
+                    <div className="fixed inset-0 z-60 flex items-center justify-center p-2 sm:p-4">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -557,8 +557,8 @@ const Notifications = () => {
                             <div className="p-3 sm:p-8 flex flex-col h-full overflow-hidden">
                                 <div className="flex items-center justify-between mb-4 sm:mb-8 shrink-0">
                                     <div className="flex items-center gap-2 sm:gap-3">
-                                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-indigo-50 rounded-xl sm:rounded-2xl flex items-center justify-center">
-                                            <Megaphone className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-600" />
+                                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-amber-50 rounded-xl sm:rounded-2xl flex items-center justify-center">
+                                            <Megaphone className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600" />
                                         </div>
                                         <h2 className="text-xl sm:text-2xl font-black text-[#1E1B4B]">Send Message</h2>
                                     </div>
@@ -577,7 +577,7 @@ const Notifications = () => {
                                                     onClick={() => setTarget('all_teachers')}
                                                     className={clsx(
                                                         "flex items-center gap-2 px-3 py-2.5 sm:px-4 sm:py-3 rounded-xl border-2 transition-all font-bold",
-                                                        target === 'all_teachers' ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-slate-100 text-slate-500 hover:border-indigo-100"
+                                                        target === 'all_teachers' ? "border-amber-600 bg-amber-50 text-amber-700" : "border-slate-100 text-slate-500 hover:border-amber-100"
                                                     )}
                                                 >
                                                     <Users className="w-4 h-4" />
@@ -588,7 +588,7 @@ const Notifications = () => {
                                                     onClick={() => setTarget('all_students')}
                                                     className={clsx(
                                                         "flex items-center gap-2 px-3 py-2.5 sm:px-4 sm:py-3 rounded-xl border-2 transition-all font-bold",
-                                                        target === 'all_students' ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-slate-100 text-slate-500 hover:border-indigo-100"
+                                                        target === 'all_students' ? "border-amber-600 bg-amber-50 text-amber-700" : "border-slate-100 text-slate-500 hover:border-amber-100"
                                                     )}
                                                 >
                                                     <School className="w-4 h-4" />
@@ -607,7 +607,7 @@ const Notifications = () => {
                                                         onClick={() => setTarget('my_class')}
                                                         className={clsx(
                                                             "flex flex-col items-center gap-1 p-2 sm:p-3 rounded-xl border-2 transition-all font-bold text-[10px] sm:text-[11px]",
-                                                            target === 'my_class' ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-slate-100 text-slate-500 hover:border-indigo-100"
+                                                            target === 'my_class' ? "border-amber-600 bg-amber-50 text-amber-700" : "border-slate-100 text-slate-500 hover:border-amber-100"
                                                         )}
                                                     >
                                                         <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -618,7 +618,7 @@ const Notifications = () => {
                                                         onClick={() => setTarget('admin')}
                                                         className={clsx(
                                                             "flex flex-col items-center gap-1 p-2 sm:p-3 rounded-xl border-2 transition-all font-bold text-[10px] sm:text-[11px]",
-                                                            target === 'admin' ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-slate-100 text-slate-500 hover:border-indigo-100"
+                                                            target === 'admin' ? "border-amber-600 bg-amber-50 text-amber-700" : "border-slate-100 text-slate-500 hover:border-amber-100"
                                                         )}
                                                     >
                                                         <School className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -629,7 +629,7 @@ const Notifications = () => {
                                                         onClick={() => setTarget('all_teachers')}
                                                         className={clsx(
                                                             "flex flex-col items-center gap-1 p-2 sm:p-3 rounded-xl border-2 transition-all font-bold text-[10px] sm:text-[11px]",
-                                                            target === 'all_teachers' ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-slate-100 text-slate-500 hover:border-indigo-100"
+                                                            target === 'all_teachers' ? "border-amber-600 bg-amber-50 text-amber-700" : "border-slate-100 text-slate-500 hover:border-amber-100"
                                                         )}
                                                     >
                                                         <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -658,12 +658,12 @@ const Notifications = () => {
                                                             <button
                                                                 type="button"
                                                                 onClick={() => setIsClassDropdownOpen(!isClassDropdownOpen)}
-                                                                className="w-full flex items-center justify-between px-3.5 py-2.5 sm:px-5 sm:py-4 bg-slate-50 border-2 border-indigo-200 rounded-xl hover:border-indigo-400 transition-all font-bold text-left"
+                                                                className="w-full flex items-center justify-between px-3.5 py-2.5 sm:px-5 sm:py-4 bg-slate-50 border-2 border-amber-200 rounded-xl hover:border-amber-400 transition-all font-bold text-left"
                                                             >
                                                                 <div className="flex items-center gap-3">
                                                                     <div className={clsx(
                                                                         "w-8 h-8 rounded-xl flex items-center justify-center",
-                                                                        selectedClass?.type === 'class_teacher' ? "bg-indigo-100 text-indigo-600" : "bg-emerald-100 text-emerald-600"
+                                                                        selectedClass?.type === 'class_teacher' ? "bg-amber-100 text-amber-600" : "bg-emerald-100 text-emerald-600"
                                                                     )}>
                                                                         {selectedClass?.type === 'class_teacher' ? (
                                                                             <Users className="w-4 h-4" />
@@ -702,13 +702,13 @@ const Notifications = () => {
                                                                                     setIsClassDropdownOpen(false);
                                                                                 }}
                                                                                 className={clsx(
-                                                                                    "w-full flex items-center gap-3 px-4 py-2.5 sm:px-5 sm:py-3.5 text-left hover:bg-indigo-50 transition-colors",
-                                                                                    selectedClassId === tc.class_id && "bg-indigo-50"
+                                                                                    "w-full flex items-center gap-3 px-4 py-2.5 sm:px-5 sm:py-3.5 text-left hover:bg-amber-50 transition-colors",
+                                                                                    selectedClassId === tc.class_id && "bg-amber-50"
                                                                                 )}
                                                                             >
                                                                                 <div className={clsx(
                                                                                     "w-8 h-8 rounded-xl flex items-center justify-center shrink-0",
-                                                                                    tc.type === 'class_teacher' ? "bg-indigo-100 text-indigo-600" : "bg-emerald-100 text-emerald-600"
+                                                                                    tc.type === 'class_teacher' ? "bg-amber-100 text-amber-600" : "bg-emerald-100 text-emerald-600"
                                                                                 )}>
                                                                                     {tc.type === 'class_teacher' ? (
                                                                                         <Users className="w-4 h-4" />
@@ -723,7 +723,7 @@ const Notifications = () => {
                                                                                     </span>
                                                                                 </div>
                                                                                 {selectedClassId === tc.class_id && (
-                                                                                    <Check className="w-4 h-4 text-indigo-600 shrink-0" />
+                                                                                    <Check className="w-4 h-4 text-amber-600 shrink-0" />
                                                                                 )}
                                                                             </button>
                                                                         ))}
@@ -739,7 +739,7 @@ const Notifications = () => {
                                                                 onClick={() => setIsMultiSelect(false)}
                                                                 className={clsx(
                                                                     "flex-1 px-2 py-1.5 rounded-lg border font-bold text-[9px] sm:text-[10px] uppercase tracking-wider transition-all",
-                                                                    !isMultiSelect ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-400 border-slate-100 hover:border-indigo-100"
+                                                                    !isMultiSelect ? "bg-amber-600 text-white border-amber-600" : "bg-white text-slate-400 border-slate-100 hover:border-amber-100"
                                                                 )}
                                                             >
                                                                 Whole Class
@@ -749,7 +749,7 @@ const Notifications = () => {
                                                                 onClick={() => setIsMultiSelect(true)}
                                                                 className={clsx(
                                                                     "flex-1 px-2 py-1.5 rounded-lg border font-bold text-[9px] sm:text-[10px] uppercase tracking-wider transition-all",
-                                                                    isMultiSelect ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-400 border-slate-100 hover:border-indigo-100"
+                                                                    isMultiSelect ? "bg-amber-600 text-white border-amber-600" : "bg-white text-slate-400 border-slate-100 hover:border-amber-100"
                                                                 )}
                                                             >
                                                                 Pick Students
@@ -761,7 +761,7 @@ const Notifications = () => {
                                                             <div className="mt-3 space-y-1 pr-1.5 custom-scrollbar">
                                                                 {loadingClassStudents ? (
                                                                     <div className="flex items-center justify-center py-4">
-                                                                        <Loader2 className="w-4 h-4 animate-spin text-indigo-500" />
+                                                                        <Loader2 className="w-4 h-4 animate-spin text-amber-500" />
                                                                     </div>
                                                                 ) : classStudents.length === 0 ? (
                                                                     <p className="text-center text-[10px] text-slate-400 py-4 font-bold uppercase tracking-widest">No students found</p>
@@ -771,11 +771,11 @@ const Notifications = () => {
                                                                             key={student.id}
                                                                             className={clsx(
                                                                                 "flex items-center justify-between p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl border-2 transition-all cursor-pointer",
-                                                                                selectedStudentIds.includes(student.id) ? "border-indigo-600 bg-indigo-50" : "border-slate-50 bg-slate-50 hover:border-indigo-100"
+                                                                                selectedStudentIds.includes(student.id) ? "border-amber-600 bg-amber-50" : "border-slate-50 bg-slate-50 hover:border-amber-100"
                                                                             )}
                                                                         >
                                                                             <div className="flex items-center gap-2">
-                                                                                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-lg flex items-center justify-center text-indigo-600 font-black text-[10px] sm:text-xs border border-indigo-100 shrink-0">
+                                                                                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-lg flex items-center justify-center text-amber-600 font-black text-[10px] sm:text-xs border border-amber-100 shrink-0">
                                                                                     {student.name.charAt(0)}
                                                                                 </div>
                                                                                 <span className="text-[11px] sm:text-xs font-bold text-[#1E1B4B]">{student.name}</span>
@@ -793,7 +793,7 @@ const Notifications = () => {
                                                                                 }}
                                                                             />
                                                                             {selectedStudentIds.includes(student.id) ? (
-                                                                                <div className="w-4 h-4 sm:w-5 sm:h-5 bg-indigo-600 rounded-lg flex items-center justify-center">
+                                                                                <div className="w-4 h-4 sm:w-5 sm:h-5 bg-amber-600 rounded-lg flex items-center justify-center">
                                                                                     <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
                                                                                 </div>
                                                                             ) : (
@@ -810,8 +810,8 @@ const Notifications = () => {
                                         )}
 
                                         {isTeacher && target === 'admin' && (
-                                            <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-2xl">
-                                                <p className="text-sm font-bold text-indigo-700 flex items-center gap-2">
+                                            <div className="p-4 bg-amber-50 border border-amber-100 rounded-2xl">
+                                                <p className="text-sm font-bold text-amber-700 flex items-center gap-2">
                                                     <School className="w-4 h-4" />
                                                     Sending to School Admin
                                                 </p>
@@ -819,8 +819,8 @@ const Notifications = () => {
                                         )}
 
                                         {isTeacher && target === 'all_teachers' && (
-                                            <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
-                                                <p className="text-sm font-bold text-emerald-700 flex items-center gap-2">
+                                            <div className="p-4 bg-amber-50 border border-amber-100 rounded-2xl">
+                                                <p className="text-sm font-bold text-amber-700 flex items-center gap-2">
                                                     <Users className="w-4 h-4" />
                                                     Broadcasting to all Teachers
                                                 </p>
@@ -836,7 +836,7 @@ const Notifications = () => {
                                                         onClick={() => setTarget('teacher')}
                                                         className={clsx(
                                                             "flex flex-col items-center gap-1 p-2 sm:p-3 rounded-xl border-2 transition-all font-bold text-[10px] sm:text-[11px]",
-                                                            target === 'teacher' ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-slate-100 text-slate-500 hover:border-indigo-100"
+                                                            target === 'teacher' ? "border-amber-600 bg-amber-50 text-amber-700" : "border-slate-100 text-slate-500 hover:border-amber-100"
                                                         )}
                                                     >
                                                         <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -847,7 +847,7 @@ const Notifications = () => {
                                                         onClick={() => setTarget('admin')}
                                                         className={clsx(
                                                             "flex flex-col items-center gap-1 p-2 sm:p-3 rounded-xl border-2 transition-all font-bold text-[10px] sm:text-[11px]",
-                                                            target === 'admin' ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-slate-100 text-slate-500 hover:border-indigo-100"
+                                                            target === 'admin' ? "border-amber-600 bg-amber-50 text-amber-700" : "border-slate-100 text-slate-500 hover:border-amber-100"
                                                         )}
                                                     >
                                                         <School className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -858,7 +858,7 @@ const Notifications = () => {
                                                         onClick={() => setTarget('all_students')}
                                                         className={clsx(
                                                             "flex flex-col items-center gap-1 p-2 sm:p-3 rounded-xl border-2 transition-all font-bold text-[10px] sm:text-[11px]",
-                                                            target === 'all_students' ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-slate-100 text-slate-500 hover:border-indigo-100"
+                                                            target === 'all_students' ? "border-amber-600 bg-amber-50 text-amber-700" : "border-slate-100 text-slate-500 hover:border-amber-100"
                                                         )}
                                                     >
                                                         <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -874,7 +874,7 @@ const Notifications = () => {
                                                 <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 px-1">Choose Teacher</label>
                                                 {loadingStudentData ? (
                                                     <div className="flex items-center justify-center py-4">
-                                                        <Loader2 className="w-5 h-5 animate-spin text-indigo-500" />
+                                                        <Loader2 className="w-5 h-5 animate-spin text-amber-500" />
                                                         <span className="ml-2 text-sm text-slate-400 font-medium">Finding your teachers...</span>
                                                     </div>
                                                 ) : studentRecipients.length === 0 ? (
@@ -886,10 +886,10 @@ const Notifications = () => {
                                                         <button
                                                             type="button"
                                                             onClick={() => setIsRecipientDropdownOpen(!isRecipientDropdownOpen)}
-                                                            className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 border-2 border-indigo-200 rounded-xl hover:border-indigo-400 transition-all font-bold text-left"
+                                                            className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 border-2 border-amber-200 rounded-xl hover:border-amber-400 transition-all font-bold text-left"
                                                         >
                                                             <div className="flex items-center gap-3">
-                                                                <div className="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                                                                <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
                                                                     <Users className="w-4 h-4" />
                                                                 </div>
                                                                 <div>
@@ -922,11 +922,11 @@ const Notifications = () => {
                                                                                 setIsRecipientDropdownOpen(false);
                                                                             }}
                                                                             className={clsx(
-                                                                                "w-full flex items-center gap-3 px-5 py-3.5 text-left hover:bg-indigo-50 transition-colors",
-                                                                                selectedRecipientId === sr.id && "bg-indigo-50"
+                                                                                "w-full flex items-center gap-3 px-5 py-3.5 text-left hover:bg-amber-50 transition-colors",
+                                                                                selectedRecipientId === sr.id && "bg-amber-50"
                                                                             )}
                                                                         >
-                                                                            <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                                                            <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
                                                                                 <Users className="w-4 h-4" />
                                                                             </div>
                                                                             <div className="flex-1 min-w-0">
@@ -934,7 +934,7 @@ const Notifications = () => {
                                                                                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{sr.role}</span>
                                                                             </div>
                                                                             {selectedRecipientId === sr.id && (
-                                                                                <Check className="w-4 h-4 text-indigo-600 shrink-0" />
+                                                                                <Check className="w-4 h-4 text-amber-600 shrink-0" />
                                                                             )}
                                                                         </button>
                                                                     ))}
@@ -951,7 +951,7 @@ const Notifications = () => {
                                                 <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 px-1">Choose Classmate</label>
                                                 {loadingStudentData ? (
                                                     <div className="flex items-center justify-center py-4">
-                                                        <Loader2 className="w-5 h-5 animate-spin text-indigo-500" />
+                                                        <Loader2 className="w-5 h-5 animate-spin text-amber-500" />
                                                         <span className="ml-2 text-sm text-slate-400 font-medium">Finding your classmates...</span>
                                                     </div>
                                                 ) : classmates.length === 0 ? (
@@ -963,10 +963,10 @@ const Notifications = () => {
                                                         <button
                                                             type="button"
                                                             onClick={() => setIsRecipientDropdownOpen(!isRecipientDropdownOpen)}
-                                                            className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 border-2 border-emerald-200 rounded-xl hover:border-emerald-400 transition-all font-bold text-left"
+                                                            className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 border-2 border-amber-200 rounded-xl hover:border-amber-400 transition-all font-bold text-left"
                                                         >
                                                             <div className="flex items-center gap-3">
-                                                                <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                                                                <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
                                                                     <Users className="w-4 h-4" />
                                                                 </div>
                                                                 <div>
@@ -997,11 +997,11 @@ const Notifications = () => {
                                                                                 setIsRecipientDropdownOpen(false);
                                                                             }}
                                                                             className={clsx(
-                                                                                "w-full flex items-center gap-3 px-5 py-3.5 text-left hover:bg-emerald-50 transition-colors",
-                                                                                selectedRecipientId === sr.id && "bg-emerald-50"
+                                                                                "w-full flex items-center gap-3 px-5 py-3.5 text-left hover:bg-amber-50 transition-colors",
+                                                                                selectedRecipientId === sr.id && "bg-amber-50"
                                                                             )}
                                                                         >
-                                                                            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                                                            <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
                                                                                 <Users className="w-4 h-4" />
                                                                             </div>
                                                                             <div className="flex-1 min-w-0">
@@ -1009,7 +1009,7 @@ const Notifications = () => {
                                                                                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Classmate</span>
                                                                             </div>
                                                                             {selectedRecipientId === sr.id && (
-                                                                                <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                                                                                <Check className="w-4 h-4 text-amber-600 shrink-0" />
                                                                             )}
                                                                         </button>
                                                                     ))}
@@ -1022,8 +1022,8 @@ const Notifications = () => {
                                         )}
 
                                         {isStudent && target === 'admin' && (
-                                            <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-2xl">
-                                                <p className="text-sm font-bold text-indigo-700 flex items-center gap-2">
+                                            <div className="p-4 bg-amber-50 border border-amber-100 rounded-2xl">
+                                                <p className="text-sm font-bold text-amber-700 flex items-center gap-2">
                                                     <School className="w-4 h-4" />
                                                     Sending to School Admin
                                                 </p>
@@ -1031,8 +1031,8 @@ const Notifications = () => {
                                         )}
 
                                         {isStudent && target === 'all_students' && (
-                                            <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
-                                                <p className="text-sm font-bold text-emerald-700 flex items-center gap-2">
+                                            <div className="p-4 bg-amber-50 border border-amber-100 rounded-2xl">
+                                                <p className="text-sm font-bold text-amber-700 flex items-center gap-2">
                                                     <Users className="w-4 h-4" />
                                                     Choose a classmate above to send a private message.
                                                 </p>
@@ -1048,7 +1048,7 @@ const Notifications = () => {
                                                         value={title}
                                                         onChange={(e) => setTitle(e.target.value)}
                                                         placeholder="Enter title..."
-                                                        className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-600 focus:bg-white transition-all font-bold outline-none text-sm"
+                                                        className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-amber-600 focus:bg-white transition-all font-bold outline-none text-sm"
                                                         required
                                                     />
                                                 </div>
@@ -1061,7 +1061,7 @@ const Notifications = () => {
                                                     onChange={(e) => setMessage(e.target.value)}
                                                     placeholder="Write your message..."
                                                     rows={isAdmin || isTeacher ? 2 : 3}
-                                                    className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-indigo-600 focus:bg-white transition-all font-bold outline-none resize-none text-sm"
+                                                    className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-amber-600 focus:bg-white transition-all font-bold outline-none resize-none text-sm"
                                                     required
                                                 />
                                             </div>
@@ -1069,7 +1069,7 @@ const Notifications = () => {
                                             <button
                                                 type="submit"
                                                 disabled={sending || (isTeacher && target === 'my_class' && !selectedClassId) || (isStudent && target === 'teacher' && !selectedRecipientId)}
-                                                className="w-full py-3 bg-indigo-600 text-white font-black rounded-xl shadow-xl shadow-indigo-200 hover:bg-indigo-700 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 text-sm"
+                                                className="w-full py-3 bg-amber-600 text-white font-black rounded-xl shadow-xl shadow-amber-200 hover:bg-amber-700 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 text-sm"
                                             >
                                                 {sending ? (
                                                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -1081,7 +1081,7 @@ const Notifications = () => {
                                                                 target === 'all_teachers' ? 'Send to Teachers' :
                                                                     'Send to Class'
                                                         ) : isStudent ? (
-                                                            target === 'admin' ? 'Send to Admin' :
+                                                            target === 'admin' ? 'Send Message' :
                                                                 target === 'teacher' ? 'Send to Teacher' :
                                                                     'Send to Classmate'
                                                         ) : 'Send Notification'}

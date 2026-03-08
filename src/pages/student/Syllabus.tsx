@@ -19,7 +19,7 @@ interface Chapter {
     id: string;
     chapter_name: string;
     description: string;
-    term: 'PWT1' | 'Half Yearly' | 'PWT2' | 'Final';
+    term: string;
     status: 'Pending' | 'Started' | 'Completed';
     completed_at: string | null;
     is_correction_completed: boolean;
@@ -92,21 +92,21 @@ const StudentSyllabus = () => {
     if (loading) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAFC]">
-                <Loader2 className="w-10 h-10 mb-4 animate-spin text-[#1E1B4B]" />
+                <Loader2 className="w-10 h-10 mb-4 animate-spin text-amber-600" />
                 <p className="text-sm font-semibold text-slate-400 tracking-wide uppercase">Loading Syllabus...</p>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 pb-24 font-inter text-[#1E1B4B]">
+        <div className="min-h-screen bg-slate-50 pb-24 font-inter text-slate-900">
             {/* Premium Header */}
-            <div className="bg-[#1E1B4B] rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group">
+            <div className="bg-amber-600 rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-32 -translate-y-32" />
 
                 <button
                     onClick={() => navigate('/student/subjects')}
-                    className="hidden md:flex relative z-10 items-center gap-2 text-indigo-300 hover:text-white transition-colors mb-8 group/back"
+                    className="hidden md:flex relative z-10 items-center gap-2 text-amber-100 hover:text-white transition-colors mb-8 group/back"
                 >
                     <ArrowLeft className="w-4 h-4 group-hover/back:-translate-x-1 transition-transform" />
                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">Back to Subjects</span>
@@ -122,8 +122,8 @@ const StudentSyllabus = () => {
                                 <span className="px-3 py-1 bg-white/10 text-white text-[10px] font-black uppercase tracking-[0.15em] rounded-lg border border-white/10">
                                     {subjectInfo?.class_name}
                                 </span>
-                                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-                                <span className="text-indigo-300 text-[10px] font-black uppercase tracking-[0.15em]">Syllabus</span>
+                                <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                                <span className="text-amber-100 text-[10px] font-black uppercase tracking-[0.15em]">Syllabus</span>
                             </div>
                             <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight uppercase">
                                 {subjectInfo?.subject_name}
@@ -132,9 +132,9 @@ const StudentSyllabus = () => {
                     </div>
 
                     <div className="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/10">
-                        <User className="w-5 h-5 text-indigo-400" />
+                        <User className="w-5 h-5 text-amber-100" />
                         <div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 block -mb-0.5">Teacher</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-amber-100 block -mb-0.5">Teacher</span>
                             <span className="text-sm font-bold text-white uppercase tracking-tight">{subjectInfo?.teacher_name}</span>
                         </div>
                     </div>
@@ -144,7 +144,7 @@ const StudentSyllabus = () => {
             {/* Content grouped by term */}
             <div className="max-w-5xl mx-auto space-y-12">
                 {['PWT1', 'Half Yearly', 'PWT2', 'Final'].map((term) => {
-                    const termChapters = chapters.filter(c => c.term === term);
+                    const termChapters = chapters.filter(c => c.term?.split(',').includes(term));
                     if (termChapters.length === 0) return null;
 
                     return (
@@ -165,7 +165,7 @@ const StudentSyllabus = () => {
                                     >
                                         <div className="flex items-start justify-between mb-4">
                                             <div className="flex-1">
-                                                <h3 className="text-lg font-black text-[#1E1B4B] tracking-tight group-hover:text-primary transition-colors uppercase leading-tight">
+                                                <h3 className="text-lg font-black text-slate-900 tracking-tight group-hover:text-amber-600 transition-colors uppercase leading-tight">
                                                     {chapter.chapter_name}
                                                 </h3>
                                                 <p className="text-xs font-medium text-slate-400 mt-1 line-clamp-2">
@@ -173,8 +173,8 @@ const StudentSyllabus = () => {
                                                 </p>
                                             </div>
                                             {chapter.status === 'Completed' ? (
-                                                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 shrink-0">
-                                                    <CheckCircle2 className="w-5 h-5 text-primary" />
+                                                <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center border border-amber-100 shrink-0">
+                                                    <CheckCircle2 className="w-5 h-5 text-amber-600" />
                                                 </div>
                                             ) : (
                                                 <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center border border-slate-100 shrink-0">
@@ -189,7 +189,7 @@ const StudentSyllabus = () => {
 
                                         <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
                                             <div className="flex items-center gap-2">
-                                                <span className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${chapter.status === 'Completed' ? 'bg-primary/10 text-primary' :
+                                                <span className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${chapter.status === 'Completed' ? 'bg-amber-50 text-amber-600 border border-amber-100' :
                                                     chapter.status === 'Started' ? 'bg-amber-500/10 text-amber-600' :
                                                         'bg-slate-100 text-slate-400'
                                                     }`}>

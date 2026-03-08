@@ -66,7 +66,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 {/* Mobile Header */}
                 <MobileHeader onMenuClick={() => setIsSidebarOpen(true)} />
 
-                <main className="flex-1 overflow-y-auto pb-32 md:pb-8 p-3 sm:p-4 md:p-8">
+                <main className="flex-1 overflow-y-auto pb-24 md:pb-8 p-4 sm:p-5 md:p-8">
                     <div className="max-w-7xl mx-auto w-full">
                         {children}
                     </div>

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Users, CalendarCheck, Clock, BookOpen, ChevronRight, Loader2, Bell, BookMarked } from 'lucide-react';
+import { Users, CalendarCheck, Clock, BookOpen, ChevronRight, Loader2, Bell, BookMarked, Sparkles } from 'lucide-react';
 import StatsCard from '../../components/common/StatsCard';
 import { Link } from 'react-router-dom';
 import { clsx } from 'clsx';
 import { useAuthStore } from '../../stores/authStore';
 import { sql } from '../../lib/db';
 import { getGreeting } from '../../lib/dateUtils';
+import { teacherTips, getWeeklyTip } from '../../lib/tips';
 
 const TeacherDashboard = () => {
     const { profile } = useAuthStore();
@@ -18,6 +19,11 @@ const TeacherDashboard = () => {
     const [mostPresent, setMostPresent] = useState<string | null>(null);
     const [needsAttention, setNeedsAttention] = useState<string | null>(null);
     const [attendanceStatus, setAttendanceStatus] = useState('Not marked yet');
+    const [tip, setTip] = useState(getWeeklyTip(teacherTips));
+
+    useEffect(() => {
+        setTip(getWeeklyTip(teacherTips));
+    }, []);
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -127,8 +133,8 @@ const TeacherDashboard = () => {
     if (loading) {
         return (
             <div className="flex flex-col items-center justify-center py-32 gap-4">
-                <Loader2 className="w-10 h-10 text-primary animate-spin" strokeWidth={3} />
-                <p className="text-gray-400 font-semibold tracking-wide uppercase text-[11px]">Loading dashboard...</p>
+                <Loader2 className="w-10 h-10 text-amber-600 animate-spin" strokeWidth={3} />
+                <p className="text-gray-400 font-semibold tracking-wide uppercase text-[11px]">Loading Your World...</p>
             </div>
         );
     }
@@ -136,9 +142,9 @@ const TeacherDashboard = () => {
     return (
         <div className="space-y-8">
             {/* Hero Section */}
-            <div className="relative overflow-hidden bg-slate-900 rounded-[32px] p-8 md:p-12 text-white shadow-2xl">
+            <div className="relative overflow-hidden bg-amber-600 rounded-3xl p-6 md:p-10 text-white shadow-2xl">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
                         <h1 className="text-2xl md:text-4xl font-black tracking-tight mb-2">
                             {(() => {
@@ -149,40 +155,43 @@ const TeacherDashboard = () => {
                                 return `${getGreeting()}, ${firstName}!`;
                             })()}
                         </h1>
-                        <p className="text-slate-300 font-medium md:text-lg opacity-80 uppercase tracking-widest text-xs flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-indigo-400" />
+                        <p className="text-amber-100 font-medium md:text-lg opacity-80 uppercase tracking-widest text-xs flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-amber-200" />
                             {assignedClass ? `Class Teacher of ${assignedClass.name}` : 'No class assigned'} • {todayDate}
                         </p>
                     </div>
 
                     {/* Teacher Tip in Header */}
-                    <div className="bg-amber-400/10 backdrop-blur-md border border-amber-400/20 p-6 rounded-2xl flex items-center gap-4 max-w-md shadow-inner">
-                        <div className="w-12 h-12 bg-amber-400 text-slate-900 rounded-xl flex items-center justify-center shadow-lg shrink-0">
-                            <BookMarked className="w-6 h-6" />
+                    <div className="bg-white p-6 rounded-3xl flex items-center gap-5 max-w-md shadow-2xl transition-all hover:-translate-y-1 group">
+                        <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center shadow-inner shrink-0 group-hover:scale-110 transition-transform">
+                            <BookMarked className="w-7 h-7" />
                         </div>
                         <div>
-                            <h4 className="text-amber-400 font-black uppercase tracking-widest text-[10px] mb-1 italic">Teaching Tip</h4>
-                            <p className="text-amber-50/90 text-xs font-bold leading-relaxed">
-                                "The art of teaching is the art of assisting discovery." — Mark Van Doren.
-                                Keep inspiring your students!
+                            <h4 className="text-amber-600 font-extrabold uppercase tracking-wider text-[10px] mb-2 flex items-center gap-2">
+                                <Sparkles className="w-3 h-3 animate-pulse" />
+                                Weekly Teaching Tip
+                            </h4>
+                            <p className="text-slate-900 text-[13px] font-semibold leading-relaxed tracking-wide">
+                                "{tip.content}"
+                                {tip.author && <span className="block mt-2 text-slate-700 text-[10px] font-black opacity-90">— {tip.author}</span>}
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 {stats.map((stat, index) => (
                     <StatsCard key={index} {...stat} />
                 ))}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-xl font-bold text-gray-900">Class Overview</h3>
                         <div className="flex gap-4">
-                            <Link to="/teacher/notifications" className="text-sm font-bold text-indigo-600 flex items-center gap-1 hover:underline">
+                            <Link to="/teacher/notifications" className="text-sm font-bold text-amber-600 flex items-center gap-1 hover:underline">
                                 <Bell className="w-4 h-4" /> Notifications
                             </Link>
                             <Link to="/teacher/attendance" className="text-sm font-bold text-primary flex items-center gap-1 hover:underline">
@@ -222,16 +231,16 @@ const TeacherDashboard = () => {
                     </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-center items-center text-center">
-                    <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                        <CalendarCheck className="w-10 h-10 text-primary" />
+                <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col justify-center items-center text-center">
+                    <div className="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center mb-4">
+                        <CalendarCheck className="w-10 h-10 text-amber-600" />
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">Ready for Today?</h3>
-                    <p className="text-gray-500 mb-8 max-w-xs uppercase text-[10px] font-bold tracking-widest leading-loose">
+                    <p className="text-gray-500 mb-8 max-w-xs uppercase text-[10px] font-semibold tracking-wider leading-loose">
                         {assignedClass ? `Manage attendance for class ${assignedClass.name}` : 'Check your class assignment'}
                     </p>
                     <Link to="/teacher/attendance" className="w-full">
-                        <button className="w-full py-4 bg-primary text-white font-bold rounded-2xl shadow-xl shadow-primary/20 hover:bg-primary-hover transition-all">
+                        <button className="w-full py-5 bg-amber-600 text-white font-bold text-lg rounded-2xl shadow-xl shadow-amber-200 hover:bg-amber-700 transition-all">
                             {attendanceStatus === 'Marked' ? "Update Today's Attendance" : "Mark Today's Attendance"}
                         </button>
                     </Link>

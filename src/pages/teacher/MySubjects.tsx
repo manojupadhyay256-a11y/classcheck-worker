@@ -60,7 +60,7 @@ const MySubjects = () => {
     if (loading) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAFC]">
-                <Loader2 className="w-10 h-10 mb-4 animate-spin text-[#008B74]" />
+                <Loader2 className="w-10 h-10 mb-4 animate-spin text-amber-600" />
                 <p className="text-sm font-semibold text-slate-400 tracking-wide uppercase">Loading Your Subjects...</p>
             </div>
         );
@@ -95,7 +95,7 @@ const MySubjects = () => {
                         <div className="flex items-center gap-4">
                             <div
                                 onClick={() => setShowAll(!showAll)}
-                                className={`w-12 h-6 rounded-full p-1 cursor-pointer transition-all duration-500 hide-tap-highlight ${showAll ? 'bg-[#008B74]' : 'bg-slate-500'}`}
+                                className={`w-12 h-6 rounded-full p-1 cursor-pointer transition-all duration-500 hide-tap-highlight ${showAll ? 'bg-amber-600' : 'bg-slate-500'}`}
                             >
                                 <motion.div
                                     animate={{ x: showAll ? 24 : 0 }}
@@ -123,28 +123,28 @@ const MySubjects = () => {
                         <div className="p-8 pb-10 flex-1">
                             <div className="flex justify-between items-start mb-6">
                                 <div>
-                                    <h3 className="text-lg font-black text-slate-800 uppercase tracking-tight group-hover:text-[#008B74] transition-colors duration-300">
+                                    <h3 className="text-lg font-black text-slate-800 uppercase tracking-tight group-hover:text-amber-600 transition-colors duration-300">
                                         {subj.subject_name}
                                     </h3>
                                     <p className="text-sm font-bold text-slate-400 mt-1">
                                         Class {subj.class_name}
                                     </p>
                                 </div>
-                                <div className="px-3 py-1 bg-slate-50 text-[#008B74] text-[10px] font-black rounded-xl uppercase tracking-widest border border-slate-100 shadow-sm">
+                                <div className="px-3 py-1 bg-amber-50 text-amber-600 text-[10px] font-black rounded-xl uppercase tracking-widest border border-amber-100 shadow-sm">
                                     {subj.class_name.split('-')[0].trim()}{subj.class_name.includes('-') ? subj.class_name.split('-')[1].trim() : ''}
                                 </div>
                             </div>
 
                             <div className="space-y-4 mt-8 mb-10">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-8 h-8 rounded-full bg-[#E2F2F0] flex items-center justify-center border border-[#CCECE7]">
-                                        <BookOpen className="w-4 h-4 text-[#008B74]" />
+                                    <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center border border-amber-100">
+                                        <BookOpen className="w-4 h-4 text-amber-600" />
                                     </div>
                                     <span className="text-sm font-bold text-slate-500">Manage Syllabus Chapters</span>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <div className="w-8 h-8 rounded-full bg-[#E2F2F0] flex items-center justify-center border border-[#CCECE7]">
-                                        <CheckCircle2 className="w-4 h-4 text-[#008B74]" />
+                                    <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center border border-amber-100">
+                                        <CheckCircle2 className="w-4 h-4 text-amber-600" />
                                     </div>
                                     <span className="text-sm font-bold text-slate-500">Track Student Work</span>
                                 </div>
@@ -153,7 +153,7 @@ const MySubjects = () => {
                             <div className="mt-auto">
                                 <button
                                     onClick={() => navigate(`/teacher/syllabus/${subj.id}`)}
-                                    className="w-full flex items-center justify-center py-4 bg-slate-50 text-slate-800 font-black uppercase tracking-widest rounded-2xl border border-slate-200 hover:bg-[#008B74] hover:text-white hover:border-[#008B74] transition-all duration-300 active:scale-95 text-[11px] shadow-sm"
+                                    className="w-full flex items-center justify-center py-4 bg-slate-50 text-slate-800 font-black uppercase tracking-widest rounded-2xl border border-slate-200 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-300 active:scale-95 text-[11px] shadow-sm"
                                 >
                                     Syllabus
                                 </button>

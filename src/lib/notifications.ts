@@ -134,9 +134,10 @@ export const notificationService = {
     },
 
     async registerPushToken(userId: string, role: 'teacher' | 'student' | 'admin' | 'principal') {
-        // Fire and forget to avoid blocking main thread
-        this._registerPushTokenInternal(userId, role).catch(err => {
-            console.error('[NotificationService] registerPushToken background error:', err);
+        // Return the promise so the UI can track progress/errors
+        return this._registerPushTokenInternal(userId, role).catch(err => {
+            console.error('[NotificationService] registerPushToken error:', err);
+            throw err; // Re-throw to inform the caller
         });
     },
 
@@ -176,19 +177,28 @@ export const notificationService = {
                 }
 
                 const permission = await Notification.requestPermission();
-                if (permission === 'granted') {
-                    const messagingInstance = await getMessagingInstance();
-                    if (!messagingInstance) {
-                        console.warn('[NotificationService] Messaging not available, skipping web token');
-                        return;
+                if (permission !== 'granted') {
+                    throw new Error('Notification permission denied by user or browser.');
+                }
+
+                const messagingInstance = await getMessagingInstance();
+                if (!messagingInstance) {
+                    throw new Error('Firebase Messaging is not supported on this browser or context (requires HTTPS).');
+                }
+
+                try {
+                    console.log('[NotificationService] Requesting fresh FCM token with VAPID:', VAPID_KEY);
+                    token = await getToken(messagingInstance, {
+                        vapidKey: VAPID_KEY
+                    });
+
+                    if (!token) {
+                        throw new Error('FCM returned an empty token.');
                     }
-                    try {
-                        token = await getToken(messagingInstance, {
-                            vapidKey: VAPID_KEY
-                        });
-                    } catch (tokenErr) {
-                        console.error('[NotificationService] getToken failed:', tokenErr);
-                    }
+                    console.log('[NotificationService] Received fresh token:', token.substring(0, 10) + '...');
+                } catch (tokenErr: any) {
+                    console.error('[NotificationService] getToken failed:', tokenErr);
+                    throw new Error(`FCM Token Error: ${tokenErr.message || 'Unknown error'}`);
                 }
             }
 
@@ -205,32 +215,19 @@ export const notificationService = {
         try {
             console.log(`[NotificationService] Saving token to DB for ${role}: ${userId}`);
 
-            // Check if column exists first (safety check)
-            const columnCheck = await sql`
-                SELECT column_name 
-                FROM information_schema.columns 
-                WHERE table_name = ${role === 'student' ? 'students' : 'profiles'} 
-                AND column_name = 'fcm_token'
-                LIMIT 1
-            `;
-
-            if (columnCheck.length === 0) {
-                console.warn(`[NotificationService] fcm_token column missing in ${role === 'student' ? 'students' : 'profiles'}`);
-                return;
-            }
-
             if (role === 'student') {
-                await sql`UPDATE public.students SET fcm_token = ${token} WHERE id = ${userId}`;
+                await sql`UPDATE public.students SET fcm_token = ${token}, updated_at = NOW() WHERE id = ${userId}`;
             } else {
                 await sql`
                     UPDATE public.profiles
-                    SET fcm_token = ${token}
+                    SET fcm_token = ${token}, updated_at = NOW()
                     WHERE id = ${userId}
                 `;
             }
             console.log(`[NotificationService] FCM token successfully saved for ${role}`);
-        } catch (err) {
+        } catch (err: any) {
             console.error('[NotificationService] Failed to save FCM token to DB:', err);
+            throw new Error(`Database sync failed: ${err.message || 'Unknown error'}`);
         }
     }
 };

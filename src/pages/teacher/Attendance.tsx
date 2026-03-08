@@ -218,9 +218,9 @@ const TeacherAttendance = () => {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-gray-50/50 border-b border-gray-100">
-                                <th className="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-widest w-24">Roll No</th>
-                                <th className="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-widest">Student Name</th>
-                                <th className="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-widest text-center">Mark Status</th>
+                                <th className="px-6 py-3.5 text-xs font-black text-gray-400 uppercase tracking-widest w-24">Roll No</th>
+                                <th className="px-6 py-3.5 text-xs font-black text-gray-400 uppercase tracking-widest">Student Name</th>
+                                <th className="px-6 py-3.5 text-xs font-black text-gray-400 uppercase tracking-widest text-center">Mark Status</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
@@ -233,14 +233,14 @@ const TeacherAttendance = () => {
                                         key={student.id}
                                         className="hover:bg-gray-50/50 transition-colors"
                                     >
-                                        <td className="px-6 py-5 font-mono text-sm font-bold text-gray-400">{student.rollNo}</td>
-                                        <td className="px-6 py-5">
+                                        <td className="px-6 py-3.5 font-mono text-sm font-bold text-gray-400">{student.rollNo}</td>
+                                        <td className="px-6 py-3.5">
                                             <div className="flex flex-col">
                                                 <span className="font-bold text-gray-900">{student.name}</span>
                                                 <span className="text-[10px] text-gray-400 font-mono uppercase">ADM: {student.admission_no}</span>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-5">
+                                        <td className="px-6 py-3.5">
                                             <div className="flex items-center justify-center gap-3">
                                                 <button
                                                     onClick={() => updateStatus(student.id, 'Present')}

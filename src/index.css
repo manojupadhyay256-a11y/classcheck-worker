@@ -2,16 +2,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #0D9488;
-  --color-primary-hover: #0F766E;
+  --color-primary: #D97706;
+  /* Amber 600 */
+  --color-primary-hover: #B45309;
+  /* Amber 700 */
   --color-secondary: #8B5CF6;
   /* Purple for hero and accents */
   --color-accent: #F59E0B;
   --color-success: #10B981;
   --color-danger: #F43F5E;
   --color-saas-dark: #0F172A;
-  --color-saas-accent: #6366F1;
-  --color-saas-accent-hover: #4F46E5;
+  --color-saas-accent: #F59E0B;
+  --color-saas-accent-hover: #D97706;
   --color-saas-border: #E2E8F0;
   --radius-xl: 16px;
   --radius-2xl: 24px;

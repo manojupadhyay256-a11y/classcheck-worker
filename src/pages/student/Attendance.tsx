@@ -80,16 +80,16 @@ const StudentAttendance = () => {
     if (loading) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAFC]">
-                <Loader2 className="w-10 h-10 mb-4 animate-spin text-primary" />
+                <Loader2 className="w-10 h-10 mb-4 animate-spin text-amber-600" />
                 <p className="text-sm font-semibold text-slate-400 tracking-wide uppercase">Calculating Attendance...</p>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 pb-24 font-inter text-[#1E1B4B]">
+        <div className="min-h-screen bg-slate-50 pb-24 font-inter text-slate-900">
             {/* Header section */}
-            <div className="bg-primary rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group border border-primary/20">
+            <div className="bg-amber-600 rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group border border-amber-400/20">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-32 -translate-y-32 group-hover:scale-110 transition-transform duration-700" />
 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
@@ -120,7 +120,7 @@ const StudentAttendance = () => {
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                 {[
-                    { label: 'Total Marked', value: stats.total, icon: Calendar, color: 'text-indigo-500', bg: 'bg-indigo-50' },
+                    { label: 'Total Marked', value: stats.total, icon: Calendar, color: 'text-amber-500', bg: 'bg-amber-50' },
                     { label: 'Present Days', value: stats.present, icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50' },
                     { label: 'Absent Days', value: stats.absent, icon: XCircle, color: 'text-rose-500', bg: 'bg-rose-50' },
                     { label: 'On Leave', value: stats.leave, icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50' },
@@ -149,7 +149,7 @@ const StudentAttendance = () => {
                     <div className="bg-white rounded-[32px] p-8 border border-slate-100 shadow-xl overflow-hidden">
                         <div className="flex items-center justify-between mb-8">
                             <h2 className="text-xl font-black uppercase tracking-tight flex items-center gap-3">
-                                <Calendar className="w-6 h-6 text-primary" />
+                                <Calendar className="w-6 h-6 text-amber-600" />
                                 {format(currentMonth, 'MMMM yyyy')}
                             </h2>
                             <div className="flex gap-2">
@@ -184,14 +184,14 @@ const StudentAttendance = () => {
                                         className={clsx(
                                             "min-h-[100px] bg-white p-3 relative transition-all duration-300",
                                             !isSameMonth(day, monthStart) && "bg-slate-50/50 opacity-30",
-                                            isToday(day) && "bg-primary/5 ring-1 ring-primary/20 inset-0"
+                                            isToday(day) && "bg-amber-50 ring-1 ring-amber-200 inset-0"
                                         )}
                                     >
                                         <time
                                             dateTime={format(day, 'yyyy-MM-dd')}
                                             className={clsx(
                                                 "text-sm font-black text-slate-400",
-                                                isToday(day) && "text-primary"
+                                                isToday(day) && "text-amber-600"
                                             )}
                                         >
                                             {format(day, 'd')}

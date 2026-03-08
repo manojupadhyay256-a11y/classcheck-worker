@@ -415,8 +415,11 @@ export const bulkDeleteData = async () => {
         const adminId = adminUsers[0]?.id;
 
         // 2. Delete data in order to respect foreign keys (Children -> Parents)
-        // Targeted tables confirmed to exist in user's public schema
         await sql`DELETE FROM attendance`;
+        await sql`DELETE FROM class_logs`;
+        await sql`DELETE FROM correction_work`;
+        await sql`DELETE FROM notifications`;
+        await sql`DELETE FROM syllabus`;
         await sql`DELETE FROM class_subjects`;
         await sql`DELETE FROM students`;
         await sql`DELETE FROM classes`;
@@ -431,9 +434,6 @@ export const bulkDeleteData = async () => {
             await sql`DELETE FROM neon_auth.session WHERE "userId" != ${adminId}`;
             await sql`DELETE FROM neon_auth.account WHERE "userId" != ${adminId}`;
             await sql`DELETE FROM neon_auth."user" WHERE id != ${adminId}`;
-        } else {
-            // Safety: if adminId is not found, we don't clear auth users to avoid lockout
-            console.warn("Admin ID not found during bulk delete, skipping auth user deletion.");
         }
 
         return {
@@ -443,5 +443,52 @@ export const bulkDeleteData = async () => {
     } catch (error) {
         console.error("Bulk Delete Error:", error);
         throw error instanceof Error ? error : new Error("Failed to clear data.");
+    }
+};
+
+export const clearStudentsOnly = async () => {
+    try {
+        await sql`DELETE FROM attendance`;
+        await sql`DELETE FROM students`;
+        return { success: true, message: "All student and attendance records have been cleared." };
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const deleteSelectedStudents = async (ids: string[]) => {
+    try {
+        if (ids.length === 0) return;
+        // In Turso/PG we use the = ANY($1) syntax for batch delete
+        await sql`DELETE FROM attendance WHERE student_id = ANY(${ids})`;
+        await sql`DELETE FROM students WHERE id = ANY(${ids})`;
+        return { success: true };
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const deleteSelectedTeachers = async (ids: string[]) => {
+    try {
+        if (ids.length === 0) return;
+        // Teachers are linked to classes and class_subjects
+        await sql`UPDATE classes SET class_teacher_id = NULL WHERE class_teacher_id = ANY(${ids})`;
+        await sql`DELETE FROM class_subjects WHERE teacher_id = ANY(${ids})`;
+        await sql`DELETE FROM teachers WHERE id = ANY(${ids})`;
+
+        // Also remove from profiles and neon_auth if possible
+        const teachers = await sql`SELECT email FROM teachers WHERE id = ANY(${ids})`;
+        const emails = teachers.map(t => t.email).filter(Boolean);
+
+        if (emails.length > 0) {
+            const adminEmail = 'manojupadhyay256@gmail.com';
+            await sql`DELETE FROM profiles WHERE email = ANY(${emails}) AND email != ${adminEmail}`;
+            // We don't delete from auth user table here as it's more complex (requires IDs)
+            // and usually teachers might return or need email preservation.
+        }
+
+        return { success: true };
+    } catch (error) {
+        throw error;
     }
 };
