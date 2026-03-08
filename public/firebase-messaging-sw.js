@@ -27,7 +27,7 @@ messaging.onBackgroundMessage((payload) => {
     const notificationTitle = payload.notification.title || 'New Message';
     const notificationOptions = {
         body: payload.notification.body || 'You have a new message.',
-        icon: '/icons/icon-192.webp' // Match new public/icons/ path
+        icon: '/dpsicon.png' // Use existing icon from public/
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions);

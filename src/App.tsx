@@ -3,6 +3,8 @@ import { App as CapacitorApp } from '@capacitor/app';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { Device } from '@capacitor/device';
 import { notificationService } from './lib/notifications';
+import { getMessagingInstance } from './firebase';
+import { onMessage } from 'firebase/messaging';
 import Layout from './components/layout/Layout';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import SignIn from './pages/auth/SignIn';
@@ -36,6 +38,7 @@ import Notifications from './pages/Notifications';
 import Help from './pages/Help';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
+import { toast } from 'sonner';
 import { useAuthStore } from './stores/authStore';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 
@@ -112,11 +115,29 @@ const App = () => {
 
           // 4. Register with FCM/APNS
           await PushNotifications.register();
+          // 5. Handle Foreground Notifications (When app is open)
+          PushNotifications.addListener('pushNotificationReceived', (notification) => {
+            console.log('[App] Native push notification received in foreground');
+            toast.info(notification.title || 'New Notification', {
+              description: notification.body || '',
+              duration: 5000,
+            });
+          });
         } else {
           // 2. Web/PWA Registration
-          // Ensure we also register on web whenever the app mounts
-          // This catches PWA installations for users already logged in
           notificationService.registerPushToken(profile.id, profile.role as any);
+
+          // 3. Handle Web Foreground Notifications
+          const messaging = await getMessagingInstance();
+          if (messaging) {
+            onMessage(messaging, (payload) => {
+              console.log('[App] Web push message received in foreground');
+              toast.info(payload.notification?.title || 'New Message', {
+                description: payload.notification?.body || '',
+                duration: 5000,
+              });
+            });
+          }
         }
       } catch (err) {
         // Catch-all: never let notification setup crash the app
