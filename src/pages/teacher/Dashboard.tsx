@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Users, CalendarCheck, Clock, BookOpen, ChevronRight, Loader2, Bell, BookMarked, Sparkles } from 'lucide-react';
+import { Users, CalendarCheck, Clock, BookOpen, ChevronRight, Loader2, Bell, BookMarked, Sparkles, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { clsx } from 'clsx';
 import { useAuthStore } from '../../stores/authStore';
+import { useNotificationStore } from '../../stores/notificationStore';
 import { sql } from '../../lib/db';
 import { getGreeting } from '../../lib/dateUtils';
 import { teacherTips, getWeeklyTip } from '../../lib/tips';
 
 const TeacherDashboard = () => {
     const { profile } = useAuthStore();
+    const { notifications, fetchNotifications } = useNotificationStore();
     const [assignedClass, setAssignedClass] = useState<any>(null);
     const [studentCount, setStudentCount] = useState(0);
     const [presentToday, setPresentToday] = useState<number | null>(null);
@@ -102,6 +104,10 @@ const TeacherDashboard = () => {
                         }
                     }
                 }
+
+                // 7. Fetch Notifications
+                await fetchNotifications(profile.id);
+
             } catch (err) {
                 console.error('Error fetching dashboard data:', err);
             } finally {
@@ -110,7 +116,7 @@ const TeacherDashboard = () => {
         };
 
         fetchDashboardData();
-    }, [profile]);
+    }, [profile, fetchNotifications]);
 
     const todayDate = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
@@ -218,18 +224,13 @@ const TeacherDashboard = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
-                <div className="mobile-card p-4 md:p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
+                <div className="mobile-card p-4 md:p-6 lg:col-span-1">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-xl font-bold text-gray-900">Class Overview</h3>
-                        <div className="flex gap-4">
-                            <Link to="/teacher/notifications" className="text-sm font-bold text-amber-600 flex items-center gap-1 hover:underline">
-                                <Bell className="w-4 h-4" /> Notifications
-                            </Link>
-                            <Link to="/teacher/attendance" className="text-sm font-bold text-primary flex items-center gap-1 hover:underline">
-                                View All <ChevronRight className="w-4 h-4" />
-                            </Link>
-                        </div>
+                        <Link to="/teacher/attendance" className="text-sm font-bold text-primary flex items-center gap-1 hover:underline">
+                            View All <ChevronRight className="w-4 h-4" />
+                        </Link>
                     </div>
                     <div className="space-y-6">
                         <div>
@@ -276,6 +277,53 @@ const TeacherDashboard = () => {
                             {attendanceStatus === 'Marked' ? "Update Today's Attendance" : "Mark Today's Attendance"}
                         </button>
                     </Link>
+                </div>
+
+                {/* Recent Alerts Card */}
+                <div className="mobile-card overflow-hidden flex flex-col">
+                    <div className="p-4 md:p-6 border-b border-slate-50">
+                        <h3 className="text-xl font-bold text-gray-900">Recent Alerts</h3>
+                    </div>
+                    <div className="flex-1 overflow-y-auto max-h-[300px] hide-scrollbar">
+                        {notifications.length > 0 ? (
+                            <div className="divide-y divide-slate-50">
+                                {notifications.slice(0, 5).map((notif) => (
+                                    <div key={notif.id} className="p-4 hover:bg-slate-50 transition-colors">
+                                        <div className="flex items-start gap-3">
+                                            <div className={clsx(
+                                                "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
+                                                notif.is_read ? "bg-slate-100 text-slate-400" : "bg-amber-50 text-amber-600"
+                                            )}>
+                                                <Bell className="w-4 h-4" />
+                                            </div>
+                                            <div className="min-w-0 flex-1">
+                                                <p className={clsx(
+                                                    "font-bold text-xs tracking-tight truncate",
+                                                    notif.is_read ? "text-slate-500" : "text-slate-800"
+                                                )}>
+                                                    {notif.title}
+                                                </p>
+                                                <p className="text-slate-400 text-[10px] font-semibold uppercase mt-0.5 truncate">
+                                                    {notif.sender_name || 'System'}
+                                                </p>
+                                            </div>
+                                            {!notif.is_read && (
+                                                <div className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0 animate-pulse" />
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                                <Link to="/teacher/notifications" className="block p-4 text-center text-[10px] font-black text-amber-600 hover:bg-amber-50 transition-all uppercase tracking-widest border-t border-slate-50">
+                                    View All Notifications
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="p-8 text-center h-full flex flex-col items-center justify-center">
+                                <CheckCircle2 className="w-10 h-10 text-slate-100 mb-2" />
+                                <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">No new alerts</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
