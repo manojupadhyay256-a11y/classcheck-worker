@@ -8,9 +8,12 @@ import { useNotificationStore } from '../../stores/notificationStore';
 import { useEffect } from 'react';
 import { FcmListener } from '../common/FcmListener';
 
+import { useTabNavigation } from '../../hooks/useTabNavigation';
+
 const Layout = ({ children }: { children: React.ReactNode }) => {
     const { profile } = useAuthStore();
     const { fetchNotifications } = useNotificationStore();
+    const { swipeLeft, swipeRight } = useTabNavigation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {
@@ -28,6 +31,17 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </div>
         );
     }
+
+    const handlePanEnd = (_: any, info: any) => {
+        const threshold = 50;
+        const velocityThreshold = 0.5;
+
+        if (info.offset.x < -threshold || info.velocity.x < -velocityThreshold) {
+            swipeLeft();
+        } else if (info.offset.x > threshold || info.velocity.x > velocityThreshold) {
+            swipeRight();
+        }
+    };
 
     return (
         <div className="flex h-screen bg-[#F8FAFC]">
@@ -67,11 +81,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 <MobileHeader onMenuClick={() => setIsSidebarOpen(true)} />
                 <MobileTopTabs />
 
-                <main className="flex-1 overflow-y-auto pb-8 md:pb-8 p-4 sm:p-5 md:p-8">
+                <motion.main
+                    className="flex-1 overflow-y-auto pb-8 md:pb-8 p-4 sm:p-5 md:p-8"
+                    onPanEnd={handlePanEnd}
+                >
                     <div className="max-w-7xl mx-auto w-full">
                         {children}
                     </div>
-                </main>
+                </motion.main>
             </div>
         </div>
     );

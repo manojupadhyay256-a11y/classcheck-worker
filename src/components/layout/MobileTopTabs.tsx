@@ -1,44 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { useAuthStore } from '../../stores/authStore';
 import { clsx } from 'clsx';
 import { motion } from 'framer-motion';
+import { useTabNavigation } from '../../hooks/useTabNavigation';
 
 const MobileTopTabs = () => {
-    const { profile } = useAuthStore();
-    const role = profile?.role;
-
-    const getNavItems = () => {
-        switch (role) {
-            case 'admin':
-                return [
-                    { to: '/admin', label: 'Explore' },
-                    { to: '/admin/teachers', label: 'Teachers' },
-                    { to: '/admin/students', label: 'Students' },
-                    { to: '/admin/log-book', label: 'Logs' },
-                    { to: '/admin/settings', label: 'Settings' },
-                ];
-            case 'teacher':
-                return [
-                    { to: '/teacher', label: 'Explore' },
-                    { to: '/teacher/attendance', label: 'Attend' },
-                    { to: '/teacher/my-subjects', label: 'Subjects' },
-                    { to: '/teacher/homework', label: 'Homework' },
-                    { to: '/teacher/notifications', label: 'Inbox' },
-                ];
-            case 'student':
-                return [
-                    { to: '/student', label: 'Explore' },
-                    { to: '/student/classwork', label: 'Tasks' },
-                    { to: '/student/subjects', label: 'Subjects' },
-                    { to: '/student/homework', label: 'HW' },
-                    { to: '/student/notifications', label: 'Inbox' },
-                ];
-            default:
-                return [];
-        }
-    };
-
-    const navItems = getNavItems();
+    const { navItems } = useTabNavigation();
 
     if (navItems.length === 0) return null;
 
