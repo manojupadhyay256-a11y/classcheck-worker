@@ -42,6 +42,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
         { to: '/admin/students', icon: Users, label: 'Students' },
         { to: '/admin/log-book', icon: ListChecks, label: 'Log Book' },
         { to: '/admin/syllabus', icon: BookOpen, label: 'Syllabus Status' },
+        { to: '/admin/homework', icon: BookOpen, label: 'Homework' },
         { to: '/admin/reports/attendance', icon: BarChart3, label: 'Attendance Report' },
         { to: '/admin/profile', icon: Users, label: 'Profile' },
         { to: '/admin/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
@@ -58,6 +59,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
     const teacherLinks = [
         { to: '/teacher', icon: LayoutDashboard, label: 'Dashboard' },
         { to: '/teacher/my-subjects', icon: BookOpen, label: 'My Subjects' },
+        { to: '/teacher/homework', icon: BookOpen, label: 'Homework' },
         { to: '/teacher/attendance', icon: CalendarCheck, label: 'Attendance' },
         { to: '/teacher/students', icon: Users, label: 'Students' },
         { to: '/teacher/log-book', icon: ListChecks, label: 'Log Book' },
@@ -69,9 +71,10 @@ const Sidebar = ({ onClose }: SidebarProps) => {
 
     const studentLinks = [
         { to: '/student', icon: LayoutDashboard, label: 'Dashboard' },
-        { to: '/student/diary', icon: Sparkles, label: 'Daily Diary' },
+        { to: '/student/classwork', icon: Sparkles, label: 'Class Work' },
         { to: '/student/attendance', icon: CalendarCheck, label: 'Attendance' },
         { to: '/student/subjects', icon: BookOpen, label: 'My Subjects' },
+        { to: '/student/homework', icon: BookOpen, label: 'Homework' },
         { to: '/student/profile', icon: Users, label: 'Profile' },
         { to: '/student/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
         { to: '/student/help', icon: HelpCircle, label: 'Help' },

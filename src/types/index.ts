@@ -49,3 +49,19 @@ export interface Holiday {
     description: string;
     created_at: string;
 }
+
+export interface Homework {
+    id: string;
+    class_id: string;
+    subject_id: string;
+    teacher_id: string;
+    date: string;
+    topic: string;
+    description: string;
+    created_at: string;
+    updated_at: string;
+    // Joined fields
+    subject_name?: string;
+    teacher_name?: string;
+    class_name?: string;
+}

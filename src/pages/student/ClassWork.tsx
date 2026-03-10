@@ -10,7 +10,7 @@ import { sql } from '../../lib/db';
 import { useAuthStore } from '../../stores/authStore';
 import { format } from 'date-fns';
 
-interface DiaryEntry {
+interface ClassWorkEntry {
     id: string;
     date: string;
     period: string;
@@ -21,18 +21,18 @@ interface DiaryEntry {
     remarks: string | null;
 }
 
-const StudentDailyDiary = () => {
+const StudentClassWork = () => {
     const { profile } = useAuthStore();
     const [loading, setLoading] = useState(true);
-    const [entries, setEntries] = useState<DiaryEntry[]>([]);
+    const [entries, setEntries] = useState<ClassWorkEntry[]>([]);
 
     useEffect(() => {
         if (profile?.id) {
-            fetchDiary();
+            fetchClassWork();
         }
     }, [profile?.id]);
 
-    const fetchDiary = async () => {
+    const fetchClassWork = async () => {
         if (!profile?.email) return;
         setLoading(true);
         try {
@@ -66,9 +66,9 @@ const StudentDailyDiary = () => {
                 WHERE cs.class_id = ${classId}
                 ORDER BY cl.date DESC, cl.period ASC
             `;
-            setEntries(data as DiaryEntry[]);
+            setEntries(data as ClassWorkEntry[]);
         } catch (error) {
-            console.error('Error fetching diary:', error);
+            console.error('Error fetching class work:', error);
         } finally {
             setLoading(false);
         }
@@ -78,7 +78,7 @@ const StudentDailyDiary = () => {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAFC]">
                 <Loader2 className="w-10 h-10 mb-4 animate-spin text-amber-600" />
-                <p className="text-sm font-semibold text-slate-400 tracking-wide uppercase">Reading Your Diary...</p>
+                <p className="text-sm font-semibold text-slate-400 tracking-wide uppercase">Reading Your Class Work...</p>
             </div>
         );
     }
@@ -89,7 +89,7 @@ const StudentDailyDiary = () => {
         if (!acc[date]) acc[date] = [];
         acc[date].push(entry);
         return acc;
-    }, {} as Record<string, DiaryEntry[]>);
+    }, {} as Record<string, ClassWorkEntry[]>);
 
     const sortedDates = Object.keys(groupedEntries).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
 
@@ -106,7 +106,7 @@ const StudentDailyDiary = () => {
                         </div>
                         <div>
                             <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md">
-                                Daily Diary
+                                Class Work
                             </h1>
                             <p className="text-slate-300 text-sm font-medium">Keep track of what was taught in your class today</p>
                         </div>
@@ -114,7 +114,7 @@ const StudentDailyDiary = () => {
                 </div>
             </div>
 
-            {/* Diary Content */}
+            {/* Class Work Content */}
             <div className="space-y-12">
                 {sortedDates.map((date) => (
                     <div key={date}>
@@ -195,4 +195,4 @@ const StudentDailyDiary = () => {
     );
 };
 
-export default StudentDailyDiary;
+export default StudentClassWork;

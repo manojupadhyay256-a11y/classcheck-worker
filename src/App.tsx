@@ -28,11 +28,14 @@ import TeacherReports from './pages/teacher/Reports';
 import TeacherMySubjects from './pages/teacher/MySubjects';
 import TeacherSyllabus from './pages/teacher/Syllabus';
 import TeacherLogBook from './pages/teacher/LogBook';
-import StudentDailyDiary from './pages/student/DailyDiary';
+import TeacherHomework from './pages/teacher/Homework';
+import StudentClassWork from './pages/student/ClassWork';
 import StudentDashboard from './pages/student/Dashboard';
 import StudentAttendance from './pages/student/Attendance';
 import StudentSubjects from './pages/student/Subjects';
 import StudentSyllabus from './pages/student/Syllabus';
+import StudentHomework from './pages/student/Homework';
+import AdminHomework from './pages/admin/Homework';
 import Profile from './pages/Profile';
 import Notifications from './pages/Notifications';
 import Help from './pages/Help';
@@ -221,6 +224,7 @@ const App = () => {
                     <Route path="/teacher-logins" element={<TeacherLogins />} />
                     <Route path="/log-book" element={<AdminLogBook />} />
                     <Route path="/syllabus" element={<AdminSyllabus />} />
+                    <Route path="/homework" element={<AdminHomework />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/notifications" element={<Notifications />} />
                     <Route path="/help" element={<Help />} />
@@ -236,13 +240,14 @@ const App = () => {
                 <Layout>
                   <Routes>
                     <Route path="/" element={<TeacherDashboard />} />
-                    <Route path="/attendance" element={<TeacherAttendance />} />
-                    <Route path="/my-subjects" element={<TeacherMySubjects />} />
-                    <Route path="/syllabus/:classSubjectId" element={<TeacherSyllabus />} />
-                    <Route path="/students" element={<TeacherStudents />} />
-                    <Route path="/log-book" element={<TeacherLogBook />} />
-                    <Route path="/reports" element={<TeacherReports />} />
-                    <Route path="/profile" element={<Profile />} />
+                    <Route path="attendance" element={<TeacherAttendance />} />
+                    <Route path="my-subjects" element={<TeacherMySubjects />} />
+                    <Route path="syllabus/:classSubjectId" element={<TeacherSyllabus />} />
+                    <Route path="students" element={<TeacherStudents />} />
+                    <Route path="log-book" element={<TeacherLogBook />} />
+                    <Route path="homework" element={<TeacherHomework />} />
+                    <Route path="reports" element={<TeacherReports />} />
+                    <Route path="profile" element={<Profile />} />
                     <Route path="/notifications" element={<Notifications />} />
                     <Route path="/help" element={<Help />} />
                   </Routes>
@@ -257,10 +262,11 @@ const App = () => {
                 <Layout>
                   <Routes>
                     <Route path="" element={<StudentDashboard />} />
-                    <Route path="diary" element={<StudentDailyDiary />} />
+                    <Route path="classwork" element={<StudentClassWork />} />
                     <Route path="attendance" element={<StudentAttendance />} />
                     <Route path="subjects" element={<StudentSubjects />} />
                     <Route path="syllabus/:classSubjectId" element={<StudentSyllabus />} />
+                    <Route path="homework" element={<StudentHomework />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="notifications" element={<Notifications />} />
                     <Route path="help" element={<Help />} />

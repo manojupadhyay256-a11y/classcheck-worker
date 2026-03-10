@@ -121,7 +121,7 @@ const StudentDashboard = () => {
     }
 
     const shortcuts = [
-        { label: 'Daily Diary', to: '/student/diary', icon: Sparkles, color: 'bg-amber-50 text-amber-600', description: 'Check daily work' },
+        { label: 'Class Work', to: '/student/classwork', icon: Sparkles, color: 'bg-amber-50 text-amber-600', description: 'Check daily work' },
         { label: 'My Subjects', to: '/student/subjects', icon: BookOpen, color: 'bg-amber-50 text-amber-600', description: 'Course materials' },
         { label: 'Attendance', to: '/student/attendance', icon: CalendarCheck, color: 'bg-emerald-50 text-emerald-600', description: 'View your records' },
         { label: 'Notifications', to: '/student/notifications', icon: Bell, color: 'bg-rose-50 text-rose-600', description: 'Messages & alerts' },

@@ -45,12 +45,12 @@ const Help = () => {
             icon: GraduationCap,
             items: [
                 {
-                    id: 's-diary',
-                    title: 'Using Daily Diary',
+                    id: 's-classwork',
+                    title: 'Using Class Work',
                     description: 'Learn how to view your daily school activities and homework.',
                     icon: Book,
                     content: [
-                        'Go to the "Daily Diary" section from the bottom menu or sidebar.',
+                        'Go to the "Class Work" section from the bottom menu or sidebar.',
                         'Activity for each subject will be listed by date.',
                         'You can see what was taught in class and what homework was assigned.',
                         'Filter by date to see past records.'
@@ -107,7 +107,7 @@ const Help = () => {
                         'Go to "Log Book" and select your class.',
                         'Select the date and period.',
                         'Type in the topics covered and assignments given.',
-                        'These logs become visible to students in their "Daily Diary".'
+                        'These logs become visible to students in their "Class Work".'
                     ]
                 },
                 {
