@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Users, CalendarCheck, Clock, BookOpen, ChevronRight, Loader2, Bell, BookMarked, Sparkles } from 'lucide-react';
-import StatsCard from '../../components/common/StatsCard';
 import { Link } from 'react-router-dom';
 import { clsx } from 'clsx';
 import { useAuthStore } from '../../stores/authStore';
@@ -14,7 +13,6 @@ const TeacherDashboard = () => {
     const [studentCount, setStudentCount] = useState(0);
     const [presentToday, setPresentToday] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
-    const [stats, setStats] = useState<any[]>([]);
     const [attendanceRate, setAttendanceRate] = useState<number | null>(null);
     const [mostPresent, setMostPresent] = useState<string | null>(null);
     const [needsAttention, setNeedsAttention] = useState<string | null>(null);
@@ -114,16 +112,6 @@ const TeacherDashboard = () => {
         fetchDashboardData();
     }, [profile]);
 
-    useEffect(() => {
-        const statsData = [
-            { label: 'My Students', value: studentCount.toString(), icon: Users, color: 'primary' as const },
-            { label: 'Present Today', value: presentToday !== null ? presentToday.toString() : '—', icon: CalendarCheck, color: 'success' as const },
-            { label: 'Attendance Rate', value: attendanceRate !== null ? `${attendanceRate}%` : '—', icon: Clock, color: 'secondary' as const },
-            { label: 'Assigned Class', value: assignedClass?.name || 'None', icon: BookOpen, color: 'accent' as const },
-        ];
-        setStats(statsData);
-    }, [studentCount, presentToday, attendanceRate, assignedClass]);
-
     const todayDate = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
         month: 'long',
@@ -180,10 +168,54 @@ const TeacherDashboard = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                {stats.map((stat, index) => (
-                    <StatsCard key={index} {...stat} />
-                ))}
+            {/* Consolidated Quick Stats Card */}
+            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm transition-all hover:shadow-md">
+                <div className="flex items-center gap-2 mb-6">
+                    <div className="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center">
+                        <Sparkles className="w-4 h-4 text-amber-600" />
+                    </div>
+                    <h3 className="font-bold text-gray-900 tracking-tight uppercase text-xs">Class at a Glance</h3>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">My Students</span>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-2xl font-black text-slate-900 leading-none">{studentCount}</span>
+                            <Users className="w-4 h-4 text-amber-500 opacity-50" />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Present Today</span>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-2xl font-black text-emerald-600 leading-none">
+                                {presentToday !== null ? presentToday : '—'}
+                            </span>
+                            <CalendarCheck className="w-4 h-4 text-emerald-500 opacity-50" />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Attendance Rate</span>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-2xl font-black text-violet-600 leading-none">
+                                {attendanceRate !== null ? `${attendanceRate}%` : '—'}
+                            </span>
+                            <Clock className="w-4 h-4 text-violet-500 opacity-50" />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Assigned Class</span>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-2xl font-black text-amber-600 leading-none truncate max-w-[120px]">
+                                {assignedClass?.name || 'None'}
+                            </span>
+                            <BookOpen className="w-4 h-4 text-amber-500 opacity-50" />
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

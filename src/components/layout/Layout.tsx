@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
-import BottomNav from './BottomNav';
+import MobileTopTabs from './MobileTopTabs';
 import MobileHeader from './MobileHeader';
 import { useAuthStore } from '../../stores/authStore';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -63,19 +63,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-                {/* Mobile Header */}
+                {/* Mobile Header & Top Tabs */}
                 <MobileHeader onMenuClick={() => setIsSidebarOpen(true)} />
+                <MobileTopTabs />
 
-                <main className="flex-1 overflow-y-auto pb-24 md:pb-8 p-4 sm:p-5 md:p-8">
+                <main className="flex-1 overflow-y-auto pb-8 md:pb-8 p-4 sm:p-5 md:p-8">
                     <div className="max-w-7xl mx-auto w-full">
                         {children}
                     </div>
                 </main>
-
-                {/* Mobile Bottom Navigation */}
-                <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">
-                    <BottomNav />
-                </div>
             </div>
         </div>
     );

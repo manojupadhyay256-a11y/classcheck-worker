@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import {
     BookOpen,
     Loader2,
-    CheckCircle2
+    CheckCircle2,
+    Users
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { sql } from '../../lib/db';
@@ -155,52 +156,74 @@ const MySubjects = () => {
                 </div>
             </div>
 
-            {/* Subject Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-2">
+            {/* Subject Grid - Professional v2 Modern Layout */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-2">
                 {subjects.map((subj, index) => (
                     <motion.div
                         key={subj.id}
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.05, type: "spring", stiffness: 100 }}
-                        className="bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-2xl hover:shadow-slate-200/80 transition-all duration-500 group flex flex-col overflow-hidden"
+                        whileHover={{ y: -8 }}
+                        transition={{ delay: index * 0.05, type: "spring", stiffness: 260, damping: 20 }}
+                        className="group relative bg-white border border-slate-100/80 rounded-[28px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(245,158,11,0.15)] transition-all duration-500 flex flex-col overflow-hidden"
                     >
-                        <div className="p-8 pb-10 flex-1">
+                        {/* Premium Top Accent Bar */}
+                        <div className="h-1.5 w-full bg-linear-to-r from-amber-400 via-orange-400 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                        <div className="p-6 flex-1 flex flex-col">
                             <div className="flex justify-between items-start mb-6">
-                                <div>
-                                    <h3 className="text-lg font-black text-slate-800 uppercase tracking-tight group-hover:text-amber-600 transition-colors duration-300">
-                                        {subj.subject_name}
-                                    </h3>
-                                    <p className="text-sm font-bold text-slate-400 mt-1">
+                                {/* Glass-styled Icon Container */}
+                                <div className="w-11 h-11 bg-linear-to-br from-amber-50 to-orange-50 rounded-2xl flex items-center justify-center border border-white shadow-sm group-hover:rotate-6 transition-transform duration-500">
+                                    <BookOpen className="w-5 h-5 text-amber-600" />
+                                </div>
+
+                                {/* Student Count Badge */}
+                                <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-50/80 backdrop-blur-sm border border-slate-100 rounded-full text-[10px] font-black text-slate-500 uppercase tracking-tight">
+                                    <Users className="w-3 h-3 text-slate-400" />
+                                    {subj.student_count || 0} Students
+                                </div>
+                            </div>
+
+                            {/* Typography: Professional Hierarchy */}
+                            <div className="mb-6">
+                                <h3 className="text-base font-black text-slate-900 leading-tight tracking-tight group-hover:text-amber-600 transition-colors line-clamp-2">
+                                    {subj.subject_name}
+                                </h3>
+                                <div className="mt-2 flex items-center gap-2">
+                                    <span className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest">
                                         Class {subj.class_name}
-                                    </p>
-                                </div>
-                                <div className="px-3 py-1 bg-amber-50 text-amber-600 text-[10px] font-black rounded-xl uppercase tracking-widest border border-amber-100 shadow-sm">
-                                    {subj.class_name.split('-')[0].trim()}{subj.class_name.includes('-') ? subj.class_name.split('-')[1].trim() : ''}
-                                </div>
-                            </div>
-
-                            <div className="space-y-4 mt-8 mb-10">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center border border-amber-100">
-                                        <BookOpen className="w-4 h-4 text-amber-600" />
-                                    </div>
-                                    <span className="text-sm font-bold text-slate-500">Manage Syllabus Chapters</span>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center border border-amber-100">
-                                        <CheckCircle2 className="w-4 h-4 text-amber-600" />
-                                    </div>
-                                    <span className="text-sm font-bold text-slate-500">Track Student Work</span>
+                                    </span>
+                                    <div className="w-1 h-1 rounded-full bg-slate-200" />
+                                    <span className="text-[11px] font-black text-amber-600/70 uppercase">
+                                        Active
+                                    </span>
                                 </div>
                             </div>
 
+                            {/* Professional Action Group */}
+                            <div className="flex items-center gap-2 mb-8">
+                                <button
+                                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-500 hover:text-amber-600 hover:bg-white hover:border-amber-200 transition-all text-[10px] font-bold uppercase tracking-wider group/action"
+                                    title="Manage Syllabus"
+                                >
+                                    <BookOpen className="w-3.5 h-3.5" />
+                                    Syllabus
+                                </button>
+                                <button
+                                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-100 text-slate-500 hover:text-emerald-500 hover:bg-white hover:border-emerald-200 transition-all"
+                                    title="Track Work"
+                                >
+                                    <CheckCircle2 className="w-4 h-4" />
+                                </button>
+                            </div>
+
+                            {/* Elevated Pill Button */}
                             <div className="mt-auto">
                                 <button
                                     onClick={() => navigate(`/teacher/syllabus/${subj.id}`)}
-                                    className="w-full flex items-center justify-center py-4 bg-slate-50 text-slate-800 font-black uppercase tracking-widest rounded-2xl border border-slate-200 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-300 active:scale-95 text-[11px] shadow-sm"
+                                    className="w-full py-3.5 bg-slate-900 border border-slate-900 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-slate-900/10 hover:bg-amber-600 hover:border-amber-600 hover:shadow-amber-600/20 transition-all duration-300 active:scale-[0.98]"
                                 >
-                                    Syllabus
+                                    Manage Course
                                 </button>
                             </div>
                         </div>

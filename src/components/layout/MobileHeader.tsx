@@ -18,21 +18,21 @@ const MobileHeader = ({ onMenuClick }: MobileHeaderProps) => {
 
     return (
         <header
-            className="md:hidden bg-slate-900 text-white px-4 flex items-center justify-between sticky top-0 z-60 shadow-lg"
+            className="md:hidden bg-white text-slate-900 px-4 flex items-center justify-between sticky top-0 z-60 shadow-sm"
             style={{ paddingTop: 'calc(0.75rem + env(safe-area-inset-top, 0px))', paddingBottom: '0.75rem' }}
         >
             <div className="flex items-center gap-3">
                 <button
                     onClick={onMenuClick}
-                    className="p-2 hover:bg-white/10 rounded-xl transition-colors"
+                    className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
                 >
-                    <Menu className="w-6 h-6" />
+                    <Menu className="w-6 h-6 text-slate-600" />
                 </button>
 
                 {!isDashboard && (
                     <button
                         onClick={() => navigate(-1)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-sm font-bold"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors text-xs font-bold text-slate-700"
                     >
                         <ArrowLeft className="w-4 h-4" />
                         <span>Back</span>
@@ -43,11 +43,11 @@ const MobileHeader = ({ onMenuClick }: MobileHeaderProps) => {
             <div className="flex items-center gap-3">
                 <button
                     onClick={() => navigate(`/${profile?.role || 'student'}/notifications`)}
-                    className="p-2 hover:bg-white/10 rounded-xl transition-colors relative"
+                    className="p-2 hover:bg-slate-100 rounded-xl transition-colors relative"
                 >
-                    <Bell className="w-5 h-5 text-white" />
+                    <Bell className="w-5 h-5 text-slate-600" />
                     {unreadCount > 0 && (
-                        <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center border border-slate-900 animate-in zoom-in duration-300">
+                        <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center border-2 border-white animate-in zoom-in duration-300">
                             {unreadCount > 9 ? '9+' : unreadCount}
                         </span>
                     )}
