@@ -190,7 +190,7 @@ const Help = () => {
                             <HelpCircle className="w-7 h-7 text-white" />
                         </div>
                         <div>
-                            <h1 className="text-2xl md:text-3xl font-black text-[#1E1B4B] tracking-tight">Help & Guide</h1>
+                            <h1 className="text-2xl md:text-4xl font-black text-[#1E1B4B] tracking-tight">Help & Guide</h1>
                             <p className="text-[#64748B] font-bold text-sm tracking-tight opacity-70">Learn how to make the best use of ClassCheck</p>
                         </div>
                     </div>

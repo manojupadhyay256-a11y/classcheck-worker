@@ -24,26 +24,29 @@ import AttendanceReport from './pages/admin/AttendanceReport';
 import TeacherDashboard from './pages/teacher/Dashboard';
 import TeacherAttendance from './pages/teacher/Attendance';
 import TeacherStudents from './pages/teacher/StudentsPage';
-import TeacherReports from './pages/teacher/Reports';
 import TeacherMySubjects from './pages/teacher/MySubjects';
 import TeacherSyllabus from './pages/teacher/Syllabus';
 import TeacherLogBook from './pages/teacher/LogBook';
 import TeacherHomework from './pages/teacher/Homework';
-import StudentClassWork from './pages/student/ClassWork';
-import StudentDashboard from './pages/student/Dashboard';
-import StudentAttendance from './pages/student/Attendance';
-import StudentSubjects from './pages/student/Subjects';
-import StudentSyllabus from './pages/student/Syllabus';
-import StudentHomework from './pages/student/Homework';
 import AdminHomework from './pages/admin/Homework';
-import Profile from './pages/Profile';
-import Notifications from './pages/Notifications';
 import Help from './pages/Help';
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
 import { toast } from 'sonner';
 import { useAuthStore } from './stores/authStore';
 import { AlertCircle, RefreshCw } from 'lucide-react';
+
+const TeacherReports = lazy(() => import('./pages/teacher/Reports'));
+const TeacherTimetable = lazy(() => import('./pages/teacher/Timetable'));
+const StudentDashboard = lazy(() => import('./pages/student/Dashboard'));
+const StudentClassWork = lazy(() => import('./pages/student/ClassWork'));
+const StudentAttendance = lazy(() => import('./pages/student/Attendance'));
+const StudentSubjects = lazy(() => import('./pages/student/Subjects'));
+const StudentSyllabus = lazy(() => import('./pages/student/Syllabus'));
+const StudentHomework = lazy(() => import('./pages/student/Homework'));
+const StudentTimetable = lazy(() => import('./pages/student/Timetable'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Notifications = lazy(() => import('./pages/Notifications'));
 
 const App = () => {
   const { profile, loading, fetchProfile } = useAuthStore();
@@ -247,6 +250,7 @@ const App = () => {
                     <Route path="log-book" element={<TeacherLogBook />} />
                     <Route path="homework" element={<TeacherHomework />} />
                     <Route path="reports" element={<TeacherReports />} />
+                    <Route path="timetable" element={<TeacherTimetable />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="/notifications" element={<Notifications />} />
                     <Route path="/help" element={<Help />} />
@@ -267,6 +271,7 @@ const App = () => {
                     <Route path="subjects" element={<StudentSubjects />} />
                     <Route path="syllabus/:classSubjectId" element={<StudentSyllabus />} />
                     <Route path="homework" element={<StudentHomework />} />
+                    <Route path="timetable" element={<StudentTimetable />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="notifications" element={<Notifications />} />
                     <Route path="help" element={<Help />} />

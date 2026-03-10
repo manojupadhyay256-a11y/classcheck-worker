@@ -101,7 +101,7 @@ const AdminHomework = () => {
                                         School Overview
                                     </span>
                                 </div>
-                                <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight leading-tight uppercase">
+                                <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight leading-tight uppercase">
                                     Homework Log
                                 </h1>
                             </div>

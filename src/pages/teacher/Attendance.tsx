@@ -169,7 +169,7 @@ const TeacherAttendance = () => {
                         <Calendar className="w-4 h-4" />
                         <span className="text-sm uppercase tracking-wider">Daily Attendance</span>
                     </div>
-                    <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Mark Attendance</h1>
+                    <h1 className="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">Mark Attendance</h1>
                     <p className="text-gray-500 mt-1">
                         {classInfo ? `Class ${classInfo.name}` : 'Class Not Found'} • {students.length} Students Total
                     </p>

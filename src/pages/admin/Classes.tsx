@@ -175,7 +175,7 @@ const Classes = () => {
                                 <School className="w-7 h-7 sm:w-8 sm:h-8 text-amber-500" strokeWidth={2.5} />
                             </div>
                             <div className="min-w-0">
-                                <h1 className="text-2xl sm:text-3xl font-black tracking-tight mb-1 truncate">Class Management</h1>
+                                <h1 className="text-2xl md:text-4xl font-black tracking-tight mb-1 truncate">Class Management</h1>
                                 <p className="text-slate-400 text-[13px] sm:text-sm font-medium">Configure class structures and homeroom assignments.</p>
                             </div>
                         </div>

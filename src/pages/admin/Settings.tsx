@@ -102,7 +102,7 @@ const Settings = () => {
     return (
         <div className="max-w-4xl mx-auto space-y-8 pb-12">
             <div>
-                <h1 className="text-3xl font-bold text-slate-900 mb-2">Settings</h1>
+                <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight mb-2">Settings</h1>
                 <p className="text-gray-500">Manage your account and school configuration.</p>
             </div>
 

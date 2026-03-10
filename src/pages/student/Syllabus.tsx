@@ -125,7 +125,7 @@ const StudentSyllabus = () => {
                                 <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                                 <span className="text-amber-100 text-[10px] font-black uppercase tracking-[0.15em]">Syllabus</span>
                             </div>
-                            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight uppercase">
+                            <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight leading-tight uppercase">
                                 {subjectInfo?.subject_name}
                             </h1>
                         </div>

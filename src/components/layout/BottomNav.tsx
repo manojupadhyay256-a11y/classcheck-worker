@@ -6,7 +6,8 @@ import {
     CalendarCheck,
     BookOpen,
     Bell,
-    HelpCircle
+    HelpCircle,
+    PencilLine
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { useNotificationStore } from '../../stores/notificationStore';
@@ -33,8 +34,8 @@ const BottomNav = () => {
                     { to: '/teacher', icon: LayoutDashboard, label: 'Home' },
                     { to: '/teacher/attendance', icon: CalendarCheck, label: 'Attend' },
                     { to: '/teacher/my-subjects', icon: BookOpen, label: 'Subjects' },
+                    { to: '/teacher/homework', icon: PencilLine, label: 'Homework' },
                     { to: '/teacher/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
-                    { to: '/teacher/help', icon: HelpCircle, label: 'Help' },
                 ];
             case 'student':
                 return [

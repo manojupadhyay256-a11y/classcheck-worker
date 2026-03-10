@@ -12,7 +12,8 @@ import {
     ListChecks,
     Sparkles,
     X,
-    Bell
+    Bell,
+    Calendar
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { useSettingsStore } from '../../stores/settingsStore';
@@ -28,57 +29,113 @@ const Sidebar = ({ onClose }: SidebarProps) => {
     const { profile, clearAuth } = useAuthStore();
     const { settings, fetchSettings } = useSettingsStore();
     const { unreadCount } = useNotificationStore();
-    const isAdmin = profile?.role === 'admin';
 
     useEffect(() => {
         fetchSettings();
     }, [fetchSettings]);
 
-    const adminLinks = [
-        { to: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
-        { to: '/admin/teachers', icon: Users, label: 'Teachers' },
-        { to: '/admin/classes', icon: BookOpen, label: 'Classes' },
-        { to: '/admin/subject-assignments', icon: BookOpen, label: 'Class Assignment' },
-        { to: '/admin/students', icon: Users, label: 'Students' },
-        { to: '/admin/log-book', icon: ListChecks, label: 'Log Book' },
-        { to: '/admin/syllabus', icon: BookOpen, label: 'Syllabus Status' },
-        { to: '/admin/homework', icon: BookOpen, label: 'Homework' },
-        { to: '/admin/reports/attendance', icon: BarChart3, label: 'Attendance Report' },
-        { to: '/admin/profile', icon: Users, label: 'Profile' },
-        { to: '/admin/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
-        { to: '/admin/help', icon: HelpCircle, label: 'Help' },
+    const adminGroups = [
+        {
+            heading: 'Overview',
+            links: [
+                { to: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
+            ]
+        },
+        {
+            heading: 'Management',
+            links: [
+                { to: '/admin/teachers', icon: Users, label: 'Teachers' },
+                { to: '/admin/classes', icon: BookOpen, label: 'Classes' },
+                { to: '/admin/subject-assignments', icon: BookOpen, label: 'Class Assignment' },
+                { to: '/admin/students', icon: Users, label: 'Students' },
+            ]
+        },
+        {
+            heading: 'Academic Tracking',
+            links: [
+                { to: '/admin/log-book', icon: ListChecks, label: 'Log Book' },
+                { to: '/admin/syllabus', icon: BookOpen, label: 'Syllabus Status' },
+                { to: '/admin/homework', icon: BookOpen, label: 'Homework' },
+            ]
+        },
+        {
+            heading: 'Communications',
+            links: [
+                { to: '/admin/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
+                { to: '/admin/reports/attendance', icon: BarChart3, label: 'Attendance Report' },
+            ]
+        },
+        {
+            heading: 'System & Tools',
+            links: [
+                { to: '/admin/bulk-import', icon: CalendarCheck, label: 'Bulk Import' },
+                { to: '/admin/settings', icon: SettingsIcon, label: 'Settings' },
+                { to: '/admin/teacher-logins', icon: Fingerprint, label: 'Teacher Logins' },
+                { to: '/admin/help', icon: HelpCircle, label: 'Help & Guide' },
+            ]
+        }
     ];
 
-    const systemLinks = [
-        { to: '/admin/bulk-import', icon: CalendarCheck, label: 'Bulk Import' },
-        { to: '/admin/settings', icon: SettingsIcon, label: 'Settings' },
-        { to: '/admin/teacher-logins', icon: Fingerprint, label: 'Teacher Logins' },
-        { to: '/admin/help', icon: HelpCircle, label: 'Help & Guide' },
+    const teacherGroups = [
+        {
+            heading: 'Overview',
+            links: [
+                { to: '/teacher', icon: LayoutDashboard, label: 'Dashboard' },
+            ]
+        },
+        {
+            heading: 'Classroom',
+            links: [
+                { to: '/teacher/my-subjects', icon: BookOpen, label: 'My Subjects' },
+                { to: '/teacher/homework', icon: BookOpen, label: 'Homework' },
+                { to: '/teacher/attendance', icon: CalendarCheck, label: 'Attendance' },
+                { to: '/teacher/timetable', icon: Calendar, label: 'Timetable' },
+            ]
+        },
+        {
+            heading: 'Students & Reports',
+            links: [
+                { to: '/teacher/students', icon: Users, label: 'Students' },
+                { to: '/teacher/log-book', icon: ListChecks, label: 'Log Book' },
+                { to: '/teacher/reports', icon: BarChart3, label: 'Reports' },
+            ]
+        },
+        {
+            heading: 'Support',
+            links: [
+                { to: '/teacher/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
+                { to: '/teacher/help', icon: HelpCircle, label: 'Help' },
+            ]
+        }
     ];
 
-    const teacherLinks = [
-        { to: '/teacher', icon: LayoutDashboard, label: 'Dashboard' },
-        { to: '/teacher/my-subjects', icon: BookOpen, label: 'My Subjects' },
-        { to: '/teacher/homework', icon: BookOpen, label: 'Homework' },
-        { to: '/teacher/attendance', icon: CalendarCheck, label: 'Attendance' },
-        { to: '/teacher/students', icon: Users, label: 'Students' },
-        { to: '/teacher/log-book', icon: ListChecks, label: 'Log Book' },
-        { to: '/teacher/reports', icon: BarChart3, label: 'Reports' },
-        { to: '/teacher/profile', icon: Users, label: 'Profile' },
-        { to: '/teacher/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
-        { to: '/teacher/help', icon: HelpCircle, label: 'Help' },
+    const studentGroups = [
+        {
+            heading: 'Overview',
+            links: [
+                { to: '/student', icon: LayoutDashboard, label: 'Dashboard' },
+            ]
+        },
+        {
+            heading: 'My Learning',
+            links: [
+                { to: '/student/classwork', icon: Sparkles, label: 'Class Work' },
+                { to: '/student/attendance', icon: CalendarCheck, label: 'Attendance' },
+                { to: '/student/subjects', icon: BookOpen, label: 'My Subjects' },
+                { to: '/student/homework', icon: BookOpen, label: 'Homework' },
+                { to: '/student/timetable', icon: Calendar, label: 'Timetable' },
+            ]
+        },
+        {
+            heading: 'Support',
+            links: [
+                { to: '/student/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
+                { to: '/student/help', icon: HelpCircle, label: 'Help' },
+            ]
+        }
     ];
 
-    const studentLinks = [
-        { to: '/student', icon: LayoutDashboard, label: 'Dashboard' },
-        { to: '/student/classwork', icon: Sparkles, label: 'Class Work' },
-        { to: '/student/attendance', icon: CalendarCheck, label: 'Attendance' },
-        { to: '/student/subjects', icon: BookOpen, label: 'My Subjects' },
-        { to: '/student/homework', icon: BookOpen, label: 'Homework' },
-        { to: '/student/profile', icon: Users, label: 'Profile' },
-        { to: '/student/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
-        { to: '/student/help', icon: HelpCircle, label: 'Help' },
-    ];
+    const groups = profile?.role === 'admin' ? adminGroups : profile?.role === 'teacher' ? teacherGroups : studentGroups;
 
     const handleLogout = () => {
         clearAuth();
@@ -115,18 +172,18 @@ const Sidebar = ({ onClose }: SidebarProps) => {
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 px-4 space-y-8 overflow-y-auto custom-scrollbar">
-                <div>
-                    <p className="px-4 text-[10px] uppercase font-black tracking-widest text-[#94A3B8] mb-4">Core Modules</p>
-                    <div className="space-y-1">
-                        {(profile?.role === 'admin' ? adminLinks : profile?.role === 'student' ? studentLinks : teacherLinks).map((link) => (
+            <nav className="flex-1 px-4 space-y-6 overflow-y-auto custom-scrollbar">
+                {groups.map((group) => (
+                    <div key={group.heading} className="space-y-1">
+                        <p className="px-4 text-[10px] uppercase font-black tracking-widest text-[#94A3B8] mb-2">{group.heading}</p>
+                        {group.links.map((link) => (
                             <NavLink
                                 key={link.to}
                                 to={link.to}
                                 end={link.to === '/admin' || link.to === '/teacher' || link.to === '/student'}
                                 onClick={onClose}
                                 className={({ isActive }) => clsx(
-                                    "flex items-center gap-3.5 px-4 py-3.5 rounded-2xl transition-all duration-300 group",
+                                    "flex items-center gap-3.5 px-4 py-3 rounded-2xl transition-all duration-300 group",
                                     isActive
                                         ? "bg-amber-600 text-white shadow-xl shadow-amber-900/10"
                                         : "text-[#64748B] hover:bg-amber-50 hover:text-amber-700"
@@ -138,11 +195,11 @@ const Sidebar = ({ onClose }: SidebarProps) => {
                                             "w-5 h-5 transition-transform duration-300 group-hover:scale-110",
                                             isActive ? "text-white" : "text-[#94A3B8] group-hover:text-amber-600"
                                         )} />
-                                        <span className="font-bold text-[15px] tracking-tight">{link.label}</span>
+                                        <span className="font-bold text-[14px] tracking-tight">{link.label}</span>
                                         {isActive && (
                                             <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                                         )}
-                                        {!isActive && link.to.endsWith('/notifications') && unreadCount > 0 && (
+                                        {!isActive && link.to.includes('notifications') && unreadCount > 0 && (
                                             <div className="ml-auto min-w-[20px] h-5 bg-rose-500 text-white text-[10px] font-black rounded-full flex items-center justify-center px-1 border-2 border-white group-hover:border-amber-50 transition-colors">
                                                 {unreadCount > 9 ? '9+' : unreadCount}
                                             </div>
@@ -152,41 +209,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
                             </NavLink>
                         ))}
                     </div>
-                </div>
-
-                {isAdmin && (
-                    <div>
-                        <p className="px-4 text-[10px] uppercase font-black tracking-widest text-[#94A3B8] mb-4">System Settings</p>
-                        <div className="space-y-1">
-                            {systemLinks.map((link) => (
-                                <NavLink
-                                    key={link.to}
-                                    to={link.to}
-                                    onClick={onClose}
-                                    className={({ isActive }) => clsx(
-                                        "flex items-center gap-3.5 px-4 py-3.5 rounded-2xl transition-all duration-300 group",
-                                        isActive
-                                            ? "bg-amber-600 text-white shadow-xl shadow-amber-900/10"
-                                            : "text-[#64748B] hover:bg-amber-50 hover:text-amber-700"
-                                    )}
-                                >
-                                    {({ isActive }) => (
-                                        <>
-                                            <link.icon className={clsx(
-                                                "w-5 h-5 transition-transform duration-300 group-hover:scale-110",
-                                                isActive ? "text-white" : "text-[#94A3B8] group-hover:text-indigo-600"
-                                            )} />
-                                            <span className="font-bold text-[15px] tracking-tight">{link.label}</span>
-                                            {isActive && (
-                                                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                                            )}
-                                        </>
-                                    )}
-                                </NavLink>
-                            ))}
-                        </div>
-                    </div>
-                )}
+                ))}
             </nav>
 
             {/* Profile & Logout */}

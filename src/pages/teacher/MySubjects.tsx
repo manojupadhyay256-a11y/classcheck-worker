@@ -29,26 +29,71 @@ const MySubjects = () => {
         if (profile?.email) {
             fetchMySubjects();
         }
-    }, [profile?.email]);
+    }, [profile?.email, showAll]);
 
     const fetchMySubjects = async () => {
         setLoading(true);
         try {
-            const data = await sql`
-                SELECT 
-                    cs.id,
-                    cs.class_id,
-                    cs.subject_id,
-                    c.name as class_name,
-                    s.name as subject_name,
-                    (SELECT COUNT(*) FROM students WHERE class_id = c.id) as student_count
-                FROM class_subjects cs
-                JOIN classes c ON cs.class_id = c.id
-                JOIN subjects s ON cs.subject_id = s.id
-                JOIN teachers t ON cs.teacher_id = t.id
-                WHERE t.email = ${profile?.email}
-                ORDER BY c.name, s.name
-            `;
+            let data;
+
+            if (showAll) {
+                // If "All Subjects of My Class" is checked, find the class where this teacher is the class teacher
+                // and fetch all subjects for THAT class.
+                data = await sql`
+                    SELECT 
+                        cs.id,
+                        cs.class_id,
+                        cs.subject_id,
+                        c.name as class_name,
+                        s.name as subject_name,
+                        (SELECT COUNT(*) FROM students WHERE class_id = c.id) as student_count
+                    FROM class_subjects cs
+                    JOIN classes c ON cs.class_id = c.id
+                    JOIN subjects s ON cs.subject_id = s.id
+                    WHERE cs.class_id IN (
+                        SELECT id
+                        FROM classes
+                        WHERE class_teacher_id = (SELECT id FROM teachers WHERE email = ${profile?.email})
+                    )
+                    ORDER BY c.name, s.name
+                `;
+
+                // If they are not a class teacher (data is empty), fallback to their own subjects
+                if (data.length === 0) {
+                    data = await sql`
+                        SELECT 
+                            cs.id,
+                            cs.class_id,
+                            cs.subject_id,
+                            c.name as class_name,
+                            s.name as subject_name,
+                            (SELECT COUNT(*) FROM students WHERE class_id = c.id) as student_count
+                        FROM class_subjects cs
+                        JOIN classes c ON cs.class_id = c.id
+                        JOIN subjects s ON cs.subject_id = s.id
+                        JOIN teachers t ON cs.teacher_id = t.id
+                        WHERE t.email = ${profile?.email}
+                        ORDER BY c.name, s.name
+                    `;
+                }
+            } else {
+                data = await sql`
+                    SELECT 
+                        cs.id,
+                        cs.class_id,
+                        cs.subject_id,
+                        c.name as class_name,
+                        s.name as subject_name,
+                        (SELECT COUNT(*) FROM students WHERE class_id = c.id) as student_count
+                    FROM class_subjects cs
+                    JOIN classes c ON cs.class_id = c.id
+                    JOIN subjects s ON cs.subject_id = s.id
+                    JOIN teachers t ON cs.teacher_id = t.id
+                    WHERE t.email = ${profile?.email}
+                    ORDER BY c.name, s.name
+                `;
+            }
+
             setSubjects(data as AssignedSubject[]);
         } catch (error) {
             console.error('Error fetching my subjects:', error);
@@ -82,7 +127,7 @@ const MySubjects = () => {
                             <BookOpen className="w-7 h-7 text-white" strokeWidth={2.5} />
                         </div>
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md">
+                            <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md">
                                 My Subjects
                             </h1>
                             <p className="text-slate-300 text-sm font-medium">
@@ -103,7 +148,7 @@ const MySubjects = () => {
                                 />
                             </div>
                             <span className="text-[11px] font-black text-white uppercase tracking-[0.2em] whitespace-nowrap">
-                                Show All Class Subjects
+                                All Subjects of My Class
                             </span>
                         </div>
                     </div>

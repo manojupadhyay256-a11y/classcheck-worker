@@ -105,7 +105,7 @@ const StudentClassWork = () => {
                             <Sparkles className="w-7 h-7 text-white" strokeWidth={2.5} />
                         </div>
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md">
+                            <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md">
                                 Class Work
                             </h1>
                             <p className="text-slate-300 text-sm font-medium">Keep track of what was taught in your class today</p>

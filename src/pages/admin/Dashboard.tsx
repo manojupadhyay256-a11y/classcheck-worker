@@ -153,7 +153,7 @@ const AdminDashboard = () => {
             {/* Minimal Header */}
             <div className="flex justify-between items-center bg-white/50 backdrop-blur-md p-6 rounded-[32px] border border-white/20 soft-shadow">
                 <div>
-                    <h1 className="text-4xl font-black text-slate-900 tracking-tight">Admin Dashboard</h1>
+                    <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">Admin Dashboard</h1>
                     <p className="text-gray-500 font-bold mt-1">ClassCheck • School Control Center</p>
                 </div>
                 <div className="flex items-center gap-4">

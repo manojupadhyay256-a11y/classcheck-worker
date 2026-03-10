@@ -91,7 +91,7 @@ const AttendanceReport = () => {
                         <ArrowLeft className="w-6 h-6 text-gray-600 group-hover:-translate-x-1 transition-transform" />
                     </button>
                     <div>
-                        <h1 className="text-3xl font-black text-slate-900 tracking-tight">Attendance Report</h1>
+                        <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">Attendance Report</h1>
                         <p className="text-gray-500 font-medium">Daily class-wise attendance analytics</p>
                     </div>
                 </div>

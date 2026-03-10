@@ -196,7 +196,7 @@ const SubjectAssignments = () => {
                                 <LayoutGrid className="w-6 h-6 text-amber-500" strokeWidth={2} />
                             </div>
                             <div>
-                                <h1 className="text-2xl md:text-3xl font-semibold tracking-tight leading-none mb-1">Subject Assignments</h1>
+                                <h1 className="text-2xl md:text-4xl font-black tracking-tight leading-none mb-1">Subject Assignments</h1>
                                 <p className="text-slate-500 text-sm font-normal">Manage teacher-to-subject mappings across all classes.</p>
                             </div>
                         </div>
