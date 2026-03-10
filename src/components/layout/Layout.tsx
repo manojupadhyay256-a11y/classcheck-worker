@@ -9,19 +9,18 @@ import { useNotificationStore } from '../../stores/notificationStore';
 import { useEffect } from 'react';
 import { FcmListener } from '../common/FcmListener';
 
-import { useTabNavigation } from '../../hooks/useTabNavigation';
+import { useSwipeNavigation } from '../../hooks/useSwipeNavigation';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
     const { profile } = useAuthStore();
     const { fetchNotifications } = useNotificationStore();
-    const { swipeLeft, swipeRight } = useTabNavigation();
+    const { onTouchStart, onTouchEnd } = useSwipeNavigation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const location = useLocation();
 
     useEffect(() => {
         if (profile?.id) {
             fetchNotifications(profile.id);
-            // Polling interval removed in favor of Pusher real-time listener
         }
     }, [profile?.id, fetchNotifications]);
 
@@ -33,17 +32,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </div>
         );
     }
-
-    const handlePanEnd = (_: any, info: any) => {
-        const threshold = 40; // Slightly lower threshold for easier swiping
-        const velocityThreshold = 0.3; // Low velocity threshold for quick swipes
-
-        if (info.offset.x < -threshold || info.velocity.x < -velocityThreshold) {
-            swipeLeft();
-        } else if (info.offset.x > threshold || info.velocity.x > velocityThreshold) {
-            swipeRight();
-        }
-    };
 
     return (
         <div className="flex h-screen bg-[#F8FAFC] overflow-hidden">
@@ -85,30 +73,29 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                     <MobileTopTabs />
                 </div>
 
-                <div className="flex-1 overflow-hidden relative touch-pan-y">
-                    <motion.div
-                        className="h-full w-full"
-                        onPanEnd={handlePanEnd}
-                    >
-                        <AnimatePresence mode="wait" initial={false}>
-                            <motion.div
-                                key={location.pathname}
-                                initial={{ opacity: 0, x: 10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -10 }}
-                                transition={{
-                                    type: "tween",
-                                    ease: "easeInOut",
-                                    duration: 0.2
-                                }}
-                                className="h-full overflow-y-auto pb-8 p-4 sm:p-5 md:p-8"
-                            >
-                                <div className="max-w-7xl mx-auto w-full">
-                                    {children}
-                                </div>
-                            </motion.div>
-                        </AnimatePresence>
-                    </motion.div>
+                <div
+                    className="flex-1 overflow-hidden relative"
+                    onTouchStart={onTouchStart}
+                    onTouchEnd={onTouchEnd}
+                >
+                    <AnimatePresence mode="wait" initial={false}>
+                        <motion.div
+                            key={location.pathname}
+                            initial={{ opacity: 0, x: 10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -10 }}
+                            transition={{
+                                type: "tween",
+                                ease: "easeInOut",
+                                duration: 0.2
+                            }}
+                            className="h-full overflow-y-auto pb-8 p-4 sm:p-5 md:p-8"
+                        >
+                            <div className="max-w-7xl mx-auto w-full">
+                                {children}
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
             </div>
         </div>
