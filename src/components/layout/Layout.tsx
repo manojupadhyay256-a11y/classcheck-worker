@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import MobileTopTabs from './MobileTopTabs';
 import MobileHeader from './MobileHeader';
@@ -15,6 +16,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     const { fetchNotifications } = useNotificationStore();
     const { swipeLeft, swipeRight } = useTabNavigation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const location = useLocation();
 
     useEffect(() => {
         if (profile?.id) {
@@ -33,8 +35,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     }
 
     const handlePanEnd = (_: any, info: any) => {
-        const threshold = 50;
-        const velocityThreshold = 0.5;
+        const threshold = 40; // Slightly lower threshold for easier swiping
+        const velocityThreshold = 0.3; // Low velocity threshold for quick swipes
 
         if (info.offset.x < -threshold || info.velocity.x < -velocityThreshold) {
             swipeLeft();
@@ -44,10 +46,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <div className="flex h-screen bg-[#F8FAFC]">
+        <div className="flex h-screen bg-[#F8FAFC] overflow-hidden">
             <FcmListener />
             {/* Desktop Sidebar */}
-            <div className="hidden md:flex shrink-0">
+            <div className="hidden md:flex shrink-0 border-r border-slate-100 shadow-sm z-30">
                 <Sidebar />
             </div>
 
@@ -60,7 +62,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsSidebarOpen(false)}
-                            className="fixed inset-0 bg-saas-dark/40 backdrop-blur-sm z-70 md:hidden"
+                            className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-70 md:hidden"
                         />
                         <motion.div
                             initial={{ x: '-100%' }}
@@ -78,17 +80,36 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
                 {/* Mobile Header & Top Tabs */}
-                <MobileHeader onMenuClick={() => setIsSidebarOpen(true)} />
-                <MobileTopTabs />
+                <div className="sticky top-0 z-50">
+                    <MobileHeader onMenuClick={() => setIsSidebarOpen(true)} />
+                    <MobileTopTabs />
+                </div>
 
-                <motion.main
-                    className="flex-1 overflow-y-auto pb-8 md:pb-8 p-4 sm:p-5 md:p-8"
-                    onPanEnd={handlePanEnd}
-                >
-                    <div className="max-w-7xl mx-auto w-full">
-                        {children}
-                    </div>
-                </motion.main>
+                <div className="flex-1 overflow-hidden relative touch-pan-y">
+                    <motion.div
+                        className="h-full w-full"
+                        onPanEnd={handlePanEnd}
+                    >
+                        <AnimatePresence mode="wait" initial={false}>
+                            <motion.div
+                                key={location.pathname}
+                                initial={{ opacity: 0, x: 10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -10 }}
+                                transition={{
+                                    type: "tween",
+                                    ease: "easeInOut",
+                                    duration: 0.2
+                                }}
+                                className="h-full overflow-y-auto pb-8 p-4 sm:p-5 md:p-8"
+                            >
+                                <div className="max-w-7xl mx-auto w-full">
+                                    {children}
+                                </div>
+                            </motion.div>
+                        </AnimatePresence>
+                    </motion.div>
+                </div>
             </div>
         </div>
     );
