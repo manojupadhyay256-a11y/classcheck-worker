@@ -140,7 +140,7 @@ const AdminSyllabus = () => {
                                 <GraduationCap className="w-8 h-8 text-white" />
                             </div>
                             <div>
-                                <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight leading-tight uppercase">
+                                <h1 className="text-lg md:text-4xl font-black text-white tracking-tight leading-tight uppercase">
                                     Syllabus Status
                                 </h1>
                                 <p className="text-slate-400 text-sm font-bold uppercase tracking-widest mt-2 flex items-center gap-2">

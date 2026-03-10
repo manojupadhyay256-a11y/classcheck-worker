@@ -157,7 +157,7 @@ const TeacherLogins = () => {
                                 <Key className="w-8 h-8 text-amber-500" strokeWidth={2.5} />
                             </div>
                             <div>
-                                <h1 className="text-2xl md:text-4xl font-black tracking-tight mb-1">Teacher Logins</h1>
+                                <h1 className="text-lg md:text-4xl font-black tracking-tight mb-1">Teacher Logins</h1>
                                 <p className="text-slate-400 text-sm">Manage system access and authentication for teaching staff.</p>
                             </div>
                         </div>

@@ -9,16 +9,16 @@ const MobileTopTabs = () => {
     if (navItems.length === 0) return null;
 
     return (
-        <div className="md:hidden bg-white/80 backdrop-blur-md sticky top-[calc(3.5rem + env(safe-area-inset-top, 0px))] z-50 border-b border-slate-100 overflow-x-auto custom-scrollbar">
-            <nav className="flex items-center px-4 min-w-max">
+        <div className="md:hidden bg-white border-b border-slate-100/80">
+            <nav className="flex items-center">
                 {navItems.map((item) => (
                     <NavLink
                         key={item.to}
                         to={item.to}
                         end={['/admin', '/teacher', '/student'].includes(item.to)}
                         className={({ isActive }) => clsx(
-                            "relative px-4 py-3 text-sm font-bold transition-all duration-300",
-                            isActive ? "text-slate-900" : "text-slate-400"
+                            "relative flex-1 text-center py-2.5 text-[12px] font-bold tracking-wide transition-colors duration-200",
+                            isActive ? "text-amber-700" : "text-slate-400 active:text-slate-600"
                         )}
                     >
                         {({ isActive }) => (
@@ -27,8 +27,8 @@ const MobileTopTabs = () => {
                                 {isActive && (
                                     <motion.div
                                         layoutId="top-tab-indicator"
-                                        className="absolute bottom-0 left-2 right-2 h-1 bg-primary rounded-t-full shadow-[0_0_8px_rgba(217,119,6,0.2)]"
-                                        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                                        className="absolute bottom-0 left-3 right-3 h-[2.5px] bg-amber-600 rounded-t-full"
+                                        transition={{ type: "spring", stiffness: 400, damping: 35 }}
                                     />
                                 )}
                             </>

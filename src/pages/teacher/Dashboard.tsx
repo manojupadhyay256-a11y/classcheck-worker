@@ -128,13 +128,13 @@ const TeacherDashboard = () => {
     }
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-5 md:space-y-8">
             {/* Hero Section */}
-            <div className="relative overflow-hidden bg-amber-600 rounded-3xl p-6 md:p-10 text-white shadow-2xl">
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
                     <div>
-                        <h1 className="text-2xl md:text-4xl font-black tracking-tight mb-2">
+                        <h1 className="text-xl md:text-4xl font-black tracking-tight mb-1">
                             {(() => {
                                 const nameParts = profile?.full_name?.split(' ') || [];
                                 const firstName = (nameParts[0]?.match(/^(Mr|Mrs|Ms|Dr|Prof)\.?$/i) && nameParts[1])
@@ -143,14 +143,14 @@ const TeacherDashboard = () => {
                                 return `${getGreeting()}, ${firstName}!`;
                             })()}
                         </h1>
-                        <p className="text-amber-100 font-medium md:text-lg opacity-80 uppercase tracking-widest text-xs flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-amber-200" />
+                        <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5" />
                             {assignedClass ? `Class Teacher of ${assignedClass.name}` : 'No class assigned'} • {todayDate}
                         </p>
                     </div>
 
-                    {/* Teacher Tip in Header */}
-                    <div className="bg-white p-6 rounded-3xl flex items-center gap-5 max-w-md shadow-2xl transition-all hover:-translate-y-1 group">
+                    {/* Teacher Tip — hidden on mobile */}
+                    <div className="hidden md:flex bg-white p-6 rounded-3xl items-center gap-5 max-w-md shadow-2xl transition-all hover:-translate-y-1 group">
                         <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center shadow-inner shrink-0 group-hover:scale-110 transition-transform">
                             <BookMarked className="w-7 h-7" />
                         </div>
@@ -169,8 +169,8 @@ const TeacherDashboard = () => {
             </div>
 
             {/* Consolidated Quick Stats Card */}
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm transition-all hover:shadow-md">
-                <div className="flex items-center gap-2 mb-6">
+            <div className="mobile-card p-4 md:p-6">
+                <div className="flex items-center gap-2 mb-4 md:mb-6">
                     <div className="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center">
                         <Sparkles className="w-4 h-4 text-amber-600" />
                     </div>
@@ -218,8 +218,8 @@ const TeacherDashboard = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
+                <div className="mobile-card p-4 md:p-6">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-xl font-bold text-gray-900">Class Overview</h3>
                         <div className="flex gap-4">
@@ -263,7 +263,7 @@ const TeacherDashboard = () => {
                     </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col justify-center items-center text-center">
+                <div className="mobile-card p-5 md:p-6 flex flex-col justify-center items-center text-center">
                     <div className="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center mb-4">
                         <CalendarCheck className="w-10 h-10 text-amber-600" />
                     </div>
@@ -272,7 +272,7 @@ const TeacherDashboard = () => {
                         {assignedClass ? `Manage attendance for class ${assignedClass.name}` : 'Check your class assignment'}
                     </p>
                     <Link to="/teacher/attendance" className="w-full">
-                        <button className="w-full py-5 bg-amber-600 text-white font-bold text-lg rounded-2xl shadow-xl shadow-amber-200 hover:bg-amber-700 transition-all">
+                        <button className="w-full py-4 md:py-5 bg-amber-600 text-white font-bold text-base md:text-lg rounded-2xl shadow-lg shadow-amber-200 active:bg-amber-700 transition-all">
                             {attendanceStatus === 'Marked' ? "Update Today's Attendance" : "Mark Today's Attendance"}
                         </button>
                     </Link>

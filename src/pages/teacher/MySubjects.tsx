@@ -128,7 +128,7 @@ const MySubjects = () => {
                             <BookOpen className="w-7 h-7 text-white" strokeWidth={2.5} />
                         </div>
                         <div>
-                            <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md">
+                            <h1 className="text-lg md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md">
                                 My Subjects
                             </h1>
                             <p className="text-slate-300 text-sm font-medium">

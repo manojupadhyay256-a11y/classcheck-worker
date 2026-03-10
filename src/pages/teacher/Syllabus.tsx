@@ -332,7 +332,7 @@ const Syllabus = () => {
                                     <div className="w-1.5 h-1.5 rounded-full bg-amber-600" />
                                     <span className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">Syllabus Planning</span>
                                 </div>
-                                <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight leading-tight uppercase">
+                                <h1 className="text-lg md:text-4xl font-black text-white tracking-tight leading-tight uppercase">
                                     {subjectInfo?.subject_name}
                                 </h1>
                             </div>

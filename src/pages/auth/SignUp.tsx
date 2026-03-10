@@ -82,7 +82,7 @@ const SignUp = () => {
                     <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-primary/20">
                         <BookOpen className="text-white w-8 h-8" />
                     </div>
-                    <h1 className="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">Create Account</h1>
+                    <h1 className="text-lg md:text-4xl font-black text-gray-900 tracking-tight">Create Account</h1>
                     <p className="text-gray-500 mt-2">Join ClassCheck and start managing your school</p>
                 </div>
 

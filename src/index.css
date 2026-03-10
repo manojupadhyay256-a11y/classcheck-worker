@@ -24,6 +24,12 @@
 @layer base {
   body {
     @apply bg-[#F8F9FB] text-gray-900 font-sans antialiased;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -68,5 +74,18 @@
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
     @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-card {
+    @apply bg-white rounded-2xl border border-slate-100/80 shadow-sm;
   }
 }

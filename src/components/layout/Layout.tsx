@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import MobileTopTabs from './MobileTopTabs';
 import MobileHeader from './MobileHeader';
@@ -16,7 +15,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     const { fetchNotifications } = useNotificationStore();
     const { onTouchStart, onTouchEnd } = useSwipeNavigation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const location = useLocation();
 
     useEffect(() => {
         if (profile?.id) {
@@ -74,28 +72,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 </div>
 
                 <div
-                    className="flex-1 overflow-hidden relative"
+                    className="flex-1 overflow-y-auto relative"
                     onTouchStart={onTouchStart}
                     onTouchEnd={onTouchEnd}
                 >
-                    <AnimatePresence mode="wait" initial={false}>
-                        <motion.div
-                            key={location.pathname}
-                            initial={{ opacity: 0, x: 10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -10 }}
-                            transition={{
-                                type: "tween",
-                                ease: "easeInOut",
-                                duration: 0.2
-                            }}
-                            className="h-full overflow-y-auto pb-8 p-4 sm:p-5 md:p-8"
-                        >
-                            <div className="max-w-7xl mx-auto w-full">
-                                {children}
-                            </div>
-                        </motion.div>
-                    </AnimatePresence>
+                    <div className="max-w-7xl mx-auto w-full p-3 sm:p-5 md:p-8 pb-8">
+                        {children}
+                    </div>
                 </div>
             </div>
         </div>

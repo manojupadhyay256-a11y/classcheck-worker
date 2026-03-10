@@ -98,7 +98,7 @@ const StudentAttendance = () => {
                             <CalendarCheck className="w-7 h-7 text-white" strokeWidth={2.5} />
                         </div>
                         <div>
-                            <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md uppercase">
+                            <h1 className="text-lg md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md uppercase">
                                 My Attendance
                             </h1>
                             <p className="text-white/70 text-sm font-medium">Tracking your classroom presence</p>

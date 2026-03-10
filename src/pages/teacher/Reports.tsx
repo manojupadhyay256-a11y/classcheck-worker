@@ -242,7 +242,7 @@ const TeacherReports = () => {
         <div className="space-y-8 pb-20">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">Reports & Analytics</h1>
+                    <h1 className="text-lg md:text-4xl font-black text-gray-900 tracking-tight">Reports & Analytics</h1>
                     <p className="text-gray-500 mt-1">
                         {classInfo ? `Generating reports for Class ${classInfo.name}` : 'Analyze and export class attendance data.'}
                     </p>

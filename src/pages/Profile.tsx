@@ -82,7 +82,7 @@ const Profile = () => {
                 <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center border-4 border-white shadow-xl mb-4 text-3xl font-bold text-primary">
                     {profile.full_name?.charAt(0) || 'U'}
                 </div>
-                <h1 className="text-2xl md:text-4xl font-black text-[#1E1B4B] tracking-tight">{profile.full_name}</h1>
+                <h1 className="text-lg md:text-4xl font-black text-[#1E1B4B] tracking-tight">{profile.full_name}</h1>
                 <div className="mt-2 px-4 py-1.5 bg-primary/5 text-primary rounded-full text-sm font-bold uppercase tracking-wider border border-primary/10">
                     {profile.role}
                 </div>

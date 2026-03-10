@@ -17,14 +17,12 @@ import { clsx } from 'clsx';
 import { useAuthStore } from '../../stores/authStore';
 import { sql } from '../../lib/db';
 import { getGreeting } from '../../lib/dateUtils';
-import StatsCard from '../../components/common/StatsCard';
 import { type Notification, notificationService } from '../../lib/notifications';
 import { studentTips, getWeeklyTip } from '../../lib/tips';
 
 const StudentDashboard = () => {
     const { profile } = useAuthStore();
     const [loading, setLoading] = useState(true);
-    const [stats, setStats] = useState<any[]>([]);
     const [recentNotifications, setRecentNotifications] = useState<Notification[]>([]);
     const [attendanceRate, setAttendanceRate] = useState<number | null>(null);
     const [subjectCount, setSubjectCount] = useState(0);
@@ -95,16 +93,6 @@ const StudentDashboard = () => {
         fetchDashboardData();
     }, [profile]);
 
-    useEffect(() => {
-        const statsData = [
-            { label: 'Attendance', value: attendanceRate !== null ? `${attendanceRate}%` : '—', icon: CalendarCheck, color: 'success' as const },
-            { label: 'My Subjects', value: subjectCount.toString(), icon: BookOpen, color: 'primary' as const },
-            { label: 'Course Progress', value: `${syllabusProgress}%`, icon: TrendingUp, color: 'secondary' as const },
-            { label: 'New Alerts', value: unreadNotifications.toString(), icon: Bell, color: 'accent' as const },
-        ];
-        setStats(statsData);
-    }, [attendanceRate, subjectCount, syllabusProgress, unreadNotifications]);
-
     const todayDate = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
         month: 'long',
@@ -129,13 +117,13 @@ const StudentDashboard = () => {
     ];
 
     return (
-        <div className="space-y-8 pb-12">
+        <div className="space-y-5 md:space-y-8 pb-8">
             {/* Hero Section */}
-            <div className="relative overflow-hidden bg-amber-600 rounded-3xl p-6 md:p-10 text-white shadow-2xl">
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
                     <div>
-                        <h1 className="text-2xl md:text-4xl font-black tracking-tight mb-2">
+                        <h1 className="text-xl md:text-4xl font-black tracking-tight mb-1">
                             {(() => {
                                 const nameParts = profile?.full_name?.split(' ') || [];
                                 const firstName = (nameParts[0]?.match(/^(Mr|Mrs|Ms|Dr|Prof)\.?$/i) && nameParts[1])
@@ -144,13 +132,13 @@ const StudentDashboard = () => {
                                 return `${getGreeting()}, ${firstName}!`;
                             })()}
                         </h1>
-                        <p className="text-amber-100 font-medium md:text-lg opacity-80 uppercase tracking-widest text-xs flex items-center gap-2">
-                            <Clock className="w-4 h-4" /> {todayDate}
+                        <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5" /> {todayDate}
                         </p>
                     </div>
 
-                    {/* Study Tip in Header */}
-                    <div className="bg-white p-6 rounded-3xl flex items-center gap-5 max-w-md shadow-2xl transition-all hover:-translate-y-1 group">
+                    {/* Study Tip — hidden on mobile */}
+                    <div className="hidden md:flex bg-white p-6 rounded-3xl items-center gap-5 max-w-md shadow-2xl transition-all hover:-translate-y-1 group">
                         <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center shadow-inner shrink-0 group-hover:scale-110 transition-transform">
                             <BookMarked className="w-7 h-7" />
                         </div>
@@ -168,36 +156,75 @@ const StudentDashboard = () => {
                 </div>
             </div>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-                {stats.map((stat, index) => (
-                    <StatsCard key={index} {...stat} />
-                ))}
+            {/* Consolidated Quick Stats Card */}
+            <div className="mobile-card p-4 md:p-6">
+                <div className="flex items-center gap-2 mb-4 md:mb-6">
+                    <div className="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center">
+                        <Sparkles className="w-4 h-4 text-amber-600" />
+                    </div>
+                    <h3 className="font-bold text-gray-900 tracking-tight uppercase text-xs">My Progress</h3>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Attendance</span>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-2xl font-black text-emerald-600 leading-none">
+                                {attendanceRate !== null ? `${attendanceRate}%` : '—'}
+                            </span>
+                            <CalendarCheck className="w-4 h-4 text-emerald-500 opacity-50" />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">My Subjects</span>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-2xl font-black text-amber-600 leading-none">{subjectCount}</span>
+                            <BookOpen className="w-4 h-4 text-amber-500 opacity-50" />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Progress</span>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-2xl font-black text-violet-600 leading-none">{syllabusProgress}%</span>
+                            <TrendingUp className="w-4 h-4 text-violet-500 opacity-50" />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Alerts</span>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-2xl font-black text-rose-600 leading-none">{unreadNotifications}</span>
+                            <Bell className="w-4 h-4 text-rose-500 opacity-50" />
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
                 {/* Shortcuts Grid */}
                 <div className="lg:col-span-2">
                     <h2 className="text-xl font-bold text-slate-800 uppercase tracking-wider mb-6 flex items-center gap-3">
                         Quick Shortcuts
                         <div className="h-0.5 flex-1 bg-slate-100 rounded-full" />
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {shortcuts.map((shortcut) => (
                             <Link
                                 key={shortcut.to}
                                 to={shortcut.to}
-                                className="group bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-amber-100 transition-all duration-300"
+                                className="group mobile-card p-4 md:p-6 active:scale-[0.98] transition-all duration-200"
                             >
-                                <div className="flex items-center gap-5">
-                                    <div className={clsx("w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110", shortcut.color)}>
-                                        <shortcut.icon className="w-7 h-7" />
+                                <div className="flex items-center gap-4">
+                                    <div className={clsx("w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110", shortcut.color)}>
+                                        <shortcut.icon className="w-5 h-5 md:w-7 md:h-7" />
                                     </div>
-                                    <div className="flex-1">
-                                        <h3 className="font-black text-slate-800 text-lg group-hover:text-amber-600 transition-colors uppercase tracking-tight">{shortcut.label}</h3>
-                                        <p className="text-slate-400 text-xs font-medium leading-tight mt-0.5">{shortcut.description}</p>
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="font-black text-slate-800 text-sm md:text-lg group-hover:text-amber-600 transition-colors uppercase tracking-tight truncate">{shortcut.label}</h3>
+                                        <p className="text-slate-400 text-[10px] md:text-xs font-medium leading-tight mt-0.5 truncate">{shortcut.description}</p>
                                     </div>
-                                    <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-amber-400 transition-all group-hover:translate-x-1" />
+                                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-amber-400 transition-all group-hover:translate-x-1 shrink-0" />
                                 </div>
                             </Link>
                         ))}
@@ -210,7 +237,7 @@ const StudentDashboard = () => {
                         Recent Alerts
                         <div className="h-0.5 flex-1 bg-slate-100 rounded-full" />
                     </h2>
-                    <div className="bg-white rounded-3xl border border-slate-100 shadow-xl overflow-hidden flex-1">
+                    <div className="mobile-card overflow-hidden flex-1">
                         {recentNotifications.length > 0 ? (
                             <div className="divide-y divide-slate-50">
                                 {recentNotifications.map((notif) => (

@@ -78,7 +78,7 @@ const StudentTimetable = () => {
                         <Calendar className="w-4 h-4" />
                         <span className="text-sm uppercase tracking-wider">Weekly Schedule</span>
                     </div>
-                    <h1 className="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">My Timetable</h1>
+                    <h1 className="text-lg md:text-4xl font-black text-gray-900 tracking-tight">My Timetable</h1>
                     <p className="text-gray-500 mt-1">Class {classInfo.name} • Academic Year 2025-26</p>
                 </div>
                 {timetable && (
