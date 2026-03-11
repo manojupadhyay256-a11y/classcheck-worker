@@ -165,10 +165,10 @@ const StudentSyllabus = () => {
                                     >
                                         <div className="flex items-start justify-between mb-4">
                                             <div className="flex-1">
-                                                <h3 className="text-lg font-black text-slate-900 tracking-tight group-hover:text-amber-600 transition-colors uppercase leading-tight">
+                                                <h3 className="text-lg font-black text-slate-900 font-sans tracking-normal group-hover:text-amber-600 transition-colors uppercase leading-tight">
                                                     {chapter.chapter_name}
                                                 </h3>
-                                                <p className="text-xs font-medium text-slate-400 mt-1 line-clamp-2">
+                                                <p className="text-xs font-medium text-slate-400 mt-1 line-clamp-2 font-sans tracking-normal">
                                                     {chapter.description || 'No detailed description available.'}
                                                 </p>
                                             </div>

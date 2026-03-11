@@ -16,9 +16,10 @@
   --color-saas-border: #E2E8F0;
   --radius-xl: 16px;
   --radius-2xl: 24px;
-  --font-sans: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-outfit: "Outfit", sans-serif;
-  --font-inter: "Inter", sans-serif;
+  --font-sans: "Outfit", "Poppins", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-outfit: "Outfit", "Poppins", sans-serif;
+  --font-inter: "Inter", "Poppins", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
 }
 
 @layer base {

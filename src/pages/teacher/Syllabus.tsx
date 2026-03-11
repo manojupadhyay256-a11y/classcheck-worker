@@ -413,8 +413,8 @@ const Syllabus = () => {
                                                         </td>
                                                         <td className="px-6 py-6">
                                                             <div className="flex flex-col">
-                                                                <span className="text-sm font-black text-slate-800 tracking-tight">{chapter.chapter_name}</span>
-                                                                <span className="text-[11px] text-slate-400 font-medium truncate max-w-xs">{chapter.description || 'No description'}</span>
+                                                                <span className="text-sm font-black text-slate-800 font-sans tracking-normal">{chapter.chapter_name}</span>
+                                                                <span className="text-[11px] text-slate-400 font-medium truncate max-w-xs font-sans tracking-normal">{chapter.description || 'No description'}</span>
                                                             </div>
                                                         </td>
                                                         <td className="px-6 py-6">
