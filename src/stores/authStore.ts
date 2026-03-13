@@ -7,6 +7,7 @@ interface UserProfile {
     full_name: string;
     email: string;
     role: 'admin' | 'principal' | 'teacher' | 'student';
+    avatar_url?: string | null;
     created_at?: string;
     updated_at?: string;
 }

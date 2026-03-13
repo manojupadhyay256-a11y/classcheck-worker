@@ -11,6 +11,7 @@ import {
     Fingerprint,
     ListChecks,
     Sparkles,
+    CheckSquare,
     X,
     Bell,
     Calendar
@@ -97,6 +98,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
             links: [
                 { to: '/teacher/students', icon: Users, label: 'Students' },
                 { to: '/teacher/log-book', icon: ListChecks, label: 'Log Book' },
+                { to: '/teacher/corrections', icon: CheckSquare, label: 'Corrections' },
                 { to: '/teacher/reports', icon: BarChart3, label: 'Reports' },
             ]
         },
@@ -122,6 +124,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
                 { to: '/student/classwork', icon: Sparkles, label: 'Class Work' },
                 { to: '/student/attendance', icon: CalendarCheck, label: 'Attendance' },
                 { to: '/student/subjects', icon: BookOpen, label: 'My Subjects' },
+                { to: '/student/correction-status', icon: CheckSquare, label: 'Correction Status' },
                 { to: '/student/homework', icon: BookOpen, label: 'Homework' },
                 { to: '/student/timetable', icon: Calendar, label: 'Timetable' },
             ]
@@ -216,8 +219,12 @@ const Sidebar = ({ onClose }: SidebarProps) => {
             <div className="px-4 mt-auto space-y-3">
                 <div className="p-1 bg-amber-50/50 rounded-[28px] border border-amber-100/50">
                     <div className="px-4 py-4 flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-2xl bg-amber-600 flex items-center justify-center shadow-lg shadow-amber-900/10">
-                            <span className="text-white font-black text-lg">{profile?.full_name?.charAt(0) || 'U'}</span>
+                        <div className="w-10 h-10 rounded-2xl bg-amber-600 flex items-center justify-center shadow-lg shadow-amber-900/10 overflow-hidden">
+                            {profile?.avatar_url ? (
+                                <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                                <span className="text-white font-black text-lg">{profile?.full_name?.charAt(0) || 'U'}</span>
+                            )}
                         </div>
                         <div className="flex flex-col min-w-0">
                             <span className="text-[15px] font-black text-slate-900 truncate tracking-tight">{profile?.full_name || 'User'}</span>

@@ -38,6 +38,7 @@ import { AlertCircle, RefreshCw } from 'lucide-react';
 
 const TeacherReports = lazy(() => import('./pages/teacher/Reports'));
 const TeacherTimetable = lazy(() => import('./pages/teacher/Timetable'));
+const TeacherCorrections = lazy(() => import('./pages/teacher/Corrections'));
 const StudentDashboard = lazy(() => import('./pages/student/Dashboard'));
 const StudentClassWork = lazy(() => import('./pages/student/ClassWork'));
 const StudentAttendance = lazy(() => import('./pages/student/Attendance'));
@@ -45,6 +46,7 @@ const StudentSubjects = lazy(() => import('./pages/student/Subjects'));
 const StudentSyllabus = lazy(() => import('./pages/student/Syllabus'));
 const StudentHomework = lazy(() => import('./pages/student/Homework'));
 const StudentTimetable = lazy(() => import('./pages/student/Timetable'));
+const StudentCorrectionStatus = lazy(() => import('./pages/student/CorrectionStatus'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Notifications = lazy(() => import('./pages/Notifications'));
 
@@ -251,6 +253,7 @@ const App = () => {
                     <Route path="homework" element={<TeacherHomework />} />
                     <Route path="reports" element={<TeacherReports />} />
                     <Route path="timetable" element={<TeacherTimetable />} />
+                    <Route path="corrections" element={<TeacherCorrections />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="/notifications" element={<Notifications />} />
                     <Route path="/help" element={<Help />} />
@@ -272,6 +275,7 @@ const App = () => {
                     <Route path="syllabus/:classSubjectId" element={<StudentSyllabus />} />
                     <Route path="homework" element={<StudentHomework />} />
                     <Route path="timetable" element={<StudentTimetable />} />
+                    <Route path="correction-status" element={<StudentCorrectionStatus />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="notifications" element={<Notifications />} />
                     <Route path="help" element={<Help />} />

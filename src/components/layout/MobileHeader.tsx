@@ -63,9 +63,13 @@ const MobileHeader = ({ onMenuClick }: MobileHeaderProps) => {
                 </button>
                 <button
                     onClick={() => navigate(`/${profile?.role || 'student'}/profile`)}
-                    className="w-8 h-8 bg-gradient-to-br from-amber-500 to-amber-700 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-sm active:scale-95 transition-transform"
+                    className="w-8 h-8 bg-linear-to-br from-amber-500 to-amber-700 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-sm active:scale-95 transition-transform overflow-hidden"
                 >
-                    {profile?.full_name?.charAt(0) || 'U'}
+                    {profile?.avatar_url ? (
+                        <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                        profile?.full_name?.charAt(0) || 'U'
+                    )}
                 </button>
             </div>
         </header>

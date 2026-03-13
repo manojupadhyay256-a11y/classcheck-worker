@@ -3,7 +3,7 @@ import { neon } from '@neondatabase/serverless';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const sql = neon(process.env.VITE_DATABASE_URL);
+const sql = neon(process.env.VITE_DATABASE_URL!);
 
 async function checkStatus() {
     try {

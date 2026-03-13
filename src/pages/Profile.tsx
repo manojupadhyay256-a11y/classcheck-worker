@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuthStore } from '../stores/authStore';
-import { Mail, Shield, LogOut, ChevronRight, Bell, RefreshCw, Key, X, Loader2 } from 'lucide-react';
+import { Mail, Shield, LogOut, ChevronRight, Bell, RefreshCw, Key, X, Loader2, Camera } from 'lucide-react';
 import { notificationService } from '../lib/notifications';
 import { toast } from 'sonner';
 import { sql } from '../lib/db';
@@ -8,7 +8,8 @@ import { authClient } from '../lib/auth-client';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Profile = () => {
-    const { profile, clearAuth } = useAuthStore();
+    const { profile, clearAuth, setAuth, setStudentProfile } = useAuthStore();
+    const [isUploading, setIsUploading] = useState(false);
 
     if (!profile) return null;
 
@@ -76,11 +77,65 @@ const Profile = () => {
         }
     };
 
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Validate file size (1MB = 1024 * 1024 bytes)
+        if (file.size > 1024 * 1024) {
+            toast.error("Image size must be less than 1MB");
+            return;
+        }
+
+        setIsUploading(true);
+        try {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64Image = reader.result as string;
+
+                if (profile.role === 'student') {
+                    await sql`UPDATE students SET avatar_url = ${base64Image}, updated_at = NOW() WHERE id = ${profile.id}`;
+                    setStudentProfile({ ...profile, avatar_url: base64Image });
+                } else {
+                    await sql`UPDATE public.profiles SET avatar_url = ${base64Image}, updated_at = NOW() WHERE id = ${profile.id}`;
+                    setAuth(useAuthStore.getState().user, { ...profile, avatar_url: base64Image });
+                }
+
+                toast.success("Profile picture updated");
+                setIsUploading(false);
+            };
+            reader.onerror = () => {
+                toast.error("Failed to read image file");
+                setIsUploading(false);
+            };
+        } catch (err) {
+            console.error('Upload error:', err);
+            toast.error("Failed to upload image");
+            setIsUploading(false);
+        }
+    };
+
     return (
         <div className="space-y-6 pb-8">
             <div className="flex flex-col items-center py-8 px-4 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center border-4 border-white shadow-xl mb-4 text-3xl font-bold text-primary">
-                    {profile.full_name?.charAt(0) || 'U'}
+                <div className="relative group">
+                    <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center border-4 border-white shadow-xl mb-4 text-3xl font-bold text-primary overflow-hidden">
+                        {profile.avatar_url ? (
+                            <img src={profile.avatar_url} alt={profile.full_name} className="w-full h-full object-cover" />
+                        ) : (
+                            profile.full_name?.charAt(0) || 'U'
+                        )}
+                        {isUploading && (
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                <Loader2 className="w-8 h-8 text-white animate-spin" />
+                            </div>
+                        )}
+                    </div>
+                    <label className="absolute bottom-4 right-0 p-2 bg-primary text-white rounded-full shadow-lg cursor-pointer hover:scale-110 active:scale-95 transition-all">
+                        <Camera className="w-4 h-4" />
+                        <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
+                    </label>
                 </div>
                 <h1 className="text-lg md:text-4xl font-black text-[#1E1B4B] tracking-tight">{profile.full_name}</h1>
                 <div className="mt-2 px-4 py-1.5 bg-primary/5 text-primary rounded-full text-sm font-bold uppercase tracking-wider border border-primary/10">
