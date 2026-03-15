@@ -68,6 +68,12 @@ const Notifications = () => {
     const [isMultiSelect, setIsMultiSelect] = useState(false);
     const [loadingClassStudents, setLoadingClassStudents] = useState(false);
 
+    // All Teachers selection state
+    const [allTeachers, setAllTeachers] = useState<StudentRecipient[]>([]);
+    const [selectedTeacherIds, setSelectedTeacherIds] = useState<string[]>([]);
+    const [isTeacherMultiSelect, setIsTeacherMultiSelect] = useState(false);
+    const [loadingAllTeachers, setLoadingAllTeachers] = useState(false);
+
     const isAdmin = profile?.role === 'admin';
     const isTeacher = profile?.role === 'teacher';
     const isStudent = profile?.role === 'student';
@@ -153,6 +159,37 @@ const Notifications = () => {
             setLoadingClasses(false);
         }
     };
+
+    // Fetch all teachers for admin/teacher broadcasting
+    const fetchAllTeachers = async () => {
+        if (!profile?.id) return;
+        setLoadingAllTeachers(true);
+        try {
+            const results = await sql`
+                SELECT p.id as profile_id, p.full_name as name
+                FROM public.profiles p
+                WHERE p.role = 'teacher' AND p.id != ${profile.id}
+                ORDER BY p.full_name ASC
+            `;
+            const teachers = results.map(row => ({
+                id: row.profile_id,
+                name: row.name,
+                role: 'Teacher',
+                type: 'admin' as const
+            }));
+            setAllTeachers(teachers as StudentRecipient[]);
+        } catch (error) {
+            console.error('Error fetching all teachers:', error);
+        } finally {
+            setLoadingAllTeachers(false);
+        }
+    };
+
+    useEffect(() => {
+        if (target === 'all_teachers' && isComposeOpen) {
+            fetchAllTeachers();
+        }
+    }, [target, isComposeOpen, profile?.id]);
 
     // Fetch students for a specific class (for teacher messaging)
     const fetchClassStudents = async (classId: string) => {
@@ -311,7 +348,11 @@ const Notifications = () => {
         const sendPromise = (async () => {
             if (isAdmin) {
                 if (target === 'all_teachers') {
-                    await notificationService.broadcastToRole(profile.id, 'teacher', title, message);
+                    if (isTeacherMultiSelect && selectedTeacherIds.length > 0) {
+                        await notificationService.broadcastToUsers(profile.id, selectedTeacherIds, title, message, 'announcement');
+                    } else {
+                        await notificationService.broadcastToRole(profile.id, 'teacher', title, message);
+                    }
                 } else {
                     await notificationService.broadcastToRole(profile.id, 'student', title, message);
                 }
@@ -336,7 +377,11 @@ const Notifications = () => {
                         throw new Error('No admin found to receive message');
                     }
                 } else if (target === 'all_teachers') {
-                    await notificationService.broadcastToRole(profile.id, 'teacher', title, message);
+                    if (isTeacherMultiSelect && selectedTeacherIds.length > 0) {
+                        await notificationService.broadcastToUsers(profile.id, selectedTeacherIds, title, message, 'announcement');
+                    } else {
+                        await notificationService.broadcastToRole(profile.id, 'teacher', title, message);
+                    }
                 }
             } else if (isStudent) {
                 if (target === 'admin') {
@@ -434,32 +479,43 @@ const Notifications = () => {
     const selectedClass = teacherClasses.find(c => c.class_id === selectedClassId);
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] pb-24 md:pb-8">
-            <div className="max-w-4xl mx-auto px-4 pt-8">
-                <div className="flex items-center justify-between mb-8">
-                    <div>
-                        <h1 className="text-lg md:text-4xl font-black text-[#1E1B4B] tracking-tight">Notification Center</h1>
-                        <p className="text-slate-500 font-medium mt-1">Stay updated with the latest alerts and messages.</p>
-                    </div>
-                    <div className="flex gap-3">
-                        {notifications.some(n => !n.is_read) && (
+        <div className="space-y-8 pb-24 md:pb-8">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+                        <div>
+                            <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                                <Bell className="w-3.5 h-3.5" />
+                                Messages & Alerts
+                            </p>
+                            <h1 className="text-xl md:text-4xl font-black tracking-tight">Notification Center</h1>
+                            <p className="text-amber-100/60 text-sm font-medium mt-1">Stay updated with the latest alerts and messages</p>
+                        </div>
+                        <div className="flex gap-3">
+                            {notifications.some(n => !n.is_read) && (
+                                <button
+                                    onClick={handleMarkAllAsRead}
+                                    className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white/15 text-white font-bold rounded-xl border border-white/20 hover:bg-white/25 transition-all active:scale-95"
+                                >
+                                    <Check className="w-4 h-4" />
+                                    Mark all read
+                                </button>
+                            )}
                             <button
-                                onClick={handleMarkAllAsRead}
-                                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white text-amber-600 font-bold rounded-xl border border-amber-100 shadow-sm hover:shadow-md transition-all active:scale-95"
+                                onClick={() => setIsComposeOpen(true)}
+                                className="flex items-center gap-2 px-4 py-2 bg-white text-amber-600 font-bold rounded-xl shadow-lg hover:bg-amber-50 transition-all active:scale-95"
                             >
-                                <Check className="w-4 h-4" />
-                                Mark all read
+                                <Plus className="w-4 h-4" />
+                                {isStudent ? 'Send Message' : 'Compose'}
                             </button>
-                        )}
-                        <button
-                            onClick={() => setIsComposeOpen(true)}
-                            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white font-bold rounded-xl shadow-lg shadow-amber-200 hover:bg-amber-700 transition-all active:scale-95"
-                        >
-                            <Plus className="w-4 h-4" />
-                            {isStudent ? 'Send Message' : 'Compose'}
-                        </button>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <div className="max-w-4xl mx-auto">
 
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-20">
@@ -818,12 +874,91 @@ const Notifications = () => {
                                             </div>
                                         )}
 
-                                        {isTeacher && target === 'all_teachers' && (
-                                            <div className="p-4 bg-amber-50 border border-amber-100 rounded-2xl">
-                                                <p className="text-sm font-bold text-amber-700 flex items-center gap-2">
-                                                    <Users className="w-4 h-4" />
-                                                    Broadcasting to all Teachers
-                                                </p>
+                                        {(isTeacher || isAdmin) && target === 'all_teachers' && (
+                                            <div>
+                                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 px-1">Send To Teachers</label>
+                                                
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setIsTeacherMultiSelect(false)}
+                                                        className={clsx(
+                                                            "flex-1 px-2 py-1.5 rounded-lg border font-bold text-[9px] sm:text-[10px] uppercase tracking-wider transition-all",
+                                                            !isTeacherMultiSelect ? "bg-amber-600 text-white border-amber-600" : "bg-white text-slate-400 border-slate-100 hover:border-amber-100"
+                                                        )}
+                                                    >
+                                                        All Teachers
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setIsTeacherMultiSelect(true)}
+                                                        className={clsx(
+                                                            "flex-1 px-2 py-1.5 rounded-lg border font-bold text-[9px] sm:text-[10px] uppercase tracking-wider transition-all",
+                                                            isTeacherMultiSelect ? "bg-amber-600 text-white border-amber-600" : "bg-white text-slate-400 border-slate-100 hover:border-amber-100"
+                                                        )}
+                                                    >
+                                                        Pick Teachers
+                                                    </button>
+                                                </div>
+
+                                                {/* All Teachers Banner */}
+                                                {!isTeacherMultiSelect && (
+                                                    <div className="mt-3 p-4 bg-amber-50 border border-amber-100 rounded-2xl">
+                                                        <p className="text-sm font-bold text-amber-700 flex items-center gap-2">
+                                                            <Users className="w-4 h-4" />
+                                                            Broadcasting to all Teachers
+                                                        </p>
+                                                    </div>
+                                                )}
+
+                                                {/* Pick Teachers List */}
+                                                {isTeacherMultiSelect && (
+                                                    <div className="mt-3 space-y-1 pr-1.5 custom-scrollbar max-h-60 overflow-y-auto">
+                                                        {loadingAllTeachers ? (
+                                                            <div className="flex items-center justify-center py-4">
+                                                                <Loader2 className="w-4 h-4 animate-spin text-amber-500" />
+                                                            </div>
+                                                        ) : allTeachers.length === 0 ? (
+                                                            <p className="text-center text-[10px] text-slate-400 py-4 font-bold uppercase tracking-widest">No teachers found</p>
+                                                        ) : (
+                                                            allTeachers.map((t) => (
+                                                                <label
+                                                                    key={t.id}
+                                                                    className={clsx(
+                                                                        "flex items-center justify-between p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl border-2 transition-all cursor-pointer",
+                                                                        selectedTeacherIds.includes(t.id) ? "border-amber-600 bg-amber-50" : "border-slate-50 bg-slate-50 hover:border-amber-100"
+                                                                    )}
+                                                                >
+                                                                    <div className="flex items-center gap-2">
+                                                                        <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-lg flex items-center justify-center text-amber-600 font-black text-[10px] sm:text-xs border border-amber-100 shrink-0">
+                                                                            {t.name.charAt(0)}
+                                                                        </div>
+                                                                        <span className="text-[11px] sm:text-xs font-bold text-[#1E1B4B]">{t.name}</span>
+                                                                    </div>
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        className="hidden"
+                                                                        checked={selectedTeacherIds.includes(t.id)}
+                                                                        onChange={(e) => {
+                                                                            if (e.target.checked) {
+                                                                                setSelectedTeacherIds(prev => [...prev, t.id]);
+                                                                            } else {
+                                                                                setSelectedTeacherIds(prev => prev.filter(id => id !== t.id));
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                    {selectedTeacherIds.includes(t.id) ? (
+                                                                        <div className="w-4 h-4 sm:w-5 sm:h-5 bg-amber-600 rounded-lg flex items-center justify-center">
+                                                                            <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="w-4 h-4 sm:w-5 sm:h-5 bg-white border-2 border-slate-200 rounded-lg" />
+                                                                    )}
+                                                                </label>
+                                                            ))
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
 

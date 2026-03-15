@@ -49,6 +49,7 @@ const StudentTimetable = lazy(() => import('./pages/student/Timetable'));
 const StudentCorrectionStatus = lazy(() => import('./pages/student/CorrectionStatus'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Notifications = lazy(() => import('./pages/Notifications'));
+const Library = lazy(() => import('./pages/Library'));
 
 const App = () => {
   const { profile, loading, fetchProfile } = useAuthStore();
@@ -230,6 +231,7 @@ const App = () => {
                     <Route path="/log-book" element={<AdminLogBook />} />
                     <Route path="/syllabus" element={<AdminSyllabus />} />
                     <Route path="/homework" element={<AdminHomework />} />
+                    <Route path="/library" element={<Library />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/notifications" element={<Notifications />} />
                     <Route path="/help" element={<Help />} />
@@ -254,6 +256,7 @@ const App = () => {
                     <Route path="reports" element={<TeacherReports />} />
                     <Route path="timetable" element={<TeacherTimetable />} />
                     <Route path="corrections" element={<TeacherCorrections />} />
+                    <Route path="library" element={<Library />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="/notifications" element={<Notifications />} />
                     <Route path="/help" element={<Help />} />

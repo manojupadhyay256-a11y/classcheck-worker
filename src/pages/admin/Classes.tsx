@@ -8,8 +8,7 @@ import {
     Users as UsersIcon,
     Loader2,
     ArrowRight,
-    RefreshCw,
-    LayoutGrid
+    RefreshCw
 } from 'lucide-react';
 import Button from '../../components/common/Button';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -165,59 +164,41 @@ const Classes = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] pb-24 font-inter">
-            {/* SaaS Header */}
-            <div className="bg-slate-900 text-white">
-                <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 sm:py-12">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-10">
-                        <div className="flex items-center gap-4 sm:gap-5">
-                            <div className="p-3.5 sm:p-4 bg-amber-500/10 rounded-2xl border border-amber-500/20 shrink-0">
-                                <School className="w-7 h-7 sm:w-8 sm:h-8 text-amber-500" strokeWidth={2.5} />
-                            </div>
-                            <div className="min-w-0">
-                                <h1 className="text-2xl md:text-4xl font-black tracking-tight mb-1 truncate">Class Management</h1>
-                                <p className="text-slate-400 text-[13px] sm:text-sm font-medium">Configure class structures and homeroom assignments.</p>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full md:w-auto">
-                            <div className="relative flex-1 sm:w-80">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                                <input
-                                    type="text"
-                                    placeholder="Search by class or teacher..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-11 pr-4 py-3 sm:py-3.5 bg-white/5 border border-white/10 rounded-xl text-[13px] sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all search-inset"
-                                />
-                            </div>
-                            <Button
-                                onClick={() => handleOpenModal()}
-                                className="bg-amber-600 hover:bg-amber-700 text-white shadow-xl shadow-amber-900/20 px-6 py-3 sm:py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0"
-                            >
-                                <Plus className="w-5 h-5" strokeWidth={3} />
-                                <span className="font-bold">Add Class</span>
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Stats Bar */}
-            <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-8 -mt-6">
-                <div className="bg-white rounded-2xl saas-shadow border border-saas-border p-4 sm:p-6 flex items-center justify-between">
-                    <div className="flex items-center gap-3 sm:gap-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-slate-100">
-                            <LayoutGrid className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400" />
-                        </div>
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-6">
                         <div>
-                            <p className="text-[11px] sm:text-sm font-semibold text-slate-500 uppercase tracking-tight">Active Classes</p>
-                            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 leading-tight">{classes.length}</h2>
+                            <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                                <School className="w-3.5 h-3.5" />
+                                Academic Configuration
+                            </p>
+                            <h1 className="text-xl md:text-4xl font-black tracking-tight">Class Management</h1>
+                            <p className="text-amber-100/60 text-sm font-medium mt-1">Configure class structures and homeroom assignments • {classes.length} Active Classes</p>
                         </div>
+                        <Button
+                            onClick={() => handleOpenModal()}
+                            className="bg-white text-amber-700 hover:bg-amber-50 shadow-xl px-6 py-3 sm:py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0 self-start"
+                        >
+                            <Plus className="w-5 h-5" strokeWidth={3} />
+                            <span className="font-bold">Add Class</span>
+                        </Button>
+                    </div>
+                    <div className="relative sm:w-80">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
+                        <input
+                            type="text"
+                            placeholder="Search by class or teacher..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-11 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
+                        />
                     </div>
                     {refreshing && (
-                        <div className="flex items-center gap-2 text-amber-600 text-[10px] sm:text-xs font-semibold animate-pulse">
-                            <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin" />
+                        <div className="flex items-center gap-2 text-white/70 text-xs font-semibold animate-pulse mt-3">
+                            <RefreshCw className="w-4 h-4 animate-spin" />
                             Refining...
                         </div>
                     )}

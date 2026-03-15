@@ -290,7 +290,7 @@ const Students = () => {
     });
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] pb-24 font-inter">
+        <div className="space-y-8 pb-24">
             <input
                 type="file"
                 ref={fileInputRef}
@@ -299,78 +299,68 @@ const Students = () => {
                 accept=".xlsx, .xls, .csv"
             />
 
-            {/* SaaS Header */}
-            <div className="bg-slate-900 text-white">
-                <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 sm:py-12">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-10">
-                        <div className="flex items-center gap-4 sm:gap-5">
-                            <div className="p-3.5 sm:p-4 bg-amber-500/10 rounded-2xl border border-amber-500/20 shrink-0">
-                                <UsersIcon className="w-7 h-7 sm:w-8 sm:h-8 text-amber-500" strokeWidth={2.5} />
-                            </div>
-                            <div className="min-w-0">
-                                <h1 className="text-2xl md:text-4xl font-black tracking-tight mb-1 truncate">Student Registry</h1>
-                                <p className="text-slate-400 text-[13px] sm:text-sm font-medium">Manage student profiles, registrations, and bulk imports.</p>
-                            </div>
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-6">
+                        <div>
+                            <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                                <UsersIcon className="w-3.5 h-3.5" />
+                                Enrollment Management
+                            </p>
+                            <h1 className="text-xl md:text-4xl font-black tracking-tight">Student Registry</h1>
+                            <p className="text-amber-100/60 text-sm font-medium mt-1">Manage student profiles, registrations, and bulk imports</p>
                         </div>
-
-                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full md:w-auto">
+                        <div className="flex flex-col sm:flex-row gap-3 self-start">
                             <Button
                                 variant="outline"
                                 onClick={() => fileInputRef.current?.click()}
                                 isLoading={isImporting}
-                                className="border-white/10 hover:bg-white/5 text-white shadow-none px-6 py-3 sm:py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 flex-1 sm:flex-none"
+                                className="border-white/20 hover:bg-white/10 text-white shadow-none px-5 py-3 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95"
                             >
                                 <FileSpreadsheet className="w-5 h-5" />
                                 <span className="font-bold">{isImporting ? importStatus || 'Importing...' : 'Import Excel'}</span>
                             </Button>
                             <Button
                                 onClick={() => handleOpenModal()}
-                                className="bg-amber-600 hover:bg-amber-700 text-white shadow-xl shadow-amber-900/20 px-6 py-3 sm:py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0"
+                                className="bg-white text-amber-700 hover:bg-amber-50 shadow-xl px-5 py-3 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95"
                             >
                                 <Plus className="w-5 h-5" strokeWidth={3} />
                                 <span className="font-bold">Add Student</span>
                             </Button>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {/* Filter Section */}
-            <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-8 -mt-6">
-                <div className="bg-white rounded-2xl saas-shadow border border-saas-border p-4 sm:p-6 flex flex-col lg:flex-row items-center justify-between gap-4">
-                    <div className="relative w-full lg:max-w-md">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                        <input
-                            type="text"
-                            placeholder="Search by name or admission no..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 transition-all"
-                        />
-                    </div>
-
-                    <div className="flex items-center gap-3 w-full lg:w-auto">
-                        <div className="relative flex-1 lg:w-64">
-                            <Filter className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                            <select
-                                value={selectedClass}
-                                onChange={(e) => setSelectedClass(e.target.value)}
-                                className="w-full pl-11 pr-10 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 appearance-none cursor-pointer"
-                            >
-                                <option value="All">All Classes</option>
-                                {classes.map(c => (
-                                    <option key={c.id} value={c.id}>{c.name}</option>
-                                ))}
-                            </select>
-                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </div>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="relative flex-1 sm:max-w-md">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
+                            <input
+                                type="text"
+                                placeholder="Search by name or admission no..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full pl-11 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
+                            />
                         </div>
-                        <button className="p-3 bg-slate-50 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-xl border border-slate-100 transition-all active:scale-95 shrink-0">
-                            <Download className="w-5 h-5" />
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <div className="relative">
+                                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 pointer-events-none" />
+                                <select
+                                    value={selectedClass}
+                                    onChange={(e) => setSelectedClass(e.target.value)}
+                                    className="pl-9 pr-8 py-3 bg-white/10 border border-white/20 rounded-xl text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-white/30 appearance-none cursor-pointer"
+                                >
+                                    <option value="All" className="text-gray-900">All Classes</option>
+                                    {classes.map(c => (
+                                        <option key={c.id} value={c.id} className="text-gray-900">{c.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <button className="p-3 bg-white/10 text-white hover:bg-white/20 rounded-xl border border-white/20 transition-all active:scale-95 shrink-0">
+                                <Download className="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

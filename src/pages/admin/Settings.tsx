@@ -101,9 +101,17 @@ const Settings = () => {
 
     return (
         <div className="max-w-4xl mx-auto space-y-8 pb-12">
-            <div>
-                <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight mb-2">Settings</h1>
-                <p className="text-gray-500">Manage your account and school configuration.</p>
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10">
+                    <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                        <SettingsIcon className="w-3.5 h-3.5" />
+                        Configuration
+                    </p>
+                    <h1 className="text-xl md:text-4xl font-black tracking-tight">Settings</h1>
+                    <p className="text-amber-100/60 text-sm font-medium mt-1">Manage your account and school configuration</p>
+                </div>
             </div>
 
             {/* Tabs */}

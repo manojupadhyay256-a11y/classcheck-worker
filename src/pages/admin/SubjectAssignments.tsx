@@ -4,11 +4,9 @@ import {
     Users,
     BookOpen,
     Search,
-    ArrowLeft,
     UserPlus,
     Loader2,
     X,
-    RefreshCw,
     LayoutGrid,
     Minus
 } from 'lucide-react';
@@ -34,7 +32,6 @@ interface Assignment {
 const SubjectAssignments = () => {
     const [view, setView] = useState<'teacher' | 'class'>('teacher');
     const [loading, setLoading] = useState(true);
-    const [refreshing, setRefreshing] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [assignments, setAssignments] = useState<Assignment[]>([]);
     const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -48,8 +45,7 @@ const SubjectAssignments = () => {
     }, []);
 
     const fetchData = async (isRefresh = false) => {
-        if (isRefresh) setRefreshing(true);
-        else setLoading(true);
+        if (!isRefresh) setLoading(true);
 
         try {
             const [assignmentsData, teachersData] = await Promise.all([
@@ -76,7 +72,6 @@ const SubjectAssignments = () => {
             console.error('Error fetching data:', error);
         } finally {
             setLoading(false);
-            setRefreshing(false);
         }
     };
 
@@ -167,57 +162,37 @@ const SubjectAssignments = () => {
 
     /* ── Main render ───────────────────────────────── */
     return (
-        <div className="min-h-screen bg-[#F8FAFC] pb-24 font-inter">
+        <div className="space-y-8 pb-24">
 
-            {/* ── Header ────────────────────────────── */}
-            <div className="bg-slate-900 text-white">
-                <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
-                    {/* Top row: back + sync */}
-                    <div className="flex items-center justify-between mb-8">
-                        <button
-                            onClick={() => window.history.back()}
-                            className="hidden md:flex items-center gap-2 text-slate-400 hover:text-white transition-colors duration-200 cursor-pointer min-h-[44px]"
-                        >
-                            <ArrowLeft className="w-4 h-4" strokeWidth={2} />
-                            <span className="text-sm font-medium">Back</span>
-                        </button>
-                        {refreshing && (
-                            <div className="flex items-center gap-2 text-slate-400 text-xs font-medium">
-                                <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                                Syncing…
-                            </div>
-                        )}
+            {/* ── Hero Header ────────────────────────────── */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-6">
+                        <div>
+                            <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                                <LayoutGrid className="w-3.5 h-3.5" />
+                                Academic Configuration
+                            </p>
+                            <h1 className="text-xl md:text-4xl font-black tracking-tight">Subject Assignments</h1>
+                            <p className="text-amber-100/60 text-sm font-medium mt-1">Manage teacher-to-subject mappings across all classes</p>
+                        </div>
                     </div>
-
-                    {/* Title row */}
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 bg-amber-500/10 rounded-xl border border-amber-500/20">
-                                <LayoutGrid className="w-6 h-6 text-amber-500" strokeWidth={2} />
-                            </div>
-                            <div>
-                                <h1 className="text-2xl md:text-4xl font-black tracking-tight leading-none mb-1">Subject Assignments</h1>
-                                <p className="text-slate-500 text-sm font-normal">Manage teacher-to-subject mappings across all classes.</p>
-                            </div>
-                        </div>
-
-                        {/* Search */}
-                        <div className="relative w-full md:w-80">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" strokeWidth={2} />
-                            <input
-                                type="text"
-                                placeholder="Search teachers, subjects…"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500/40 transition-all duration-200 search-inset min-h-[44px]"
-                            />
-                        </div>
+                    <div className="relative sm:w-80">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
+                        <input
+                            type="text"
+                            placeholder="Search teachers, subjects…"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full pl-11 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
+                        />
                     </div>
                 </div>
             </div>
 
             {/* ── Content ───────────────────────────── */}
-            <div className="max-w-7xl mx-auto px-4 md:px-8 mt-8">
+            <div>
 
                 {/* ── Pill Switch Toggle ─────────────── */}
                 <div className="relative bg-slate-100 p-1 rounded-xl inline-flex gap-0.5 mb-10">

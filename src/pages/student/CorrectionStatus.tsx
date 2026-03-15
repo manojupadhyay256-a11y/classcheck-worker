@@ -4,7 +4,7 @@ import {
     CheckSquare,
     BookOpen,
     Clock,
-    ArrowLeft,
+
     CheckCircle2,
     GraduationCap,
     Filter,
@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { sql } from '../../lib/db';
 import { useAuthStore } from '../../stores/authStore';
-import { useNavigate } from 'react-router-dom';
 
 interface Chapter {
     id: string;
@@ -30,7 +29,7 @@ interface Subject {
 
 const CorrectionStatus = () => {
     const { profile } = useAuthStore();
-    const navigate = useNavigate();
+
     const [loading, setLoading] = useState(true);
     const [subjects, setSubjects] = useState<Subject[]>([]);
     const [selectedSubject, setSelectedSubject] = useState<string>('all');
@@ -130,46 +129,40 @@ const CorrectionStatus = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] pb-24 px-4 md:px-8 pt-4 md:pt-8 font-inter">
-            {/* Header Section */}
-            <div className="max-w-6xl mx-auto">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
                     <div>
-                        <div className="flex items-center gap-2 text-slate-400 mb-2">
-                            <button
-                                onClick={() => navigate('/student')}
-                                className="p-2 hover:bg-white rounded-xl transition-colors text-slate-400"
-                            >
-                                <ArrowLeft className="w-5 h-5" />
-                            </button>
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Learning Tracker</span>
-                        </div>
-                        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-none uppercase">
-                            Copy <span className="text-amber-600">Corrections</span>
-                        </h1>
+                        <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                            <CheckSquare className="w-3.5 h-3.5" />
+                            Learning Tracker
+                        </p>
+                        <h1 className="text-xl md:text-4xl font-black tracking-tight">Copy Corrections</h1>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-3">
-                        <div className="p-1.5 bg-white rounded-2xl border border-slate-200 shadow-sm flex items-center gap-1">
-                            <Filter className="w-4 h-4 ml-2 text-slate-400" />
+                        <div className="flex items-center gap-1 bg-white/10 rounded-2xl border border-white/20 px-3 py-2">
+                            <Filter className="w-4 h-4 text-white/70" />
                             <select
                                 value={selectedTerm}
                                 onChange={(e) => setSelectedTerm(e.target.value)}
-                                className="bg-transparent border-none text-xs font-bold text-slate-600 focus:ring-0 cursor-pointer pr-8"
+                                className="bg-transparent border-none text-xs font-bold text-white focus:ring-0 cursor-pointer pr-6"
                             >
-                                {terms.map(t => <option key={t} value={t}>{t === 'All' ? 'All Exams' : t}</option>)}
+                                {terms.map(t => <option key={t} value={t} className="text-gray-900">{t === 'All' ? 'All Exams' : t}</option>)}
                             </select>
                         </div>
-                        <div className="p-1.5 bg-white rounded-2xl border border-slate-200 shadow-sm flex items-center gap-1">
-                            <BookOpen className="w-4 h-4 ml-2 text-slate-400" />
+                        <div className="flex items-center gap-1 bg-white/10 rounded-2xl border border-white/20 px-3 py-2">
+                            <BookOpen className="w-4 h-4 text-white/70" />
                             <select
                                 value={selectedSubject}
                                 onChange={(e) => setSelectedSubject(e.target.value)}
-                                className="bg-transparent border-none text-xs font-bold text-slate-600 focus:ring-0 cursor-pointer pr-8"
+                                className="bg-transparent border-none text-xs font-bold text-white focus:ring-0 cursor-pointer pr-6"
                             >
-                                <option value="all">All Subjects</option>
+                                <option value="all" className="text-gray-900">All Subjects</option>
                                 {subjects.map(s => (
-                                    <option key={s.class_subject_id} value={s.class_subject_id}>
+                                    <option key={s.class_subject_id} value={s.class_subject_id} className="text-gray-900">
                                         {s.subject_name}
                                     </option>
                                 ))}
@@ -177,6 +170,7 @@ const CorrectionStatus = () => {
                         </div>
                     </div>
                 </div>
+            </div>
 
                 {/* Progress Overview Card */}
                 <motion.div
@@ -306,7 +300,6 @@ const CorrectionStatus = () => {
                         </div>
                     )}
                 </div>
-            </div>
         </div>
     );
 };

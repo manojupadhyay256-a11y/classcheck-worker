@@ -8,6 +8,9 @@ interface UserProfile {
     email: string;
     role: 'admin' | 'principal' | 'teacher' | 'student';
     avatar_url?: string | null;
+    is_office?: boolean;
+    is_librarian?: boolean;
+    is_class_teacher?: boolean;
     created_at?: string;
     updated_at?: string;
 }
@@ -18,6 +21,9 @@ interface AuthState {
     loading: boolean;
     isAdmin: boolean;
     isTeacher: boolean;
+    isOffice: boolean;
+    isLibrarian: boolean;
+    isClassTeacher: boolean;
     isStudent: boolean;
     setAuth: (user: any, profile: UserProfile | null) => void;
     setStudentProfile: (profile: UserProfile | null) => void;
@@ -32,6 +38,9 @@ export const useAuthStore = create<AuthState>((set) => {
         loading: true,
         isAdmin: false,
         isTeacher: false,
+        isOffice: false,
+        isLibrarian: false,
+        isClassTeacher: false,
         isStudent: false,
         setAuth: (user, profile) => {
             console.log('[Auth] setAuth called', { userId: user?.id, role: profile?.role });
@@ -48,6 +57,8 @@ export const useAuthStore = create<AuthState>((set) => {
                 loading: false,
                 isAdmin: profile?.role === 'admin' || profile?.role === 'principal',
                 isTeacher: profile?.role === 'teacher',
+                isOffice: !!profile?.is_office,
+                isLibrarian: !!profile?.is_librarian,
                 isStudent: profile?.role === 'student'
             });
         },
@@ -63,6 +74,8 @@ export const useAuthStore = create<AuthState>((set) => {
                     loading: false,
                     isAdmin: false,
                     isTeacher: false,
+                    isOffice: false,
+                    isLibrarian: false,
                     isStudent: true
                 });
             } else {
@@ -74,6 +87,8 @@ export const useAuthStore = create<AuthState>((set) => {
                     loading: false,
                     isAdmin: false,
                     isTeacher: false,
+                    isOffice: false,
+                    isLibrarian: false,
                     isStudent: false
                 });
             }
@@ -97,6 +112,8 @@ export const useAuthStore = create<AuthState>((set) => {
                 loading: false,
                 isAdmin: false,
                 isTeacher: false,
+                isOffice: false,
+                isLibrarian: false,
                 isStudent: false
             });
         },
@@ -118,6 +135,9 @@ export const useAuthStore = create<AuthState>((set) => {
                             loading: false,
                             isAdmin: profile.role === 'admin' || profile.role === 'principal',
                             isTeacher: profile.role === 'teacher',
+                            isOffice: !!profile.is_office,
+                            isLibrarian: !!profile.is_librarian,
+                            isClassTeacher: !!profile.is_class_teacher,
                             isStudent: profile.role === 'student'
                         });
                     } catch (e) {
@@ -136,8 +156,14 @@ export const useAuthStore = create<AuthState>((set) => {
                     // Fetch fresh profile from the database
                     console.log('[Auth] Fetching profile from database for user:', session.user.id);
                     const results = await sql`
-                        SELECT * FROM public.profiles 
-                        WHERE id = ${session.user.id}
+                        SELECT p.*,
+                            EXISTS (
+                                SELECT 1 FROM classes c
+                                JOIN teachers t ON c.class_teacher_id = t.id
+                                WHERE t.email = p.email
+                            ) as is_class_teacher
+                        FROM public.profiles p 
+                        WHERE p.id = ${session.user.id}
                         LIMIT 1
                     `;
 
@@ -151,6 +177,9 @@ export const useAuthStore = create<AuthState>((set) => {
                             loading: false,
                             isAdmin: profile.role === 'admin' || profile.role === 'principal',
                             isTeacher: profile.role === 'teacher',
+                            isOffice: !!profile.is_office,
+                            isLibrarian: !!profile.is_librarian,
+                            isClassTeacher: !!profile.is_class_teacher,
                             isStudent: profile.role === 'student'
                         });
                         localStorage.setItem('cc_user', JSON.stringify(session.user));
@@ -166,6 +195,9 @@ export const useAuthStore = create<AuthState>((set) => {
                             loading: false,
                             isAdmin: false,
                             isTeacher: false,
+                            isOffice: false,
+                            isLibrarian: false,
+                            isClassTeacher: false,
                             isStudent: false
                         });
                     }
@@ -187,6 +219,8 @@ export const useAuthStore = create<AuthState>((set) => {
                             loading: false,
                             isAdmin: false,
                             isTeacher: false,
+                            isOffice: false,
+                            isLibrarian: false,
                             isStudent: false
                         });
                     }

@@ -7,6 +7,8 @@ export interface Profile {
     date_of_birth?: string;
     gender?: 'Male' | 'Female' | 'Other';
     role: UserRole;
+    is_office?: boolean;
+    is_librarian?: boolean;
     created_at: string;
     updated_at: string;
 }
@@ -64,4 +66,29 @@ export interface Homework {
     subject_name?: string;
     teacher_name?: string;
     class_name?: string;
+}
+
+export interface Book {
+    id: string;
+    title: string;
+    author: string;
+    isbn?: string;
+    total_copies: number;
+    available_copies: number;
+    created_at: string;
+}
+
+export interface BookIssue {
+    id: string;
+    book_id: string;
+    student_id: string;
+    issue_date: string;
+    due_date: string;
+    return_date?: string;
+    status: 'issued' | 'returned' | 'overdue';
+    created_at: string;
+    // Joined fields
+    book_title?: string;
+    student_name?: string;
+    admission_no?: string;
 }

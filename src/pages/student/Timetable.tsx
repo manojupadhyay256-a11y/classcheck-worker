@@ -72,24 +72,28 @@ const StudentTimetable = () => {
 
     return (
         <div className="space-y-8 pb-32">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <div className="flex items-center gap-2 text-primary font-bold mb-1">
-                        <Calendar className="w-4 h-4" />
-                        <span className="text-sm uppercase tracking-wider">Weekly Schedule</span>
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+                    <div>
+                        <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                            <Calendar className="w-3.5 h-3.5" />
+                            Weekly Schedule
+                        </p>
+                        <h1 className="text-xl md:text-4xl font-black tracking-tight">My Timetable</h1>
+                        <p className="text-amber-100/60 text-sm font-medium mt-1">Class {classInfo.name} • Academic Year 2025-26</p>
                     </div>
-                    <h1 className="text-lg md:text-4xl font-black text-gray-900 tracking-tight">My Timetable</h1>
-                    <p className="text-gray-500 mt-1">Class {classInfo.name} • Academic Year 2025-26</p>
+                    {timetable && (
+                        <button
+                            onClick={handleDownload}
+                            className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-amber-700 font-bold rounded-2xl shadow-lg hover:bg-amber-50 active:scale-95 transition-all text-sm self-start"
+                        >
+                            <Download className="w-5 h-5" />
+                            Save Image
+                        </button>
+                    )}
                 </div>
-                {timetable && (
-                    <button
-                        onClick={handleDownload}
-                        className="flex items-center justify-center gap-2 px-6 py-3.5 bg-white border border-gray-100 rounded-2xl text-gray-700 font-bold shadow-sm hover:shadow-md hover:border-primary/20 hover:text-primary transition-all self-start"
-                    >
-                        <Download className="w-5 h-5" />
-                        Save Image
-                    </button>
-                )}
             </div>
 
             <motion.div

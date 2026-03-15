@@ -83,30 +83,17 @@ const AdminHomework = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] pb-24 font-inter">
-            {/* Premium Header */}
-            <div className="bg-slate-900 overflow-hidden relative">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full -translate-y-48 translate-x-48 blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-600/5 rounded-full translate-y-32 -translate-x-32 blur-2xl" />
-
-                <div className="max-w-5xl mx-auto px-6 pt-12 pb-20 relative z-10">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-                        <div className="flex items-center gap-6">
-                            <div className="w-20 h-20 bg-amber-600 rounded-[28px] flex items-center justify-center shadow-2xl shadow-amber-900/20 border border-amber-500/50">
-                                <BookOpen className="w-10 h-10 text-white" strokeWidth={2.5} />
-                            </div>
-                            <div>
-                                <div className="flex items-center gap-3 mb-3">
-                                    <span className="px-3 py-1 bg-white/5 text-amber-500 text-[10px] font-black uppercase tracking-[0.2em] rounded-lg border border-white/5">
-                                        School Overview
-                                    </span>
-                                </div>
-                                <h1 className="text-lg md:text-4xl font-black text-white tracking-tight leading-tight uppercase">
-                                    Homework Log
-                                </h1>
-                            </div>
-                        </div>
-                    </div>
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10">
+                    <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                        <BookOpen className="w-3.5 h-3.5" />
+                        School Overview
+                    </p>
+                    <h1 className="text-xl md:text-4xl font-black tracking-tight">Homework Log</h1>
+                    <p className="text-amber-100/60 text-sm font-medium mt-1">Monitor homework assignments across all classes</p>
                 </div>
             </div>
 

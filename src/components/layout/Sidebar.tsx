@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import {
     LayoutDashboard,
     Users,
@@ -12,10 +12,11 @@ import {
     ListChecks,
     Sparkles,
     CheckSquare,
-    X,
     Bell,
     Calendar,
-    Download
+    User,
+    ChevronRight,
+    X
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { useSettingsStore } from '../../stores/settingsStore';
@@ -28,7 +29,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ onClose }: SidebarProps) => {
-    const { profile, clearAuth } = useAuthStore();
+    const { profile, clearAuth, isOffice, isLibrarian, isClassTeacher } = useAuthStore();
     const { settings, fetchSettings } = useSettingsStore();
     const { unreadCount } = useNotificationStore();
 
@@ -61,6 +62,12 @@ const Sidebar = ({ onClose }: SidebarProps) => {
             ]
         },
         {
+            heading: 'Library',
+            links: [
+                { to: '/admin/library', icon: BookOpen, label: 'Library Management' },
+            ]
+        },
+        {
             heading: 'Communications',
             links: [
                 { to: '/admin/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
@@ -71,6 +78,12 @@ const Sidebar = ({ onClose }: SidebarProps) => {
             heading: 'System & Tools',
             links: [
                 { to: '/admin/bulk-import', icon: CalendarCheck, label: 'Bulk Import' },
+            ]
+        },
+        {
+            heading: 'Account',
+            links: [
+                { to: '/admin/profile', icon: User, label: 'My Profile' },
                 { to: '/admin/settings', icon: SettingsIcon, label: 'Settings' },
                 { to: '/admin/teacher-logins', icon: Fingerprint, label: 'Teacher Logins' },
                 { to: '/admin/help', icon: HelpCircle, label: 'Help & Guide' },
@@ -78,39 +91,65 @@ const Sidebar = ({ onClose }: SidebarProps) => {
         }
     ];
 
-    const teacherGroups = [
+    const teacherGroups: any[] = [
         {
             heading: 'Overview',
             links: [
                 { to: '/teacher', icon: LayoutDashboard, label: 'Dashboard' },
             ]
-        },
-        {
+        }
+    ];
+
+    // If pure office (not a librarian), we hide classroom features.
+    // If they are regular teachers or librarians, they see the classroom features.
+    if (!isOffice || isLibrarian) {
+        teacherGroups.push({
             heading: 'Classroom',
             links: [
                 { to: '/teacher/my-subjects', icon: BookOpen, label: 'My Subjects' },
                 { to: '/teacher/homework', icon: BookOpen, label: 'Homework' },
-                { to: '/teacher/attendance', icon: CalendarCheck, label: 'Attendance' },
-                { to: '/teacher/timetable', icon: Calendar, label: 'Timetable' },
+                ...(isClassTeacher ? [
+                    { to: '/teacher/attendance', icon: CalendarCheck, label: 'Attendance' },
+                    { to: '/teacher/timetable', icon: Calendar, label: 'Timetable' }
+                ] : []),
             ]
-        },
-        {
+        });
+        teacherGroups.push({
             heading: 'Students & Reports',
             links: [
-                { to: '/teacher/students', icon: Users, label: 'Students' },
+                ...(isClassTeacher ? [{ to: '/teacher/students', icon: Users, label: 'My Students' }] : []),
                 { to: '/teacher/log-book', icon: ListChecks, label: 'Log Book' },
                 { to: '/teacher/corrections', icon: CheckSquare, label: 'Corrections' },
                 { to: '/teacher/reports', icon: BarChart3, label: 'Reports' },
             ]
-        },
-        {
-            heading: 'Support',
+        });
+    } else {
+        // Office staff 
+        teacherGroups.push({
+            heading: 'Students',
             links: [
-                { to: '/teacher/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
-                { to: '/teacher/help', icon: HelpCircle, label: 'Help' },
+                { to: '/teacher/students', icon: Users, label: 'Students Directory' },
             ]
-        }
-    ];
+        });
+    }
+
+    if (isLibrarian) {
+        teacherGroups.push({
+            heading: 'Library',
+            links: [
+                { to: '/teacher/library', icon: BookOpen, label: 'Library Dashboard' },
+            ]
+        });
+    }
+
+    teacherGroups.push({
+        heading: 'Support',
+        links: [
+            { to: '/teacher/profile', icon: User, label: 'My Profile' },
+            { to: '/teacher/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
+            { to: '/teacher/help', icon: HelpCircle, label: 'Help' },
+        ]
+    });
 
     const studentGroups = [
         {
@@ -133,6 +172,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
         {
             heading: 'Support',
             links: [
+                { to: '/student/profile', icon: User, label: 'My Profile' },
                 { to: '/student/notifications', icon: Bell, label: 'Messages', badge: unreadCount },
                 { to: '/student/help', icon: HelpCircle, label: 'Help' },
             ]
@@ -180,7 +220,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
                 {groups.map((group) => (
                     <div key={group.heading} className="space-y-1">
                         <p className="px-4 text-[10px] uppercase font-black tracking-widest text-[#94A3B8] mb-2">{group.heading}</p>
-                        {group.links.map((link) => (
+                        {group.links.map((link: any) => (
                             <NavLink
                                 key={link.to}
                                 to={link.to}
@@ -218,32 +258,30 @@ const Sidebar = ({ onClose }: SidebarProps) => {
 
             {/* Profile & Logout */}
             <div className="px-4 mt-auto space-y-3">
-                <a
-                    href="/app-debug.apk"
-                    download="ClassCheck.apk"
-                    className="flex items-center justify-center gap-2 px-4 py-3 w-full bg-[#10b981] text-white rounded-2xl hover:bg-[#059669] transition-all duration-300 font-bold shadow-lg shadow-emerald-900/10 group"
+                <Link
+                    to={profile?.role === 'admin' ? '/admin/profile' : profile?.role === 'teacher' ? '/teacher/profile' : '/student/profile'}
+                    onClick={onClose}
+                    className="block transition-transform active:scale-[0.98]"
                 >
-                    <Download className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
-                    <span>Download Android App</span>
-                </a>
-
-                <div className="p-1 bg-amber-50/50 rounded-[28px] border border-amber-100/50">
-                    <div className="px-4 py-4 flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-2xl bg-amber-600 flex items-center justify-center shadow-lg shadow-amber-900/10 overflow-hidden">
-                            {profile?.avatar_url ? (
-                                <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
-                            ) : (
-                                <span className="text-white font-black text-lg">{profile?.full_name?.charAt(0) || 'U'}</span>
-                            )}
-                        </div>
-                        <div className="flex flex-col min-w-0">
-                            <span className="text-[15px] font-black text-slate-900 truncate tracking-tight">{profile?.full_name || 'User'}</span>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-amber-600/60 leading-none mt-1">
-                                {profile?.role || 'Guest'}
-                            </span>
+                    <div className="p-1 bg-amber-50/50 rounded-[28px] border border-amber-100/50 hover:bg-amber-100/50 transition-colors">
+                        <div className="px-4 py-4 flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-2xl bg-amber-600 flex items-center justify-center shadow-lg shadow-amber-900/10 overflow-hidden">
+                                {profile?.avatar_url ? (
+                                    <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="text-white font-black text-lg">{profile?.full_name?.charAt(0) || 'U'}</span>
+                                )}
+                            </div>
+                            <div className="flex flex-col min-w-0 flex-1">
+                                <span className="text-[15px] font-black text-slate-900 truncate tracking-tight">{profile?.full_name || 'User'}</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-amber-600/60 leading-none mt-1">
+                                    {profile?.role || 'Guest'}
+                                </span>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-amber-400 opacity-50" />
                         </div>
                     </div>
-                </div>
+                </Link>
 
                 <button
                     onClick={handleLogout}

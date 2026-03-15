@@ -87,26 +87,21 @@ const StudentAttendance = () => {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 pb-24 font-inter text-slate-900">
-            {/* Header section */}
-            <div className="bg-amber-600 rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group border border-amber-400/20">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-32 -translate-y-32 group-hover:scale-110 transition-transform duration-700" />
-
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
-                    <div className="flex items-center gap-6">
-                        <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center border border-white/30 shadow-inner">
-                            <CalendarCheck className="w-7 h-7 text-white" strokeWidth={2.5} />
-                        </div>
-                        <div>
-                            <h1 className="text-lg md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md uppercase">
-                                My Attendance
-                            </h1>
-                            <p className="text-white/70 text-sm font-medium">Tracking your classroom presence</p>
-                        </div>
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+                    <div>
+                        <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                            <CalendarCheck className="w-3.5 h-3.5" />
+                            Tracking Your Presence
+                        </p>
+                        <h1 className="text-xl md:text-4xl font-black tracking-tight">My Attendance</h1>
                     </div>
 
-                    <div className="flex items-center gap-4 bg-white/10 p-2 rounded-2xl border border-white/20 backdrop-blur-sm">
-                        <div className="px-6 py-2">
+                    <div className="flex items-center gap-4 bg-white/10 px-5 py-3 rounded-2xl border border-white/20">
+                        <div>
                             <span className="text-[10px] font-black uppercase tracking-widest text-white/50 block mb-0.5">Attendance Rate</span>
                             <div className="flex items-baseline gap-2">
                                 <span className="text-3xl font-black text-white">{stats.percentage}%</span>

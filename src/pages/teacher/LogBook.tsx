@@ -107,44 +107,39 @@ const TeacherLogBook = () => {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 pb-24 font-inter">
-            {/* Header section */}
-            <div className="bg-[#1E293B] rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group border border-slate-700/50">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-32 -translate-y-32 group-hover:scale-110 transition-transform duration-700" />
-
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
-                    <div className="flex items-center gap-6">
-                        <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20 shadow-inner">
-                            <BookOpen className="w-7 h-7 text-white" strokeWidth={2.5} />
-                        </div>
-                        <div>
-                            <h1 className="text-lg md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md">
-                                Class Log Book
-                            </h1>
-                            <p className="text-slate-300 text-sm font-medium">Record and track your daily classroom teachings</p>
-                        </div>
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+                    <div>
+                        <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                            <BookOpen className="w-3.5 h-3.5" />
+                            Daily Records
+                        </p>
+                        <h1 className="text-xl md:text-4xl font-black tracking-tight">Class Log Book</h1>
+                        <p className="text-amber-100/60 text-sm font-medium mt-1">Record and track your daily classroom teachings</p>
                     </div>
-
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="flex items-center justify-center gap-3 px-8 py-4 bg-amber-600 text-white font-black uppercase tracking-widest rounded-2xl border border-amber-500 hover:bg-amber-700 transition-all duration-300 active:scale-95 text-xs shadow-xl shadow-amber-900/10 group"
+                        className="flex items-center gap-2 px-6 py-3 bg-white text-amber-700 font-bold rounded-2xl shadow-lg hover:bg-amber-50 active:scale-95 transition-all text-sm self-start"
                     >
-                        <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+                        <Plus className="w-4 h-4" strokeWidth={3} />
                         Create Entry
                     </button>
                 </div>
             </div>
 
             {/* Filter and Search */}
-            <div className="mb-8 flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1 relative">
-                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
                         type="text"
                         placeholder="Search by class, subject, or topic..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-14 pr-6 py-4 bg-white border border-slate-200 rounded-3xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none font-bold text-slate-600 shadow-sm"
+                        className="w-full pl-14 pr-6 py-3.5 bg-white border border-gray-100 rounded-2xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500/30 outline-none font-bold text-gray-600 shadow-sm"
                     />
                 </div>
             </div>

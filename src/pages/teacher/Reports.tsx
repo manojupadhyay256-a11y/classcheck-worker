@@ -240,27 +240,32 @@ const TeacherReports = () => {
 
     return (
         <div className="space-y-8 pb-20">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-lg md:text-4xl font-black text-gray-900 tracking-tight">Reports & Analytics</h1>
-                    <p className="text-gray-500 mt-1">
-                        {classInfo ? `Generating reports for Class ${classInfo.name}` : 'Analyze and export class attendance data.'}
-                    </p>
-                </div>
-                <div className="flex items-center gap-3">
-                    <select
-                        value={selectedMonth}
-                        onChange={(e) => setSelectedMonth(e.target.value)}
-                        className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-700 shadow-sm outline-none focus:ring-4 focus:ring-primary/10"
-                    >
-                        {months.map(m => (
-                            <option key={m.value} value={m.value}>{m.label}</option>
-                        ))}
-                    </select>
-                    <Button variant="outline">
-                        <Filter className="w-5 h-5" />
-                        <span className="hidden sm:inline">More Filters</span>
-                    </Button>
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+                    <div>
+                        <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                            <BarChart className="w-3.5 h-3.5" />
+                            Class Analytics
+                        </p>
+                        <h1 className="text-xl md:text-4xl font-black tracking-tight">Reports & Analytics</h1>
+                        <p className="text-amber-100/60 text-sm font-medium mt-1">
+                            {classInfo ? `Generating reports for Class ${classInfo.name}` : 'Analyze and export class attendance data.'}
+                        </p>
+                    </div>
+                    <div className="flex items-center gap-3 self-start">
+                        <Filter className="w-4 h-4 text-white/70" />
+                        <select
+                            value={selectedMonth}
+                            onChange={(e) => setSelectedMonth(e.target.value)}
+                            className="bg-white/10 border border-white/20 rounded-2xl px-5 py-3 text-sm font-bold text-white focus:ring-2 focus:ring-white/30 transition-all cursor-pointer appearance-none backdrop-blur-sm"
+                        >
+                            {months.map(m => (
+                                <option key={m.value} value={m.value} className="text-gray-900">{m.label}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
             </div>
 

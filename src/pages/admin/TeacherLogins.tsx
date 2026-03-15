@@ -6,7 +6,6 @@ import {
     ShieldCheck,
     ShieldAlert,
     Loader2,
-    RefreshCw,
     MoreVertical,
     Mail,
     Key,
@@ -23,7 +22,6 @@ const TeacherLogins = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [refreshing, setRefreshing] = useState(false);
 
     // Modal States
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -34,8 +32,7 @@ const TeacherLogins = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const fetchData = async (isRefresh = false) => {
-        if (isRefresh) setRefreshing(true);
-        else setLoading(true);
+        if (!isRefresh) setLoading(true);
         try {
             const result = await sql`
                 SELECT 
@@ -53,7 +50,6 @@ const TeacherLogins = () => {
             console.error('Error fetching teacher login data:', err);
         } finally {
             setLoading(false);
-            setRefreshing(false);
         }
     };
 
@@ -147,59 +143,35 @@ const TeacherLogins = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] pb-24 font-inter">
-            {/* SaaS Header */}
-            <div className="bg-slate-900 text-white">
-                <div className="max-w-7xl mx-auto px-4 md:px-8 py-10">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-                        <div className="flex items-center gap-5">
-                            <div className="p-4 bg-amber-500/10 rounded-2xl border border-amber-500/20">
-                                <Key className="w-8 h-8 text-amber-500" strokeWidth={2.5} />
-                            </div>
-                            <div>
-                                <h1 className="text-lg md:text-4xl font-black tracking-tight mb-1">Teacher Logins</h1>
-                                <p className="text-slate-400 text-sm">Manage system access and authentication for teaching staff.</p>
-                            </div>
-                        </div>
-
-                        <div className="relative w-full md:w-80">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                            <input
-                                type="text"
-                                placeholder="Search teacher by name..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-11 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-600/40 transition-all search-inset"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Dashboard Stats Placeholder */}
-            <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-6">
-                <div className="bg-white rounded-2xl saas-shadow border border-saas-border p-6 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-slate-100">
-                            <Fingerprint className="w-6 h-6 text-slate-400" />
-                        </div>
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-6">
                         <div>
-                            <p className="text-sm font-semibold text-slate-500">Access Overview</p>
-                            <h2 className="text-2xl font-bold text-slate-900 leading-tight">
-                                {data.filter(t => t.profile_id).length} / {data.length} Logins
-                            </h2>
+                            <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                                <Key className="w-3.5 h-3.5" />
+                                Access Management
+                            </p>
+                            <h1 className="text-xl md:text-4xl font-black tracking-tight">Teacher Logins</h1>
+                            <p className="text-amber-100/60 text-sm font-medium mt-1">Manage system access and authentication • {data.filter(t => t.profile_id).length}/{data.length} Active</p>
                         </div>
                     </div>
-                    {refreshing && (
-                        <div className="flex items-center gap-2 text-amber-600 text-xs font-semibold animate-pulse">
-                            <RefreshCw className="w-4 h-4 animate-spin" />
-                            Refreshing...
-                        </div>
-                    )}
+                    <div className="relative sm:w-80">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
+                        <input
+                            type="text"
+                            placeholder="Search teacher by name..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-11 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
+                        />
+                    </div>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 md:px-8 mt-10">
+            <div>
                 <div className="bg-white rounded-2xl saas-shadow border border-saas-border overflow-hidden">
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-32 gap-4">

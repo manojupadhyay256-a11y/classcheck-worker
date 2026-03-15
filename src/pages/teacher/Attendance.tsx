@@ -163,51 +163,58 @@ const TeacherAttendance = () => {
 
     return (
         <div className="space-y-8 pb-32">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <div className="flex items-center gap-2 text-primary font-bold mb-1">
-                        <Calendar className="w-4 h-4" />
-                        <span className="text-sm uppercase tracking-wider">Daily Attendance</span>
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+                    <div>
+                        <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                            <Calendar className="w-3.5 h-3.5" />
+                            Daily Attendance
+                        </p>
+                        <h1 className="text-xl md:text-4xl font-black tracking-tight">Mark Attendance</h1>
+                        <p className="text-amber-100/60 text-sm font-medium mt-1">
+                            {classInfo ? `Class ${classInfo.name}` : 'Class Not Found'} • {students.length} Students Total
+                        </p>
                     </div>
-                    <h1 className="text-lg md:text-4xl font-black text-gray-900 tracking-tight">Mark Attendance</h1>
-                    <p className="text-gray-500 mt-1">
-                        {classInfo ? `Class ${classInfo.name}` : 'Class Not Found'} • {students.length} Students Total
-                    </p>
-                </div>
-                <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm self-start">
-                    <button
-                        onClick={() => changeDate(-1)}
-                        className="p-2 hover:bg-gray-50 rounded-xl text-gray-400"
-                    >
-                        <ChevronLeft className="w-5 h-5" />
-                    </button>
-                    <input
-                        type="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                        className="bg-transparent border-none outline-none font-bold text-gray-700 cursor-pointer text-sm"
-                    />
-                    <button
-                        onClick={() => changeDate(1)}
-                        className="p-2 hover:bg-gray-50 rounded-xl text-gray-400"
-                    >
-                        <ChevronRight className="w-5 h-5" />
-                    </button>
+                    <div className="flex items-center gap-3 bg-white/10 p-2 rounded-2xl border border-white/20 self-start">
+                        <button
+                            onClick={() => changeDate(-1)}
+                            className="p-2 hover:bg-white/10 rounded-xl text-white/60"
+                        >
+                            <ChevronLeft className="w-5 h-5" />
+                        </button>
+                        <input
+                            type="date"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                            className="bg-transparent border-none outline-none font-bold text-white cursor-pointer text-sm"
+                        />
+                        <button
+                            onClick={() => changeDate(1)}
+                            className="p-2 hover:bg-white/10 rounded-xl text-white/60"
+                        >
+                            <ChevronRight className="w-5 h-5" />
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 transition-all">
-                    <p className="text-emerald-600 text-xs font-bold uppercase tracking-wider mb-1">Present</p>
-                    <p className="text-3xl font-black text-emerald-700">{students.filter(s => s.status === 'Present').length}</p>
+            <div className="grid grid-cols-3 md:grid-cols-3 gap-2 md:gap-6">
+                <div className="bg-emerald-50 p-3 md:p-6 rounded-2xl border border-emerald-100 transition-all flex flex-col justify-center text-center md:text-left">
+                    <p className="text-emerald-600 text-[10px] md:text-xs font-bold uppercase tracking-wider mb-1">Present</p>
+                    <p className="text-xl md:text-3xl font-black text-emerald-700">{students.filter(s => s.status === 'Present').length}</p>
                 </div>
-                <div className="bg-rose-50 p-6 rounded-2xl border border-rose-100 transition-all">
-                    <p className="text-rose-600 text-xs font-bold uppercase tracking-wider mb-1">Absent</p>
-                    <p className="text-3xl font-black text-rose-700">{students.filter(s => s.status === 'Absent').length}</p>
+                <div className="bg-rose-50 p-3 md:p-6 rounded-2xl border border-rose-100 transition-all flex flex-col justify-center text-center md:text-left">
+                    <p className="text-rose-600 text-[10px] md:text-xs font-bold uppercase tracking-wider mb-1">Absent</p>
+                    <p className="text-xl md:text-3xl font-black text-rose-700">{students.filter(s => s.status === 'Absent').length}</p>
                 </div>
-                <div className="bg-amber-50 p-6 rounded-2xl border border-amber-100 transition-all">
-                    <p className="text-amber-600 text-xs font-bold uppercase tracking-wider mb-1">Leave / Holiday</p>
-                    <p className="text-3xl font-black text-amber-700">
+                <div className="bg-amber-50 p-3 md:p-6 rounded-2xl border border-amber-100 transition-all flex flex-col justify-center text-center md:text-left">
+                    <p className="text-amber-600 text-[10px] md:text-xs font-bold uppercase tracking-wider mb-1">
+                        <span className="hidden md:inline">Leave / Holiday</span>
+                        <span className="md:hidden">Leave</span>
+                    </p>
+                    <p className="text-xl md:text-3xl font-black text-amber-700">
                         {students.filter(s => s.status === 'Leave' || s.status === 'Holiday').length}
                     </p>
                 </div>

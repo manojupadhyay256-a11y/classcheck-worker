@@ -129,31 +129,21 @@ const AdminSyllabus = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] pb-24 font-inter">
-            {/* Header */}
-            <div className="rounded-3xl p-8 md:p-10 mb-10 relative overflow-hidden group shadow-2xl bg-slate-900">
-                <div className="absolute top-0 right-0 w-72 h-72 bg-amber-500/10 rounded-full translate-x-36 -translate-y-36" />
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
                 <div className="relative z-10">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-                        <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 bg-amber-600 rounded-2xl flex items-center justify-center shadow-lg border border-amber-500/50">
-                                <GraduationCap className="w-8 h-8 text-white" />
-                            </div>
-                            <div>
-                                <h1 className="text-lg md:text-4xl font-black text-white tracking-tight leading-tight uppercase">
-                                    Syllabus Status
-                                </h1>
-                                <p className="text-slate-400 text-sm font-bold uppercase tracking-widest mt-2 flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-amber-600" />
-                                    Completion Tracking
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                        <GraduationCap className="w-3.5 h-3.5" />
+                        Completion Tracking
+                    </p>
+                    <h1 className="text-xl md:text-4xl font-black tracking-tight">Syllabus Status</h1>
+                    <p className="text-amber-100/60 text-sm font-medium mt-1">Track syllabus completion across all subjects</p>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4">
+            <div>
                 {/* Filters */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                     <div className="relative group">

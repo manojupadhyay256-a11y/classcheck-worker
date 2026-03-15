@@ -99,43 +99,33 @@ const StudentSyllabus = () => {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 pb-24 font-inter text-slate-900">
-            {/* Premium Header */}
-            <div className="bg-amber-600 rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-32 -translate-y-32" />
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10">
+                    <button
+                        onClick={() => navigate('/student/subjects')}
+                        className="flex items-center gap-2 text-amber-100/70 hover:text-white transition-colors mb-4 group/back"
+                    >
+                        <ArrowLeft className="w-4 h-4 group-hover/back:-translate-x-1 transition-transform" />
+                        <span className="text-xs font-bold uppercase tracking-wider">Back to Subjects</span>
+                    </button>
 
-                <button
-                    onClick={() => navigate('/student/subjects')}
-                    className="hidden md:flex relative z-10 items-center gap-2 text-amber-100 hover:text-white transition-colors mb-8 group/back"
-                >
-                    <ArrowLeft className="w-4 h-4 group-hover/back:-translate-x-1 transition-transform" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Back to Subjects</span>
-                </button>
-
-                <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
-                    <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20 shadow-inner">
-                            <BookOpen className="w-8 h-8 text-white" strokeWidth={2.5} />
-                        </div>
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
                         <div>
-                            <div className="flex items-center gap-3 mb-2">
-                                <span className="px-3 py-1 bg-white/10 text-white text-[10px] font-black uppercase tracking-[0.15em] rounded-lg border border-white/10">
-                                    {subjectInfo?.class_name}
-                                </span>
-                                <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                                <span className="text-amber-100 text-[10px] font-black uppercase tracking-[0.15em]">Syllabus</span>
+                            <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                                <BookOpen className="w-3.5 h-3.5" />
+                                {subjectInfo?.class_name} • Syllabus
+                            </p>
+                            <h1 className="text-xl md:text-4xl font-black tracking-tight">{subjectInfo?.subject_name}</h1>
+                        </div>
+                        <div className="flex items-center gap-3 bg-white/10 px-5 py-3 rounded-2xl border border-white/20 self-start">
+                            <User className="w-5 h-5 text-amber-100" />
+                            <div>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-white/50 block">Teacher</span>
+                                <span className="text-sm font-bold text-white">{subjectInfo?.teacher_name}</span>
                             </div>
-                            <h1 className="text-lg md:text-4xl font-black text-white tracking-tight leading-tight uppercase">
-                                {subjectInfo?.subject_name}
-                            </h1>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/10">
-                        <User className="w-5 h-5 text-amber-100" />
-                        <div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-amber-100 block -mb-0.5">Teacher</span>
-                            <span className="text-sm font-bold text-white uppercase tracking-tight">{subjectInfo?.teacher_name}</span>
                         </div>
                     </div>
                 </div>

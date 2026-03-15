@@ -150,18 +150,25 @@ const AdminDashboard = () => {
 
     return (
         <div className="space-y-12 pb-12 overflow-x-hidden">
-            {/* Minimal Header */}
-            <div className="flex justify-between items-center bg-white/50 backdrop-blur-md p-6 rounded-[32px] border border-white/20 soft-shadow">
-                <div>
-                    <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">Admin Dashboard</h1>
-                    <p className="text-gray-500 font-bold mt-1">ClassCheck • School Control Center</p>
-                </div>
-                <div className="flex items-center gap-4">
-                    <button className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center soft-shadow hover:scale-105 transition-all text-gray-400 hover:text-amber-600">
-                        <Bell className="w-6 h-6" />
-                    </button>
-                    <div className="w-12 h-12 bg-amber-600 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-amber-200">
-                        {profile?.full_name?.charAt(0) || 'A'}
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+                    <div>
+                        <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                            <LayoutDashboard className="w-3.5 h-3.5" />
+                            School Control Center
+                        </p>
+                        <h1 className="text-xl md:text-4xl font-black tracking-tight">Admin Dashboard</h1>
+                        <p className="text-amber-100/60 text-sm font-medium mt-1">ClassCheck • {profile?.full_name || 'Administrator'}</p>
+                    </div>
+                    <div className="flex items-center gap-3 self-start">
+                        <button className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:bg-white/20 transition-colors border border-white/20">
+                            <Bell className="w-6 h-6 text-white" />
+                        </button>
+                        <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-white font-black text-xl border border-white/30 shadow-lg">
+                            {profile?.full_name?.charAt(0) || 'A'}
+                        </div>
                     </div>
                 </div>
             </div>

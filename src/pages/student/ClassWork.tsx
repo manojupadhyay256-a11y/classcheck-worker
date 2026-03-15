@@ -94,23 +94,17 @@ const StudentClassWork = () => {
     const sortedDates = Object.keys(groupedEntries).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
 
     return (
-        <div className="min-h-screen bg-slate-50 pb-24 font-inter">
-            {/* Header section */}
-            <div className="bg-slate-900 rounded-[32px] p-8 md:p-10 mb-8 shadow-2xl relative overflow-hidden group border border-slate-700/50">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full translate-x-32 -translate-y-32 group-hover:scale-110 transition-transform duration-700" />
-
-                <div className="relative z-10 flex items-center justify-between gap-8">
-                    <div className="flex items-center gap-6">
-                        <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center border border-white/30 shadow-inner">
-                            <Sparkles className="w-7 h-7 text-white" strokeWidth={2.5} />
-                        </div>
-                        <div>
-                            <h1 className="text-lg md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md">
-                                Class Work
-                            </h1>
-                            <p className="text-slate-300 text-sm font-medium">Keep track of what was taught in your class today</p>
-                        </div>
-                    </div>
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10">
+                    <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        Daily Lessons
+                    </p>
+                    <h1 className="text-xl md:text-4xl font-black tracking-tight">Class Work</h1>
+                    <p className="text-amber-100/60 text-sm font-medium mt-1">Keep track of what was taught in your class today</p>
                 </div>
             </div>
 

@@ -111,30 +111,27 @@ const BulkImport = () => {
 
     return (
         <div className="space-y-8 pb-12">
-            {/* Header */}
-            <div className="bg-slate-900 rounded-[32px] p-8 md:p-12 relative overflow-hidden shadow-2xl shadow-amber-900/10">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
                 <div className="relative z-10">
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 glass-card rounded-2xl flex items-center justify-center text-white">
-                            <FileSpreadsheet className="w-6 h-6" />
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+                        <div>
+                            <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                                <FileSpreadsheet className="w-3.5 h-3.5" />
+                                Data Management
+                            </p>
+                            <h1 className="text-xl md:text-4xl font-black tracking-tight">Bulk Import</h1>
+                            <p className="text-amber-100/60 text-sm font-medium mt-1">Import teachers, classes, subjects and assignments from Excel</p>
                         </div>
-                        <h1 className="text-2xl md:text-4xl font-black text-white leading-none tracking-tight">Bulk Import</h1>
+                        <button
+                            onClick={() => setShowDeleteModal(true)}
+                            className="flex items-center gap-2 px-5 py-2.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-100 rounded-xl transition-all border border-rose-500/30 font-bold text-sm backdrop-blur-md"
+                        >
+                            <Trash2 className="w-4 h-4" />
+                            Bulk Delete Data
+                        </button>
                     </div>
-                    <p className="text-slate-300 max-w-xl text-lg">
-                        Import teachers, classes, subjects and assignments from Excel. Populate your database in seconds.
-                    </p>
-                </div>
-                <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-
-                {/* Bulk Delete Button */}
-                <div className="absolute bottom-8 right-8 z-20">
-                    <button
-                        onClick={() => setShowDeleteModal(true)}
-                        className="flex items-center gap-2 px-6 py-3 bg-rose-500/20 hover:bg-rose-500/30 text-rose-100 rounded-2xl transition-all border border-rose-500/30 font-bold text-sm backdrop-blur-md"
-                    >
-                        <Trash2 className="w-4 h-4" />
-                        Bulk Delete Data
-                    </button>
                 </div>
             </div>
 

@@ -164,21 +164,27 @@ const TeacherStudents = () => {
     }
 
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <h1 className="text-lg md:text-4xl font-black text-gray-900 tracking-tight">My Students</h1>
-                    <p className="text-gray-500 mt-1">Class {className} • {students.length} students enrolled</p>
+        <div className="space-y-6 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                            <Users className="w-3.5 h-3.5" />
+                            Class Roster
+                        </p>
+                        <h1 className="text-xl md:text-4xl font-black tracking-tight">My Students</h1>
+                        <p className="text-amber-100/60 text-sm font-medium mt-1">Class {className} • {students.length} students enrolled</p>
+                    </div>
+                    <button
+                        onClick={() => setIsBulkModalOpen(true)}
+                        className="flex items-center gap-2 px-4 py-2 bg-white text-amber-600 font-bold rounded-xl shadow-lg hover:bg-amber-50 transition-all active:scale-95 whitespace-nowrap"
+                    >
+                        <Shield className="w-4 h-4" />
+                        Setup Class Passwords
+                    </button>
                 </div>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsBulkModalOpen(true)}
-                    className="flex items-center gap-2"
-                >
-                    <Shield className="w-4 h-4" />
-                    Setup Class Passwords
-                </Button>
             </div>
 
             <div className="bg-white p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-center">

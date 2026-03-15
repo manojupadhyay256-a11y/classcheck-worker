@@ -9,7 +9,7 @@ import {
     Save,
     ChevronDown,
     CheckCircle2,
-    ArrowLeft,
+
     X
 } from 'lucide-react';
 import { sql } from '../../lib/db';
@@ -219,54 +219,52 @@ const TeacherCorrections = () => {
     const selectedSubject = subjects.find(s => s.id === selectedSubjectId);
 
     return (
-        <div className="min-h-screen bg-[#F8F9FB] pb-24 px-4 md:px-8 pt-4 md:pt-8 font-sans">
-            <div className="max-w-6xl mx-auto">
-                {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
                     <div>
-                        <div className="flex items-center gap-2 text-amber-600 mb-2">
-                            <button onClick={() => navigate('/teacher')} className="p-2 hover:bg-white rounded-xl transition-colors">
-                                <ArrowLeft className="w-5 h-5" />
-                            </button>
-                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-70">Academic Management</span>
-                        </div>
-                        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-none">
-                            Notebook <span className="text-amber-600">Corrections</span>
-                        </h1>
+                        <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                            <CheckSquare className="w-3.5 h-3.5" />
+                            Academic Management
+                        </p>
+                        <h1 className="text-xl md:text-4xl font-black tracking-tight">Notebook Corrections</h1>
                     </div>
 
-                    <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-                        <div className="relative group">
+                    <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+                        <div className="relative">
                             <select
                                 value={selectedSubjectId}
                                 onChange={(e) => setSelectedSubjectId(e.target.value)}
-                                className="w-full md:w-64 pl-12 pr-10 py-4 bg-white border border-slate-100/80 rounded-2xl text-sm font-bold text-slate-700 tracking-tight focus:ring-4 focus:ring-amber-100 focus:border-amber-600 transition-all appearance-none cursor-pointer shadow-sm"
+                                className="w-full md:w-64 pl-11 pr-10 py-3 bg-white/10 border border-white/20 rounded-2xl text-sm font-bold text-white focus:ring-2 focus:ring-white/30 transition-all appearance-none cursor-pointer backdrop-blur-sm"
                             >
                                 {subjects.map(s => (
-                                    <option key={s.id} value={s.id}>
+                                    <option key={s.id} value={s.id} className="text-gray-900">
                                         {s.class_name} - {s.subject_name}
                                     </option>
                                 ))}
                             </select>
-                            <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-600" />
-                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                            <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/70" />
+                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/70" />
                         </div>
 
-                        <div className="relative group">
+                        <div className="relative">
                             <select
                                 value={selectedExam}
                                 onChange={(e) => setSelectedExam(e.target.value)}
-                                className="w-full md:w-48 pl-12 pr-10 py-4 bg-white border border-slate-100/80 rounded-2xl text-sm font-bold text-slate-700 tracking-tight focus:ring-4 focus:ring-amber-100 focus:border-amber-600 transition-all appearance-none cursor-pointer shadow-sm"
+                                className="w-full md:w-48 pl-11 pr-10 py-3 bg-white/10 border border-white/20 rounded-2xl text-sm font-bold text-white focus:ring-2 focus:ring-white/30 transition-all appearance-none cursor-pointer backdrop-blur-sm"
                             >
                                 {uniqueExams.map(exam => (
-                                    <option key={exam} value={exam}>{exam}</option>
+                                    <option key={exam} value={exam} className="text-gray-900">{exam}</option>
                                 ))}
                             </select>
-                            <CheckSquare className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-600" />
-                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                            <CheckSquare className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/70" />
+                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/70" />
                         </div>
                     </div>
                 </div>
+            </div>
 
                 {/* Chapter List */}
                 <div className="space-y-4">
@@ -459,7 +457,6 @@ const TeacherCorrections = () => {
                         </button>
                     </div>
                 )}
-            </div>
         </div>
     );
 };

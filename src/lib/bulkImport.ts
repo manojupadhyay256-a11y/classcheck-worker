@@ -24,6 +24,11 @@ export interface StudentParsedImport {
     totalRows: number;
 }
 
+export interface BookParsedImport {
+    books: BookEntry[];
+    totalRows: number;
+}
+
 export interface TeacherEntry {
     name: string;
     email: string;
@@ -39,6 +44,15 @@ export interface StudentEntry {
     address: string;
     category: string;
     className: string;
+}
+
+export interface BookEntry {
+    title: string;
+    author: string;
+    isbn?: string;
+    category?: string;
+    rack_number?: string;
+    total_copies: number;
 }
 
 export interface Assignment {
@@ -401,6 +415,82 @@ export const executeImport = async (
     } catch (error) {
         console.error("Execute Import Error:", error);
         throw error instanceof Error ? error : new Error("Failed to execute import.");
+    }
+};
+
+export const parseBookImport = async (file: File): Promise<BookParsedImport> => {
+    const data = await file.arrayBuffer();
+    const workbook = XLSX.read(data);
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rawData: any[] = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+
+    if (!rawData || rawData.length === 0) {
+        throw new Error("The uploaded file is empty.");
+    }
+
+    const books: BookEntry[] = rawData.map((row: any) => ({
+        title: toSentenceCase(String(row['Title'] || row['Book Name'] || row['title'] || '')),
+        author: toSentenceCase(String(row['Author'] || row['author'] || row['Writer'] || '')),
+        isbn: String(row['ISBN'] || row['isbn'] || ''),
+        category: toSentenceCase(String(row['Category'] || row['category'] || row['Genre'] || 'General')),
+        rack_number: String(row['Rack'] || row['Rack Number'] || row['rack_number'] || row['Location'] || ''),
+        total_copies: parseInt(row['Total Copies'] || row['Quantity'] || row['Copies'] || '1', 10) || 1,
+    })).filter(b => b.title && b.author);
+
+    return {
+        books,
+        totalRows: rawData.length,
+    };
+};
+
+export const executeBookImport = async (
+    parsedData: BookParsedImport,
+    onProgress?: (progress: number, status: string) => void
+) => {
+    try {
+        const { books } = parsedData;
+        const totalSteps = books.length;
+        let currentStep = 0;
+
+        const updateProgress = (status: string) => {
+            currentStep++;
+            if (onProgress) {
+                onProgress(Math.min(Math.round((currentStep / totalSteps) * 100), 100), status);
+            }
+        };
+
+        for (const book of books) {
+            updateProgress(`Importing ${book.title}...`);
+            await sql`
+                INSERT INTO public.books (
+                    title, 
+                    author, 
+                    isbn, 
+                    category, 
+                    rack_number, 
+                    total_copies, 
+                    available_copies
+                )
+                VALUES (
+                    ${book.title}, 
+                    ${book.author}, 
+                    ${book.isbn}, 
+                    ${book.category}, 
+                    ${book.rack_number}, 
+                    ${book.total_copies}, 
+                    ${book.total_copies}
+                )
+            `;
+        }
+
+        return {
+            success: true,
+            message: `Successfully imported ${books.length} books.`,
+            booksCount: books.length,
+        };
+    } catch (error) {
+        console.error("Book Import Error:", error);
+        throw error instanceof Error ? error : new Error("Failed to import books.");
     }
 };
 

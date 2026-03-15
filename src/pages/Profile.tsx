@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuthStore } from '../stores/authStore';
-import { Mail, Shield, LogOut, ChevronRight, Bell, RefreshCw, Key, X, Loader2, Camera } from 'lucide-react';
+import { Mail, Shield, LogOut, ChevronRight, Bell, RefreshCw, Key, X, Loader2, Camera, Download } from 'lucide-react';
 import { notificationService } from '../lib/notifications';
 import { toast } from 'sonner';
 import { sql } from '../lib/db';
@@ -118,28 +118,32 @@ const Profile = () => {
 
     return (
         <div className="space-y-6 pb-8">
-            <div className="flex flex-col items-center py-8 px-4 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                <div className="relative group">
-                    <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center border-4 border-white shadow-xl mb-4 text-3xl font-bold text-primary overflow-hidden">
-                        {profile.avatar_url ? (
-                            <img src={profile.avatar_url} alt={profile.full_name} className="w-full h-full object-cover" />
-                        ) : (
-                            profile.full_name?.charAt(0) || 'U'
-                        )}
-                        {isUploading && (
-                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                <Loader2 className="w-8 h-8 text-white animate-spin" />
-                            </div>
-                        )}
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10 flex flex-col items-center">
+                    <div className="relative group mb-4">
+                        <div className="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center border-4 border-white/30 shadow-xl text-3xl font-bold text-white overflow-hidden">
+                            {profile.avatar_url ? (
+                                <img src={profile.avatar_url} alt={profile.full_name} className="w-full h-full object-cover" />
+                            ) : (
+                                profile.full_name?.charAt(0) || 'U'
+                            )}
+                            {isUploading && (
+                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                    <Loader2 className="w-8 h-8 text-white animate-spin" />
+                                </div>
+                            )}
+                        </div>
+                        <label className="absolute bottom-0 right-0 p-2 bg-white text-amber-600 rounded-full shadow-lg cursor-pointer hover:scale-110 active:scale-95 transition-all">
+                            <Camera className="w-4 h-4" />
+                            <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
+                        </label>
                     </div>
-                    <label className="absolute bottom-4 right-0 p-2 bg-primary text-white rounded-full shadow-lg cursor-pointer hover:scale-110 active:scale-95 transition-all">
-                        <Camera className="w-4 h-4" />
-                        <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
-                    </label>
-                </div>
-                <h1 className="text-lg md:text-4xl font-black text-[#1E1B4B] tracking-tight">{profile.full_name}</h1>
-                <div className="mt-2 px-4 py-1.5 bg-primary/5 text-primary rounded-full text-sm font-bold uppercase tracking-wider border border-primary/10">
-                    {profile.role}
+                    <h1 className="text-xl md:text-4xl font-black tracking-tight">{profile.full_name}</h1>
+                    <div className="mt-2 px-4 py-1.5 bg-white/15 text-white rounded-full text-sm font-bold uppercase tracking-wider border border-white/20">
+                        {profile.role}
+                    </div>
                 </div>
             </div>
 
@@ -208,6 +212,17 @@ const Profile = () => {
                     </div>
                     <RefreshCw className="w-4 h-4 text-gray-300 group-hover:text-primary transition-colors" />
                 </button>
+            </div>
+
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden p-4">
+                <a
+                    href="/app-debug.apk"
+                    download="ClassCheck.apk"
+                    className="flex items-center justify-center gap-2 px-6 py-4 w-full bg-emerald-600 text-white rounded-2xl hover:bg-emerald-700 transition-all duration-300 font-black uppercase tracking-widest shadow-lg shadow-emerald-900/10 group text-[11px]"
+                >
+                    <Download className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
+                    <span>Download Android App</span>
+                </a>
             </div>
 
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">

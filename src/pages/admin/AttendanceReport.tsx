@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react';
 import {
     Users,
     Calendar as CalendarIcon,
-    ArrowLeft,
     Search,
     TrendingUp,
     ChevronRight,
     School
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+
 import { sql } from '../../lib/db';
 import { format } from 'date-fns';
 import { clsx } from 'clsx';
@@ -24,7 +23,7 @@ interface ClassAttendance {
 }
 
 const AttendanceReport = () => {
-    const navigate = useNavigate();
+
     const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
     const [attendances, setAttendances] = useState<ClassAttendance[]>([]);
     const [loading, setLoading] = useState(true);
@@ -81,30 +80,28 @@ const AttendanceReport = () => {
 
     return (
         <div className="space-y-8 pb-12">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => navigate('/admin')}
-                        className="hidden md:flex w-12 h-12 bg-white rounded-2xl items-center justify-center shadow-sm border border-gray-100 hover:bg-gray-50 transition-all font-bold group"
-                    >
-                        <ArrowLeft className="w-6 h-6 text-gray-600 group-hover:-translate-x-1 transition-transform" />
-                    </button>
-                    <div>
-                        <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">Attendance Report</h1>
-                        <p className="text-gray-500 font-medium">Daily class-wise attendance analytics</p>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-3 w-full md:w-auto">
-                    <div className="relative flex-1 md:w-64">
-                        <CalendarIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                        <input
-                            type="date"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
-                            className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border border-gray-100 focus:ring-2 focus:ring-amber-600 outline-none shadow-sm transition-all font-bold text-slate-900"
-                        />
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+                        <div>
+                            <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                                <TrendingUp className="w-3.5 h-3.5" />
+                                Analytics
+                            </p>
+                            <h1 className="text-xl md:text-4xl font-black tracking-tight">Attendance Report</h1>
+                            <p className="text-amber-100/60 text-sm font-medium mt-1">Daily class-wise attendance analytics</p>
+                        </div>
+                        <div className="relative md:w-64">
+                            <CalendarIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 pointer-events-none" />
+                            <input
+                                type="date"
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
+                                className="w-full pl-11 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/30 transition-all font-bold"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

@@ -304,45 +304,33 @@ const Syllabus = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] pb-24 font-inter">
-            {/* Premium Header */}
-            <div className="bg-slate-900 overflow-hidden relative">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full -translate-y-48 translate-x-48 blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-600/5 rounded-full translate-y-32 -translate-x-32 blur-2xl" />
-
-                <div className="max-w-5xl mx-auto px-6 pt-12 pb-20 relative z-10">
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10">
                     <button
                         onClick={() => navigate('/teacher/subjects')}
-                        className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-10 group/back"
+                        className="flex items-center gap-2 text-amber-100/70 hover:text-white transition-colors mb-4 group/back"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover/back:-translate-x-1 transition-transform" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Back to My Subjects</span>
+                        <span className="text-xs font-bold uppercase tracking-wider">Back to My Subjects</span>
                     </button>
 
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-                        <div className="flex items-center gap-6">
-                            <div className="w-20 h-20 bg-amber-600 rounded-[28px] flex items-center justify-center shadow-2xl shadow-amber-900/20 border border-amber-500/50">
-                                <BookOpen className="w-10 h-10 text-white" strokeWidth={2.5} />
-                            </div>
-                            <div>
-                                <div className="flex items-center gap-3 mb-3">
-                                    <span className="px-3 py-1 bg-white/5 text-amber-500 text-[10px] font-black uppercase tracking-[0.2em] rounded-lg border border-white/5">
-                                        {subjectInfo?.class_name}
-                                    </span>
-                                    <div className="w-1.5 h-1.5 rounded-full bg-amber-600" />
-                                    <span className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">Syllabus Planning</span>
-                                </div>
-                                <h1 className="text-lg md:text-4xl font-black text-white tracking-tight leading-tight uppercase">
-                                    {subjectInfo?.subject_name}
-                                </h1>
-                            </div>
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+                        <div>
+                            <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                                <BookOpen className="w-3.5 h-3.5" />
+                                {subjectInfo?.class_name} • Syllabus Planning
+                            </p>
+                            <h1 className="text-xl md:text-4xl font-black tracking-tight">{subjectInfo?.subject_name}</h1>
                         </div>
 
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3 self-start">
                             {chapters.length > 0 && (
                                 <button
                                     onClick={handleOpenCopyModal}
-                                    className="px-6 py-4 bg-white/5 text-white font-black uppercase tracking-widest rounded-2xl border border-white/10 hover:bg-white/10 transition-all text-[10px] flex items-center gap-2"
+                                    className="px-5 py-3 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 transition-all text-sm flex items-center gap-2"
                                 >
                                     <Copy className="w-4 h-4" />
                                     Copy Options
@@ -350,7 +338,7 @@ const Syllabus = () => {
                             )}
                             <button
                                 onClick={() => handleOpenModal()}
-                                className="flex items-center gap-2 px-8 py-4 bg-amber-600 text-white font-black uppercase tracking-widest rounded-2xl shadow-lg shadow-amber-900/10 hover:bg-amber-700 hover:scale-[1.02] active:scale-95 transition-all text-[10px] border border-amber-500/50"
+                                className="flex items-center gap-2 px-6 py-3 bg-white text-amber-700 font-bold rounded-2xl shadow-lg hover:bg-amber-50 active:scale-95 transition-all text-sm"
                             >
                                 <Plus className="w-4 h-4" strokeWidth={3} />
                                 Add Chapter
@@ -358,22 +346,22 @@ const Syllabus = () => {
                         </div>
                     </div>
 
-                    {/* Chapter count indicator */}
+                    {/* Progress Bar */}
                     {chapters.length > 0 && (
                         <div className="mt-6 flex items-center gap-3">
-                            <div className="h-6 bg-slate-100/10 rounded-full overflow-hidden relative flex-1">
+                            <div className="h-6 bg-white/10 rounded-full overflow-hidden relative flex-1">
                                 <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${Math.round((syllabusProgress.completed / Math.max(1, syllabusProgress.total)) * 100)}%` }}
-                                    className="h-full bg-linear-to-r from-amber-500 to-amber-600"
+                                    className="h-full bg-white/30"
                                 />
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-white/60 text-[10px] font-black uppercase tracking-widest whitespace-nowrap drop-shadow-sm">
+                                    <span className="text-white/80 text-[10px] font-black uppercase tracking-widest whitespace-nowrap drop-shadow-sm">
                                         {Math.round((syllabusProgress.completed / Math.max(1, syllabusProgress.total)) * 100)}% Completed
                                     </span>
                                 </div>
                             </div>
-                            <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
+                            <span className="text-amber-100/60 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
                                 {chapters.length} Chapter{chapters.length !== 1 ? 's' : ''}
                             </span>
                         </div>
@@ -381,9 +369,7 @@ const Syllabus = () => {
                 </div>
             </div>
 
-            {/* Content */}
-            <div className="max-w-5xl mx-auto px-4 -mt-10 relative z-20 pb-20">
-                {/* Content Grouped by Term */}
+            {/* Content Grouped by Term */}
                 {['PWT1', 'Half Yearly', 'PWT2', 'Final'].map((term) => {
                     const termChapters = chapters.filter(c => c.term?.split(',').includes(term));
                     if (termChapters.length === 0 && chapters.length > 0) return null;
@@ -518,7 +504,6 @@ const Syllabus = () => {
                         </div>
                     );
                 })}
-            </div>
 
             {/* Add/Edit Modal */}
             <AnimatePresence>

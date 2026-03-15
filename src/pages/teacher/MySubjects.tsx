@@ -113,45 +113,33 @@ const MySubjects = () => {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 pb-24 font-inter">
-            {/* Header Card - Using hardcoded background color for absolute visibility */}
-            <div
-                className="rounded-[32px] p-8 md:p-10 mb-10 shadow-2xl relative overflow-hidden group border border-slate-700/50"
-                style={{ backgroundColor: '#1E293B' }} // Force dark background
-            >
-                {/* Decorative background element */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-32 -translate-y-32 group-hover:scale-110 transition-transform duration-700" />
-
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
-                    <div className="flex items-center gap-6">
-                        <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20 shadow-inner group-hover:bg-white/20 transition-colors duration-300">
-                            <BookOpen className="w-7 h-7 text-white" strokeWidth={2.5} />
-                        </div>
-                        <div>
-                            <h1 className="text-lg md:text-4xl font-black text-white tracking-tight leading-none mb-2 drop-shadow-md">
-                                My Subjects
-                            </h1>
-                            <p className="text-slate-300 text-sm font-medium">
-                                Manage your assigned subjects and track student progress
-                            </p>
-                        </div>
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
+                    <div>
+                        <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                            <BookOpen className="w-3.5 h-3.5" />
+                            Academic Management
+                        </p>
+                        <h1 className="text-xl md:text-4xl font-black tracking-tight">My Subjects</h1>
+                        <p className="text-amber-100/60 text-sm font-medium mt-1">Manage your assigned subjects and track student progress</p>
                     </div>
 
-                    <div className="flex items-center gap-4 bg-white/5 px-6 py-4 rounded-3xl border border-white/10 backdrop-blur-md self-start md:self-center">
-                        <div className="flex items-center gap-4">
-                            <div
-                                onClick={() => setShowAll(!showAll)}
-                                className={`w-12 h-6 rounded-full p-1 cursor-pointer transition-all duration-500 hide-tap-highlight ${showAll ? 'bg-amber-600' : 'bg-slate-500'}`}
-                            >
-                                <motion.div
-                                    animate={{ x: showAll ? 24 : 0 }}
-                                    className="w-4 h-4 bg-white rounded-full shadow-lg"
-                                />
-                            </div>
-                            <span className="text-[11px] font-black text-white uppercase tracking-[0.2em] whitespace-nowrap">
-                                All Subjects of My Class
-                            </span>
+                    <div className="flex items-center gap-4 bg-white/10 px-5 py-3 rounded-2xl border border-white/20 self-start">
+                        <div
+                            onClick={() => setShowAll(!showAll)}
+                            className={`w-12 h-6 rounded-full p-1 cursor-pointer transition-all duration-500 hide-tap-highlight ${showAll ? 'bg-white' : 'bg-white/30'}`}
+                        >
+                            <motion.div
+                                animate={{ x: showAll ? 24 : 0 }}
+                                className={`w-4 h-4 rounded-full shadow-lg ${showAll ? 'bg-amber-600' : 'bg-white'}`}
+                            />
                         </div>
+                        <span className="text-xs font-bold text-white whitespace-nowrap">
+                            All Subjects of My Class
+                        </span>
                     </div>
                 </div>
             </div>

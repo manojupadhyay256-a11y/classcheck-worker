@@ -181,38 +181,32 @@ const Help = () => {
     })).filter(section => section.items.length > 0);
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC]">
-            {/* Header */}
-            <header className="bg-white border-b border-[#F1F5F9] px-6 py-8 md:px-12 md:py-12">
-                <div className="max-w-4xl mx-auto">
-                    <div className="flex items-center gap-4 mb-6">
-                        <div className="w-12 h-12 bg-amber-600 rounded-2xl flex items-center justify-center shadow-xl shadow-amber-100">
-                            <HelpCircle className="w-7 h-7 text-white" />
-                        </div>
-                        <div>
-                            <h1 className="text-lg md:text-4xl font-black text-[#1E1B4B] tracking-tight">Help & Guide</h1>
-                            <p className="text-[#64748B] font-bold text-sm tracking-tight opacity-70">Learn how to make the best use of ClassCheck</p>
-                        </div>
-                    </div>
-
-                    {/* Search Bar */}
-                    <div className="relative group">
-                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <Search className="w-5 h-5 text-[#94A3B8] group-focus-within:text-amber-600 transition-colors" />
-                        </div>
+        <div className="space-y-8 pb-24">
+            {/* Hero Header */}
+            <div className="relative overflow-hidden bg-amber-600 rounded-2xl md:rounded-3xl p-4 md:p-10 text-white shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-16 -translate-y-16 blur-3xl" />
+                <div className="relative z-10">
+                    <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                        <HelpCircle className="w-3.5 h-3.5" />
+                        User Guide
+                    </p>
+                    <h1 className="text-xl md:text-4xl font-black tracking-tight">Help & Guide</h1>
+                    <p className="text-amber-100/60 text-sm font-medium mt-1">Learn how to make the best use of ClassCheck</p>
+                    <div className="relative sm:w-80 mt-6">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
                         <input
                             type="text"
                             placeholder="Search for guides or features..."
-                            className="block w-full pl-12 pr-4 py-4 md:py-5 bg-white border-2 border-[#F1F5F9] rounded-2xl md:rounded-3xl text-[15px] font-bold text-[#1E1B4B] placeholder-[#94A3B8] focus:outline-none focus:border-amber-600 focus:ring-4 focus:ring-amber-50 transition-all duration-300"
+                            className="w-full pl-11 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                 </div>
-            </header>
+            </div>
 
             {/* Content */}
-            <main className="max-w-4xl mx-auto px-6 py-10 md:py-16 space-y-12">
+            <div className="space-y-12">
                 {filteredSections.length > 0 ? (
                     filteredSections.map((section) => (
                         <div key={section.id} className="space-y-6">
@@ -306,7 +300,7 @@ const Help = () => {
                         <p className="text-[#64748B] text-sm font-bold mt-1">Try searching for different keywords</p>
                     </div>
                 )}
-            </main>
+            </div>
 
             {/* Getting Started Tip */}
             {!searchQuery && (
