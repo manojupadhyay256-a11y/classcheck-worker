@@ -19,7 +19,7 @@ const Teachers = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [teachers, setTeachers] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [refreshing, setRefreshing] = useState(false);
+    const [, setRefreshing] = useState(false);
 
     // CRUD States
     const [isModalOpen, setIsModalOpen] = useState(false);
