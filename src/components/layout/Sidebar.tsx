@@ -14,7 +14,8 @@ import {
     CheckSquare,
     X,
     Bell,
-    Calendar
+    Calendar,
+    Download
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { useSettingsStore } from '../../stores/settingsStore';
@@ -217,6 +218,15 @@ const Sidebar = ({ onClose }: SidebarProps) => {
 
             {/* Profile & Logout */}
             <div className="px-4 mt-auto space-y-3">
+                <a
+                    href="/app-debug.apk"
+                    download="ClassCheck.apk"
+                    className="flex items-center justify-center gap-2 px-4 py-3 w-full bg-[#10b981] text-white rounded-2xl hover:bg-[#059669] transition-all duration-300 font-bold shadow-lg shadow-emerald-900/10 group"
+                >
+                    <Download className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
+                    <span>Download Android App</span>
+                </a>
+
                 <div className="p-1 bg-amber-50/50 rounded-[28px] border border-amber-100/50">
                     <div className="px-4 py-4 flex items-center gap-3">
                         <div className="w-10 h-10 rounded-2xl bg-amber-600 flex items-center justify-center shadow-lg shadow-amber-900/10 overflow-hidden">
