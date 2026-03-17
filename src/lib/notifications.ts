@@ -54,7 +54,7 @@ export const notificationService = {
 
             // 3. Send via Netlify function synchronously
             if (fcmToken) {
-                fetch('/.netlify/functions/send-notification', {
+                fetch('/api/send-notification', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
