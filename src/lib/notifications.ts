@@ -34,14 +34,57 @@ export const notificationService = {
         type?: Notification['type'];
         priority?: Notification['priority'];
     }) {
-        // 2. Async Stability: DB Insert happens FIRST with 'pending' status for the worker
-        const result = await sql`
+        // 1. Insert into DB with default status
+        const [inserted] = await sql`
             INSERT INTO notifications (sender_id, recipient_id, title, message, type, priority, status)
             VALUES (${senderId}, ${recipientId}, ${title}, ${message}, ${type}, ${priority}, 'pending')
             RETURNING *
         `;
 
-        return result;
+        try {
+            // 2. Fetch the recipient's FCM token
+            const tokenRes = await sql`
+                SELECT fcm_token FROM profiles WHERE id = ${recipientId}
+                UNION ALL
+                SELECT fcm_token FROM students WHERE id = ${recipientId}
+                LIMIT 1
+            `;
+
+            const fcmToken = tokenRes[0]?.fcm_token;
+
+            // 3. Send via Netlify function synchronously
+            if (fcmToken) {
+                fetch('/.netlify/functions/send-notification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        token: fcmToken,
+                        title,
+                        message,
+                        data: {
+                            notificationId: inserted.id.toString(),
+                            senderId: senderId ? senderId.toString() : '',
+                        }
+                    })
+                }).then(async (res) => {
+                    if (res.ok) {
+                        await sql`UPDATE notifications SET status = 'sent' WHERE id = ${inserted.id}`;
+                    } else {
+                        await sql`UPDATE notifications SET status = 'failed' WHERE id = ${inserted.id}`;
+                    }
+                }).catch(err => {
+                    console.error('[NotificationService] Netlify function request error:', err);
+                });
+            } else {
+                // No token found
+                await sql`UPDATE notifications SET status = 'no_token' WHERE id = ${inserted.id}`;
+            }
+        } catch (err) {
+            console.error('[NotificationService] Failed to process push:', err);
+            await sql`UPDATE notifications SET status = 'failed' WHERE id = ${inserted.id}`;
+        }
+
+        return [inserted];
     },
 
     async fetchByRecipient(recipientId: string) {

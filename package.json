@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node worker/worker.js",
+    "start": "echo 'No worker needed for synchronous push'",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
