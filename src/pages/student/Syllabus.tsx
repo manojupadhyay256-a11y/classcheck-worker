@@ -5,11 +5,8 @@ import {
     ArrowLeft,
     BookOpen,
     Loader2,
-    CheckCircle2,
-    Circle,
     CheckSquare,
     GraduationCap,
-    Clock,
     User
 } from 'lucide-react';
 import { sql } from '../../lib/db';
@@ -20,7 +17,8 @@ interface Chapter {
     chapter_name: string;
     description: string;
     term: string;
-    status: 'Pending' | 'Started' | 'Completed';
+    status: 'Pending' | 'Started' | 'Completed' | 'Revision Pending' | 'Revision Started' | 'Revision Completed';
+    started_at: string | null;
     completed_at: string | null;
     is_correction_completed: boolean;
 }
@@ -162,19 +160,29 @@ const StudentSyllabus = () => {
                                                     {chapter.description || 'No detailed description available.'}
                                                 </p>
                                             </div>
-                                            {chapter.status === 'Completed' ? (
-                                                <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center border border-amber-100 shrink-0">
-                                                    <CheckCircle2 className="w-5 h-5 text-amber-600" />
-                                                </div>
-                                            ) : (
-                                                <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center border border-slate-100 shrink-0">
-                                                    {chapter.status === 'Started' ? (
-                                                        <Clock className="w-5 h-5 text-amber-500 animate-pulse" />
+                                            {chapter.status === 'Completed' || chapter.status === 'Revision Completed' ? (
+                                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 rounded-full border border-amber-100 shadow-sm">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                                                            <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">
+                                                                {chapter.status === 'Revision Completed' ? 'Revision Completed' : 'Completed'}
+                                                            </span>
+                                                        </div>
+                                                    ) : chapter.status.startsWith('Revision') ? (
+                                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 rounded-full border border-amber-100 shadow-sm">
+                                                            <Loader2 className="w-3.5 h-3.5 text-amber-500 animate-spin-slow" />
+                                                            <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Revision In Progress</span>
+                                                        </div>
+                                                    ) : chapter.status === 'Started' ? (
+                                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 rounded-full border border-amber-100 shadow-sm">
+                                                            <Loader2 className="w-3.5 h-3.5 text-amber-500 animate-spin-slow" />
+                                                            <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">In Progress</span>
+                                                        </div>
                                                     ) : (
-                                                        <Circle className="w-5 h-5 text-slate-200" />
+                                                        <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 rounded-full border border-slate-200">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Not Started</span>
+                                                        </div>
                                                     )}
-                                                </div>
-                                            )}
                                         </div>
 
                                         <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">

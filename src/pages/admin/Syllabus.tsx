@@ -24,7 +24,7 @@ interface ChapterStatus {
     id: string;
     chapter_name: string;
     term: string;
-    status: 'Pending' | 'Started' | 'Completed';
+    status: 'Pending' | 'Started' | 'Completed' | 'Revision Pending' | 'Revision Started' | 'Revision Completed';
     started_at: string | null;
     completed_at: string | null;
     correction_percentage: number;
@@ -64,7 +64,7 @@ const AdminSyllabus = () => {
                     s.name as subject_name,
                     p.full_name as teacher_name,
                     (SELECT COUNT(*) FROM syllabus WHERE class_subject_id = cs.id) as total_chapters,
-                    (SELECT COUNT(*) FROM syllabus WHERE class_subject_id = cs.id AND status = 'Completed') as completed_chapters
+                    (SELECT COUNT(*) FROM syllabus WHERE class_subject_id = cs.id AND (status = 'Completed' OR status = 'Revision Completed')) as completed_chapters
                 FROM class_subjects cs
                 JOIN classes c ON cs.class_id = c.id
                 JOIN subjects s ON cs.subject_id = s.id
@@ -262,8 +262,10 @@ const AdminSyllabus = () => {
                                                                     <div key={chapter.id} className="group py-2">
                                                                         <div className="flex items-center justify-between mb-2">
                                                                             <div className="flex items-center gap-3">
-                                                                                {chapter.status === 'Completed' ? (
+                                                                                 {chapter.status === 'Completed' || chapter.status === 'Revision Completed' ? (
                                                                                     <CheckCircle2 className="w-5 h-5 text-amber-600" />
+                                                                                ) : chapter.status.startsWith('Revision') ? (
+                                                                                    <Loader2 className="w-5 h-5 text-amber-500 animate-spin-slow" />
                                                                                 ) : chapter.status === 'Started' ? (
                                                                                     <Loader2 className="w-5 h-5 text-amber-500 animate-spin" />
                                                                                 ) : (
@@ -272,11 +274,15 @@ const AdminSyllabus = () => {
                                                                                 <span className={`text-sm font-bold tracking-tight ${chapter.status !== 'Pending' ? 'text-slate-800' : 'text-slate-400 font-medium'}`}>
                                                                                     {chapter.chapter_name}
                                                                                 </span>
-                                                                            </div>
-                                                                            <div className="flex items-center gap-2">
-                                                                                {chapter.status === 'Completed' && chapter.completed_at && (
+                                                                            </div>                                                                             <div className="flex items-center gap-2">
+                                                                                {(chapter.status === 'Completed' || chapter.status === 'Revision Completed') && chapter.completed_at && (
                                                                                     <span className="text-[10px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md uppercase tracking-widest whitespace-nowrap border border-amber-100">
-                                                                                        Done {new Date(chapter.completed_at).toLocaleDateString()}
+                                                                                        {chapter.status === 'Revision Completed' ? 'Revision Completed' : 'Done'} {new Date(chapter.completed_at).toLocaleDateString()}
+                                                                                    </span>
+                                                                                )}
+                                                                                {chapter.status.startsWith('Revision') && chapter.status !== 'Revision Completed' && (
+                                                                                    <span className="text-[10px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md uppercase tracking-widest whitespace-nowrap border border-amber-100">
+                                                                                        In Revision
                                                                                     </span>
                                                                                 )}
                                                                                 {chapter.status === 'Started' && chapter.started_at && (
@@ -285,6 +291,7 @@ const AdminSyllabus = () => {
                                                                                     </span>
                                                                                 )}
                                                                             </div>
+
                                                                         </div>
 
                                                                         {/* Correction Work Percentage */}

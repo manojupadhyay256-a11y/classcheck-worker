@@ -25,7 +25,7 @@ interface Chapter {
     chapter_name: string;
     description: string;
     term: string; // Comma separated terms e.g. "PWT1,Half Yearly"
-    status: 'Pending' | 'Started' | 'Completed';
+    status: 'Pending' | 'Started' | 'Completed' | 'Revision Pending' | 'Revision Started' | 'Revision Completed';
     started_at: string | null;
     completed_at: string | null;
     order_index: number;
@@ -74,6 +74,10 @@ const Syllabus = () => {
     // Correction modal state
     const [isCorrectionModalOpen, setIsCorrectionModalOpen] = useState(false);
     const [selectedChapterForCorrection, setSelectedChapterForCorrection] = useState<Chapter | null>(null);
+
+    // Revision choice modal state
+    const [isRevisionModalOpen, setIsRevisionModalOpen] = useState(false);
+    const [selectedChapterForRevision, setSelectedChapterForRevision] = useState<Chapter | null>(null);
 
     useEffect(() => {
         if (classSubjectId) {
@@ -238,13 +242,27 @@ const Syllabus = () => {
     };
 
     const handleToggleStatus = async (chapter: Chapter) => {
-        let updates: any = { status: 'Started', started_at: new Date().toISOString(), completed_at: null };
+        let updates: any = null;
 
-        if (chapter.status === 'Started') {
+        if (chapter.status === 'Pending') {
+            updates = { status: 'Started', started_at: new Date().toISOString(), completed_at: null };
+        } else if (chapter.status === 'Started') {
             updates = { status: 'Completed', started_at: chapter.started_at, completed_at: new Date().toISOString() };
         } else if (chapter.status === 'Completed') {
-            updates = { status: 'Pending', started_at: null, completed_at: null };
+            setSelectedChapterForRevision(chapter);
+            setIsRevisionModalOpen(true);
+            return;
+        } else if (chapter.status === 'Revision Pending') {
+            updates = { status: 'Revision Started', started_at: chapter.started_at, completed_at: null };
+        } else if (chapter.status === 'Revision Started') {
+            updates = { status: 'Revision Completed', started_at: chapter.started_at, completed_at: new Date().toISOString() };
+        } else if (chapter.status === 'Revision Completed') {
+            setSelectedChapterForRevision(chapter);
+            setIsRevisionModalOpen(true);
+            return;
         }
+
+        if (!updates) return;
 
         const updatePromise = sql`
             UPDATE syllabus 
@@ -264,6 +282,39 @@ const Syllabus = () => {
 
         try {
             await updatePromise;
+            fetchData();
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+    };
+
+    const handleRevisionChoice = async (chapter: Chapter, choice: 'restart' | 'revision') => {
+        let updates: any = null;
+        if (choice === 'restart') {
+            updates = { status: 'Started', started_at: new Date().toISOString(), completed_at: null };
+        } else {
+            updates = { status: 'Revision Pending', started_at: chapter.started_at, completed_at: null };
+        }
+
+        const updatePromise = sql`
+            UPDATE syllabus 
+            SET 
+                status = ${updates.status},
+                started_at = ${updates.started_at},
+                completed_at = ${updates.completed_at},
+                updated_at = NOW()
+            WHERE id = ${chapter.id}
+        `;
+
+        toast.promise(updatePromise, {
+            loading: choice === 'restart' ? 'Restarting chapter...' : 'Starting revision...',
+            success: choice === 'restart' ? 'Chapter restarted!' : 'Revision started!',
+            error: 'Failed to update status'
+        });
+
+        try {
+            await updatePromise;
+            setIsRevisionModalOpen(false);
             fetchData();
         } catch (error) {
             console.error('Error updating status:', error);
@@ -291,7 +342,7 @@ const Syllabus = () => {
 
     const syllabusProgress = {
         total: chapters.length,
-        completed: chapters.filter(c => c.status === 'Completed').length
+        completed: chapters.filter(c => c.status === 'Completed' || c.status === 'Revision Completed').length
     };
 
     if (loading) {
@@ -319,28 +370,28 @@ const Syllabus = () => {
 
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
                         <div>
-                            <p className="text-amber-100/80 font-medium text-[11px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
-                                <BookOpen className="w-3.5 h-3.5" />
+                            <p className="text-amber-100/80 font-medium text-[10px] md:text-xs uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                                <BookOpen className="w-3 h-3 md:w-3.5 md:h-3.5" />
                                 {subjectInfo?.class_name} • Syllabus Planning
                             </p>
-                            <h1 className="text-xl md:text-4xl font-black tracking-tight">{subjectInfo?.subject_name}</h1>
+                            <h1 className="text-xl md:text-3xl lg:text-4xl font-black tracking-tight">{subjectInfo?.subject_name}</h1>
                         </div>
 
-                        <div className="flex items-center gap-3 self-start">
+                        <div className="flex flex-wrap items-center gap-2 md:gap-3 self-start">
                             {chapters.length > 0 && (
                                 <button
                                     onClick={handleOpenCopyModal}
-                                    className="px-5 py-3 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 transition-all text-sm flex items-center gap-2"
+                                    className="px-4 md:px-5 py-2.5 md:py-3 bg-white/10 text-white font-bold rounded-xl md:rounded-2xl border border-white/20 hover:bg-white/20 transition-all text-xs md:text-sm flex items-center gap-2"
                                 >
-                                    <Copy className="w-4 h-4" />
+                                    <Copy className="w-3.5 h-3.5 md:w-4 md:h-4" />
                                     Copy Options
                                 </button>
                             )}
                             <button
                                 onClick={() => handleOpenModal()}
-                                className="flex items-center gap-2 px-6 py-3 bg-white text-amber-700 font-bold rounded-2xl shadow-lg hover:bg-amber-50 active:scale-95 transition-all text-sm"
+                                className="flex items-center gap-2 px-5 md:px-6 py-2.5 md:py-3 bg-white text-amber-700 font-bold rounded-xl md:rounded-2xl shadow-lg hover:bg-amber-50 active:scale-95 transition-all text-xs md:text-sm"
                             >
-                                <Plus className="w-4 h-4" strokeWidth={3} />
+                                <Plus className="w-3.5 h-3.5 md:w-4 md:h-4" strokeWidth={3} />
                                 Add Chapter
                             </button>
                         </div>
@@ -389,7 +440,9 @@ const Syllabus = () => {
                                     <div className="bg-amber-600 px-6 py-4">
                                         <h3 className="text-white font-black text-sm uppercase tracking-widest">Chapters Progress</h3>
                                     </div>
-                                    <div className="overflow-x-auto">
+                                    
+                                    {/* Desktop Table View */}
+                                    <div className="hidden md:block overflow-x-auto">
                                         <table className="w-full text-left border-collapse">
                                             <tbody>
                                                 {termChapters.map((chapter, idx) => (
@@ -404,11 +457,17 @@ const Syllabus = () => {
                                                             </div>
                                                         </td>
                                                         <td className="px-6 py-6">
-                                                            <div className="flex items-center gap-2">
-                                                                {chapter.status === 'Completed' ? (
+                                                            <div className="flex items-center gap-2">                                                                 {chapter.status === 'Completed' || chapter.status === 'Revision Completed' ? (
                                                                     <div className="flex items-center gap-2 text-amber-600">
                                                                         <CheckCircle2 className="w-4 h-4" />
-                                                                        <span className="text-[10px] font-black uppercase tracking-widest">Completed</span>
+                                                                        <span className="text-[10px] font-black uppercase tracking-widest">
+                                                                            {chapter.status === 'Revision Completed' ? 'Revision Completed' : 'Completed'}
+                                                                        </span>
+                                                                    </div>
+                                                                ) : chapter.status.startsWith('Revision') ? (
+                                                                    <div className="flex items-center gap-2 text-amber-500">
+                                                                        <Loader2 className="w-4 h-4 animate-spin-slow" />
+                                                                        <span className="text-[10px] font-black uppercase tracking-widest">Revision In Progress</span>
                                                                     </div>
                                                                 ) : chapter.status === 'Started' ? (
                                                                     <div className="flex items-center gap-2 text-amber-500">
@@ -440,13 +499,24 @@ const Syllabus = () => {
                                                                 </button>
                                                                 <button
                                                                     onClick={() => handleToggleStatus(chapter)}
-                                                                    className={`px-6 py-2 rounded-lg font-black text-[11px] tracking-widest uppercase transition-all shadow-sm active:scale-95 ${chapter.status === 'Completed'
+                                                                    className={`px-6 py-2 rounded-lg font-black text-[11px] tracking-widest uppercase transition-all shadow-sm active:scale-95 ${chapter.status === 'Completed' || chapter.status === 'Revision Completed'
                                                                         ? 'bg-slate-100 text-slate-400'
-                                                                        : 'bg-amber-600 text-white shadow-amber-900/10'
+                                                                        : chapter.status.startsWith('Revision')
+                                                                            ? 'bg-amber-500 text-white shadow-amber-900/10'
+                                                                            : 'bg-amber-600 text-white shadow-amber-900/10'
                                                                         }`}
                                                                 >
-                                                                    {chapter.status === 'Completed' ? 'Done' : chapter.status === 'Started' ? 'Complete' : 'Start'}
+                                                                    {chapter.status === 'Completed' || chapter.status === 'Revision Completed'
+                                                                        ? 'Done'
+                                                                        : chapter.status === 'Revision Started'
+                                                                            ? 'Complete'
+                                                                            : chapter.status === 'Revision Pending'
+                                                                                ? 'Revision Start'
+                                                                                : chapter.status === 'Started'
+                                                                                    ? 'Complete'
+                                                                                    : 'Start'}
                                                                 </button>
+
                                                                 <div className="flex items-center ml-2 border-l border-slate-100 pl-2">
                                                                     <button
                                                                         onClick={() => handleOpenModal(chapter)}
@@ -467,6 +537,101 @@ const Syllabus = () => {
                                                 ))}
                                             </tbody>
                                         </table>
+                                    </div>
+
+                                    {/* Mobile Cards View */}
+                                    <div className="md:hidden divide-y divide-slate-100">
+                                        {termChapters.map((chapter, idx) => (
+                                            <div key={chapter.id} className="p-4 space-y-4">
+                                                <div className="flex items-start justify-between gap-4">
+                                                    <div className="flex gap-3">
+                                                        <span className="text-xs font-black text-slate-400 mt-1">{idx + 1}</span>
+                                                        <div className="flex flex-col">
+                                                            <span className="text-sm font-black text-slate-800 leading-tight">{chapter.chapter_name}</span>
+                                                            <span className="text-[11px] text-slate-400 font-medium mt-1">{chapter.description || 'No description'}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex flex-col items-end gap-1 shrink-0">
+                                                        {chapter.status === 'Completed' || chapter.status === 'Revision Completed' ? (
+                                                            <div className="flex items-center gap-1.5 text-amber-600">
+                                                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                                                <span className="text-[9px] font-black uppercase tracking-widest">
+                                                                    {chapter.status === 'Revision Completed' ? 'Revision Completed' : 'Completed'}
+                                                                </span>
+                                                            </div>
+                                                        ) : chapter.status.startsWith('Revision') ? (
+                                                            <div className="flex items-center gap-1.5 text-amber-500">
+                                                                <Loader2 className="w-3.5 h-3.5 animate-spin-slow" />
+                                                                <span className="text-[9px] font-black uppercase tracking-widest">Revision...</span>
+                                                            </div>
+                                                        ) : chapter.status === 'Started' ? (
+                                                            <div className="flex items-center gap-1.5 text-amber-500">
+                                                                <Loader2 className="w-3.5 h-3.5 animate-spin-slow" />
+                                                                <span className="text-[9px] font-black uppercase tracking-widest">Started</span>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="flex items-center gap-1.5 text-slate-300">
+                                                                <Circle className="w-3.5 h-3.5" />
+                                                                <span className="text-[9px] font-black uppercase tracking-widest">Pending</span>
+                                                            </div>
+                                                        )}
+
+                                                        {chapter.completed_at && (
+                                                            <span className="text-[10px] font-bold text-slate-500">
+                                                                {new Date(chapter.completed_at).toLocaleDateString()}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex flex-wrap items-center gap-2 pt-2">
+                                                    <button
+                                                        onClick={() => {
+                                                            setSelectedChapterForCorrection(chapter);
+                                                            setIsCorrectionModalOpen(true);
+                                                        }}
+                                                        className="flex-1 min-w-[120px] px-3 py-2.5 bg-white text-slate-600 font-bold rounded-xl border border-slate-200 hover:bg-slate-50 transition-all text-[11px] shadow-sm active:scale-95 flex items-center justify-center gap-2"
+                                                    >
+                                                        <CheckSquare className="w-3.5 h-3.5 text-amber-600" />
+                                                        Check Work
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleToggleStatus(chapter)}
+                                                        className={`flex-1 min-w-[100px] px-3 py-2.5 rounded-xl font-black text-[11px] tracking-widest uppercase transition-all shadow-sm active:scale-95 ${chapter.status === 'Completed' || chapter.status === 'Revision Completed'
+                                                            ? 'bg-slate-100 text-slate-400'
+                                                            : chapter.status.startsWith('Revision')
+                                                                ? 'bg-amber-500 text-white shadow-amber-900/10'
+                                                                : 'bg-amber-600 text-white shadow-amber-900/10'
+                                                            }`}
+                                                    >
+                                                        {chapter.status === 'Completed' || chapter.status === 'Revision Completed'
+                                                            ? 'Done'
+                                                            : chapter.status === 'Revision Started'
+                                                                ? 'Complete'
+                                                                : chapter.status === 'Revision Pending'
+                                                                    ? 'Revision Start'
+                                                                    : chapter.status === 'Started'
+                                                                        ? 'Complete'
+                                                                        : 'Start'}
+                                                    </button>
+
+                                                    <div className="flex items-center gap-1 ml-auto">
+                                                        <button
+                                                            onClick={() => handleOpenModal(chapter)}
+                                                            className="p-2.5 text-slate-400 hover:text-amber-600 transition-all bg-slate-50 rounded-lg"
+                                                        >
+                                                            <Edit2 className="w-4 h-4" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDelete(chapter.id, chapter.chapter_name)}
+                                                            className="p-2.5 text-slate-400 hover:text-rose-600 transition-all bg-slate-50 rounded-lg"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             ) : chapters.length === 0 && term === 'PWT1' ? (
@@ -781,6 +946,104 @@ const Syllabus = () => {
                     classId={subjectInfo?.class_id || ''}
                 />
             )}
+
+            {/* Revision Choice Modal */}
+            <AnimatePresence>
+                {isRevisionModalOpen && selectedChapterForRevision && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsRevisionModalOpen(false)}
+                            className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="relative bg-white rounded-3xl max-w-sm w-full shadow-2xl overflow-hidden p-8 text-center"
+                        >
+                            <div className="w-20 h-20 bg-amber-50 rounded-[32px] flex items-center justify-center mx-auto mb-6 border border-amber-100 shadow-inner">
+                                <BookOpen className="w-10 h-10 text-amber-600" />
+                            </div>
+                            <h3 className="text-xl font-black text-slate-800 mb-2 tracking-tight">Chapter Completed!</h3>
+                            <p className="text-slate-500 text-sm font-medium mb-8">
+                                What would you like to do next with "{selectedChapterForRevision.chapter_name}"?
+                            </p>
+                            <div className="flex flex-col gap-3">
+                                <button
+                                    onClick={() => handleRevisionChoice(selectedChapterForRevision, 'revision')}
+                                    className="w-full py-4 bg-amber-600 text-white font-black uppercase tracking-widest rounded-2xl shadow-lg shadow-amber-900/10 hover:bg-amber-700 transition-all text-xs"
+                                >
+                                    Start Revision
+                                </button>
+                                <button
+                                    onClick={() => handleRevisionChoice(selectedChapterForRevision, 'restart')}
+                                    className="w-full py-4 bg-slate-100 text-slate-600 font-black uppercase tracking-widest rounded-2xl hover:bg-slate-200 transition-all text-xs"
+                                >
+                                    Start Again
+                                </button>
+                                <button
+                                    onClick={() => setIsRevisionModalOpen(false)}
+                                    className="w-full py-4 text-slate-400 font-bold uppercase tracking-widest text-[10px] hover:text-slate-600 transition-colors"
+                                >
+                                    Dismiss
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Revision Choice Modal */}
+            <AnimatePresence>
+                {isRevisionModalOpen && selectedChapterForRevision && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsRevisionModalOpen(false)}
+                            className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="relative bg-white rounded-3xl max-w-sm w-full shadow-2xl overflow-hidden p-8 text-center"
+                        >
+                            <div className="w-20 h-20 bg-amber-50 rounded-[32px] flex items-center justify-center mx-auto mb-6 border border-amber-100 shadow-inner">
+                                <BookOpen className="w-10 h-10 text-amber-600" />
+                            </div>
+                            <h3 className="text-xl font-black text-slate-800 mb-2 tracking-tight">Chapter Completed!</h3>
+                            <p className="text-slate-500 text-sm font-medium mb-8">
+                                What would you like to do next with "{selectedChapterForRevision.chapter_name}"?
+                            </p>
+                            <div className="flex flex-col gap-3">
+                                <button
+                                    onClick={() => handleRevisionChoice(selectedChapterForRevision, 'revision')}
+                                    className="w-full py-4 bg-amber-600 text-white font-black uppercase tracking-widest rounded-2xl shadow-lg shadow-amber-900/10 hover:bg-amber-700 transition-all text-xs"
+                                >
+                                    Start Revision
+                                </button>
+                                <button
+                                    onClick={() => handleRevisionChoice(selectedChapterForRevision, 'restart')}
+                                    className="w-full py-4 bg-slate-100 text-slate-600 font-black uppercase tracking-widest rounded-2xl hover:bg-slate-200 transition-all text-xs"
+                                >
+                                    Start Again
+                                </button>
+                                <button
+                                    onClick={() => setIsRevisionModalOpen(false)}
+                                    className="w-full py-4 text-slate-400 font-bold uppercase tracking-widest text-[10px] hover:text-slate-600 transition-colors"
+                                >
+                                    Dismiss
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
